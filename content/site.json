@@ -120,7 +120,8 @@
         {
           "slug": "praktica-l",
           "title": "Praktica L",
-          "unit": "strona"
+          "unit": "strona",
+          "cover_pos": "50% 90%"
         },
         {
           "slug": "praktica-ee3",
