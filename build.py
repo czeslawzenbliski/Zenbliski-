@@ -10,6 +10,7 @@ Wymaga tylko biblioteki standardowej Pythona 3.9+.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import shutil
 from html import escape
@@ -24,6 +25,13 @@ KEEP = {"assets", "zdjecia", ".nojekyll", "CNAME"}
 
 
 # ---------------------------------------------------------------- pomocnicze
+
+def asset(name: str) -> str:
+    """Adres pliku z assets/ z sumą kontrolną, żeby po zmianie stylów lub skryptu
+    przeglądarki (zwłaszcza w telefonach) nie pokazywały starej wersji z pamięci."""
+    digest = hashlib.sha1((OUT / "assets" / name).read_bytes()).hexdigest()[:8]
+    return f"assets/{name}?v={digest}"
+
 
 def plural(n: int, one: str, few: str, many: str) -> str:
     """Polska odmiana: 1 galeria, 2 galerie, 5 galerii, 22 galerie."""
@@ -121,7 +129,7 @@ def head(site: dict, title: str, description: str, prefix: str) -> str:
 <meta property="og:locale" content="pl_PL">
 <meta name="theme-color" content="#151412">
 <link rel="preload" href="{prefix}assets/fonts/playfair-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="{prefix}assets/style.css">
+<link rel="stylesheet" href="{prefix}{asset('style.css')}">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 """
@@ -154,7 +162,7 @@ def footer(site: dict, prefix: str) -> str:
     return f"""<footer class="foot">
   <p>{escape(site['footer'])}</p>
 </footer>
-<script src="{prefix}assets/site.js" defer></script>
+<script src="{prefix}{asset('site.js')}" defer></script>
 </body>
 </html>
 """

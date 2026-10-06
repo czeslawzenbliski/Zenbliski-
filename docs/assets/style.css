@@ -448,7 +448,13 @@ a:hover { color: var(--papier); }
   background: #0d0c0b;
   color: var(--papier);
   overflow: hidden;
+  /* Ruch poziomy obsługuje skrypt (następne/poprzednie zdjęcie); bez tego
+     przeglądarka przejmuje gest i przesuwanie palcem nie działa. */
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior: contain;
 }
+/* Po powiększeniu dwoma palcami oddajemy przesuwanie przeglądarce. */
+.lb.is-zoomed { touch-action: auto; }
 .lb::backdrop { background: #0d0c0b; }
 .lb__bar {
   position: absolute;
@@ -504,6 +510,7 @@ a:hover { color: var(--papier); }
   width: 4.5rem;
   display: grid;
   place-items: center;
+  z-index: 1; /* zawsze nad podpisem i zdjęciem */
 }
 .lb__prev { left: 0; }
 .lb__next { right: 0; }
@@ -524,7 +531,8 @@ a:hover { color: var(--papier); }
 @media (max-width: 40rem) {
   .lb__stage { inset: 3.5rem 0 5.5rem; }
   .lb__prev, .lb__next { top: auto; bottom: 0; height: 5.5rem; width: 4rem; }
-  .lb__caption { min-height: 5.5rem; padding: 0.5rem 4rem; font-size: 0.9375rem; }
+  /* Podpis mieści się między strzałkami; wcześniej je zasłaniał i przechwytywał stuknięcia. */
+  .lb__caption { inset: auto 4rem 0 4rem; min-height: 5.5rem; padding: 0.5rem; font-size: 0.9375rem; }
 }
 
 /* Playfair ma domyślnie cyfry nautyczne („HP5", „100" wyglądają wtedy jak litery).

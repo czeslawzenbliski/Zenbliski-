@@ -12,6 +12,7 @@ Zmiany na stronie wprowadzasz i publikujesz sam; jego rolą jest dostarczyć zdj
 - `content/teksty/<ścieżka z "--" zamiast "/">.html` – opcjonalna treść podstrony (fragment HTML), np. `kolekcja--stan-kolekcji.html`.
 - `build.py` – generator. Czyta `content/` i manifesty zdjęć, zapisuje HTML do `docs/`. Tylko biblioteka standardowa.
 - `tools/add_photos.py` – zmniejsza zdjęcia, robi miniatury, usuwa EXIF, dopisuje do manifestu galerii. Wymaga Pillow.
+- `tools/check_viewer.py` – test podglądu zdjęć (dotyk, mysz, klawiatura). Wymaga Playwrighta.
 - `docs/` – to, co widzi świat. HTML jest generowany, nie edytuj go ręcznie.
   - `docs/assets/` – `style.css`, `site.js`, fonty (edytowane ręcznie).
   - `docs/zdjecia/<ścieżka>/` – zdjęcia galerii, miniatury w `mini/`, manifest `index.json` (tu wpisuje się podpisy: pole `caption`).
@@ -27,6 +28,9 @@ Nowa galeria lub dział: dopisz wpis w `content/site.json`, potem `python3 build
 Pola wpisu: `slug`, `title`, opcjonalnie `lead`, `kind` (`gallery` domyślnie albo `text`), `plate` (metryczka: aparat, obiektyw, film), `cover` (nazwa pliku okładki), `cover_pos` (przesunięcie kadru okładki, np. `50% 20%`), `empty` (tekst pustej strony), `children`.
 
 Po każdej zmianie: uruchom `build.py`, obejrzyj wynik w przeglądarce (komputer i telefon), dopiero potem commit i push do `main`.
+
+Po zmianach w `docs/assets/site.js` albo w stylach podglądu zdjęć (`.lb…`) uruchom też `python3 tools/check_viewer.py`.
+Skrypt stuka w strzałki i przesuwa palcem tak jak człowiek na telefonie. Sam zrzut ekranu tego nie wykaże: pierwsza wersja podglądu wyglądała dobrze, a na telefonie nie działała.
 
 ## Zasady
 

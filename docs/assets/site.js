@@ -85,13 +85,32 @@
     links[current].focus();
   });
 
-  // Przesunięcie palcem w lewo lub w prawo.
-  var startX = null;
-  stage.addEventListener("pointerdown", function (e) { startX = e.clientX; });
-  stage.addEventListener("pointerup", function (e) {
-    if (startX === null) return;
-    var dx = e.clientX - startX;
-    startX = null;
-    if (Math.abs(dx) > 50) show(current + (dx < 0 ? 1 : -1));
-  });
+  // Przesunięcie palcem w lewo lub w prawo. Używamy zdarzeń dotykowych, nie
+  // wskaźnikowych: gdy przeglądarka uzna ruch za przewijanie, pointerup nie przychodzi.
+  var viewport = window.visualViewport;
+  function zoomed() { return !!viewport && viewport.scale > 1.05; }
+  if (viewport) {
+    viewport.addEventListener("resize", function () {
+      dialog.classList.toggle("is-zoomed", zoomed());
+    });
+  }
+
+  var touch = null;
+  dialog.addEventListener("touchstart", function (e) {
+    // Jeden palec i brak powiększenia; dwa palce to powiększanie zdjęcia.
+    touch = e.touches.length === 1 && !zoomed()
+      ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+      : null;
+  }, { passive: true });
+  dialog.addEventListener("touchend", function (e) {
+    if (!touch || e.touches.length) { touch = null; return; }
+    var t = e.changedTouches[0];
+    var dx = t.clientX - touch.x;
+    var dy = t.clientY - touch.y;
+    touch = null;
+    if (links.length < 2) return;
+    // Wyraźny ruch w poziomie: w lewo następne zdjęcie, w prawo poprzednie.
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) show(current + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+  dialog.addEventListener("touchcancel", function () { touch = null; }, { passive: true });
 })();
