@@ -22,7 +22,9 @@
         },
         {
           "slug": "gucin",
-          "title": "Gucin"
+          "title": "Gucin",
+          "cover": "gucin-02.jpg",
+          "cover_pos": "50% 20%"
         }
       ]
     },

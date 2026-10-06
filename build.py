@@ -166,8 +166,11 @@ def frame(node: Node, prefix: str, heading: str = "h2") -> str:
     if cover:
         owner, p = cover
         src = f"{prefix}zdjecia/{owner.path}/mini/{p['file']}"
+        # "cover_pos" przesuwa kadr okładki (CSS object-position), np. "50% 20%".
+        pos = owner.data.get("cover_pos")
+        pos_attr = f' style="object-position:{escape(pos, quote=True)}"' if pos else ""
         view = (f'<img src="{src}" width="{p["mw"]}" height="{p["mh"]}" '
-                f'alt="" loading="lazy" decoding="async">')
+                f'alt="" loading="lazy" decoding="async"{pos_attr}>')
         cls = "frame"
     else:
         view = ""

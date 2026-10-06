@@ -24,7 +24,7 @@ Dodanie zdjęć do galerii:
     python3 build.py
 
 Nowa galeria lub dział: dopisz wpis w `content/site.json`, potem `python3 build.py`.
-Pola wpisu: `slug`, `title`, opcjonalnie `lead`, `kind` (`gallery` domyślnie albo `text`), `plate` (metryczka: aparat, obiektyw, film), `cover` (nazwa pliku okładki), `empty` (tekst pustej strony), `children`.
+Pola wpisu: `slug`, `title`, opcjonalnie `lead`, `kind` (`gallery` domyślnie albo `text`), `plate` (metryczka: aparat, obiektyw, film), `cover` (nazwa pliku okładki), `cover_pos` (przesunięcie kadru okładki, np. `50% 20%`), `empty` (tekst pustej strony), `children`.
 
 Po każdej zmianie: uruchom `build.py`, obejrzyj wynik w przeglądarce (komputer i telefon), dopiero potem commit i push do `main`.
 
