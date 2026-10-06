@@ -181,8 +181,11 @@ def frame(node: Node, prefix: str, heading: str = "h2") -> str:
 
 
 def photo_grid(node: Node, prefix: str) -> str:
-    out = ['<div class="photos" data-lightbox>']
-    for p in node.photos:
+    photos = node.photos
+    # Przy kilku zdjęciach rząd wypełnia całą szerokość zamiast zostawiać pustą przestrzeń.
+    cls = "photos photos--few" if len(photos) <= 4 else "photos"
+    out = [f'<div class="{cls}" data-lightbox>']
+    for p in photos:
         base = f"{prefix}zdjecia/{node.path}/"
         ratio = round(p["w"] / p["h"], 4)
         caption = p.get("caption", "")
@@ -335,7 +338,7 @@ def main() -> None:
         pages += 1
 
     photos = sum(len(n.photos) for n in walk(sections))
-    print(f"Gotowe: {pages} stron, {photos} zdjęć w galeriach.")
+    print(f"Gotowe: stron: {pages}, zdjęć w galeriach: {photos}.")
 
 
 if __name__ == "__main__":
