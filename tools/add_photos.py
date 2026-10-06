@@ -6,11 +6,15 @@ EXIF (w tym położenie GPS) i dopisuje zdjęcia do manifestu galerii.
 Oryginałów nie zmienia.
 
 Użycie:
-    python3 tools/add_photos.py <ścieżka-galerii> <plik-lub-katalog> [...]
+    python3 tools/add_photos.py [--edge=PIKSELE] <ścieżka-galerii> <plik-lub-katalog> [...]
 
-Przykład:
+Przykłady:
     python3 tools/add_photos.py archiwalne/gucin ~/Zdjęcia/Gucin
+    python3 tools/add_photos.py --edge=2400 materialy-reklamowe/praktica-lb2 ~/Skany/LB2
     python3 build.py
+
+--edge ustawia dłuższy bok dużego zdjęcia (domyślnie 2000). Dla skanów z drobnym
+tekstem (prospekty, instrukcje) używaj 2400, żeby tekst był ostry po powiększeniu.
 
 Ścieżka galerii to adres podstrony z content/site.json, np. "cyfrowe"
 albo "analogowe/nikon-fa-ilford-hp5-plus". Wymaga biblioteki Pillow.
@@ -77,9 +81,15 @@ def save(im: Image.Image, target: Path, edge: int, quality: int, icc: bytes | No
 
 
 def main() -> None:
-    if len(sys.argv) < 3:
+    args, full_edge = [], FULL_EDGE
+    for arg in sys.argv[1:]:
+        if arg.startswith("--edge="):
+            full_edge = int(arg.split("=", 1)[1])
+        else:
+            args.append(arg)
+    if len(args) < 2:
         sys.exit(__doc__)
-    gallery = sys.argv[1].strip("/")
+    gallery = args[0].strip("/")
     target = PHOTOS / gallery
     mini = target / "mini"
     mini.mkdir(parents=True, exist_ok=True)
@@ -89,7 +99,7 @@ def main() -> None:
     taken = {p["file"] for p in manifest}
 
     added = 0
-    for src in collect(sys.argv[2:]):
+    for src in collect(args[1:]):
         base = slugify(src.stem)
         name, n = f"{base}.jpg", 2
         while name in taken:
@@ -100,7 +110,7 @@ def main() -> None:
             print(f"Pominięto {src.name}: {exc}")
             continue
         icc = im.info.get("icc_profile")
-        w, h = save(im, target / name, FULL_EDGE, FULL_QUALITY, icc)
+        w, h = save(im, target / name, full_edge, FULL_QUALITY, icc)
         mw, mh = save(im, mini / name, MINI_EDGE, MINI_QUALITY, icc)
         manifest.append({"file": name, "w": w, "h": h, "mw": mw, "mh": mh, "caption": ""})
         taken.add(name)

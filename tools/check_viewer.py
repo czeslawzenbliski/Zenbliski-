@@ -96,6 +96,8 @@ async def check_touch(browser, url, total, width, height, failures):
     expect("przesunięcie w prawo", await count(), f"1 z {total}")
     await swipe(cdp, width * 0.5, height * 0.3, width * 0.55, height * 0.7)
     expect("ruch pionowy nie zmienia zdjęcia", await count(), f"1 z {total}")
+    if await page.locator(".lb__zoom").is_visible():
+        failures.append(f"{name}: przycisk Powiększ nie powinien być widoczny na ekranie dotykowym")
     await page.touchscreen.tap(*await centre(page, ".lb__close"))
     await page.wait_for_timeout(250)
     if await page.evaluate("document.querySelector('dialog.lb').open"):
@@ -107,12 +109,38 @@ async def check_desktop(browser, url, total, failures):
     page = await browser.new_page(viewport={"width": 1440, "height": 900})
     await page.goto(url, wait_until="networkidle")
     await page.click(".photos a")
+    # Zaraz po pierwszym otwarciu, zanim zdjęcie trafi do pamięci przeglądarki.
+    try:
+        await page.wait_for_selector(".lb__zoom", state="visible", timeout=5000)
+    except Exception:
+        failures.append("komputer: po pierwszym otwarciu zdjęcia nie pojawia się przycisk Powiększ")
     await page.click(".lb__next")
     if await page.inner_text(".lb__count") != f"2 z {total}":
         failures.append("komputer: kliknięcie strzałki następne nie działa")
     await page.keyboard.press("ArrowLeft")
     if await page.inner_text(".lb__count") != f"1 z {total}":
         failures.append("komputer: klawisz strzałki w lewo nie działa")
+
+    # Powiększenie do szerokości okna: przyciskiem i kliknięciem w zdjęcie.
+    width = "document.querySelector('.lb__img').getBoundingClientRect().width"
+    if await page.locator(".lb__zoom").is_visible():
+        fitted = await page.evaluate(width)
+        await page.click(".lb__zoom")
+        if await page.evaluate(width) < fitted * 1.2:
+            failures.append("komputer: przycisk Powiększ nie powiększa zdjęcia")
+        if await page.locator(".lb__next").is_visible():
+            failures.append("komputer: w powiększeniu strzałki powinny być ukryte")
+        await page.click(".lb__img", position={"x": 200, "y": 200})
+        if abs(await page.evaluate(width) - fitted) > 2:
+            failures.append("komputer: kliknięcie w powiększone zdjęcie nie pomniejsza go")
+        await page.click(".lb__img")
+        if await page.evaluate(width) < fitted * 1.2:
+            failures.append("komputer: kliknięcie w zdjęcie nie powiększa go")
+        await page.keyboard.press("ArrowRight")
+        if await page.evaluate("document.querySelector('dialog.lb').classList.contains('is-full')"):
+            failures.append("komputer: przejście do następnego zdjęcia nie wyłącza powiększenia")
+    else:
+        failures.append("komputer: brak przycisku Powiększ przy zdjęciu większym niż okno")
     await page.keyboard.press("Escape")
     await page.wait_for_timeout(200)
     if await page.evaluate("document.querySelector('dialog.lb').open"):
@@ -135,7 +163,7 @@ async def main() -> None:
         for f in failures:
             print("  -", f)
         sys.exit(1)
-    print(f"Podgląd zdjęć działa (galeria „{gallery}”, {total} zdjęcia): strzałki, przesuwanie palcem, mysz, klawiatura.")
+    print(f"Podgląd zdjęć działa (galeria „{gallery}”, {total} zdjęcia): strzałki, przesuwanie palcem, mysz, klawiatura, powiększanie.")
 
 
 if __name__ == "__main__":

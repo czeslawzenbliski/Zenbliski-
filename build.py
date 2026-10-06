@@ -24,6 +24,12 @@ PHOTOS = OUT / "zdjecia"
 KEEP = {"assets", "zdjecia", ".nojekyll", "CNAME"}
 
 
+UNITS = {
+    "zdjęcie": ("zdjęcie", "zdjęcia", "zdjęć"),
+    "strona": ("strona", "strony", "stron"),
+}
+
+
 # ---------------------------------------------------------------- pomocnicze
 
 def asset(name: str) -> str:
@@ -106,7 +112,9 @@ class Node:
             return plural(n, "pozycja", "pozycje", "pozycji")
         n = len(self.photos)
         if n:
-            return plural(n, "zdjęcie", "zdjęcia", "zdjęć")
+            # "unit": "strona" dla skanów prospektów i instrukcji (8 stron zamiast 8 zdjęć).
+            forms = UNITS.get(self.data.get("unit", "zdjęcie"), UNITS["zdjęcie"])
+            return plural(n, *forms)
         if self.body:
             return ""
         return "w przygotowaniu"

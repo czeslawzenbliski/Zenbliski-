@@ -109,19 +109,23 @@
       "children": [
         {
           "slug": "praktica-lb2",
-          "title": "Praktica LB2"
+          "title": "Praktica LB2",
+          "unit": "strona"
         },
         {
           "slug": "praktica-lb",
-          "title": "Praktica LB"
+          "title": "Praktica LB",
+          "unit": "strona"
         },
         {
           "slug": "praktica-l",
-          "title": "Praktica L"
+          "title": "Praktica L",
+          "unit": "strona"
         },
         {
           "slug": "praktica-ee3",
-          "title": "Praktica EE3"
+          "title": "Praktica EE3",
+          "unit": "strona"
         }
       ]
     },

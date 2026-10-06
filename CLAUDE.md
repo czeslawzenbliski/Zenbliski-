@@ -24,8 +24,11 @@ Dodanie zdjęć do galerii:
     python3 tools/add_photos.py archiwalne/gucin /ścieżka/do/oryginałów
     python3 build.py
 
+Skany z drobnym tekstem (prospekty w dziale Materiały reklamowe) dodawaj z `--edge=2400`, żeby tekst był ostry po powiększeniu.
+Do czytania służy w podglądzie przycisk „Powiększ” (na komputerze) albo powiększenie dwoma palcami (na telefonie).
+
 Nowa galeria lub dział: dopisz wpis w `content/site.json`, potem `python3 build.py`.
-Pola wpisu: `slug`, `title`, opcjonalnie `lead`, `kind` (`gallery` domyślnie albo `text`), `plate` (metryczka: aparat, obiektyw, film), `cover` (nazwa pliku okładki), `cover_pos` (przesunięcie kadru okładki, np. `50% 20%`), `empty` (tekst pustej strony), `children`.
+Pola wpisu: `slug`, `title`, opcjonalnie `lead`, `kind` (`gallery` domyślnie albo `text`), `plate` (metryczka: aparat, obiektyw, film), `cover` (nazwa pliku okładki), `cover_pos` (przesunięcie kadru okładki, np. `50% 20%`), `unit` (`strona` dla skanów prospektów, wtedy licznik pokazuje „8 stron”), `empty` (tekst pustej strony), `children`.
 
 Po każdej zmianie: uruchom `build.py`, obejrzyj wynik w przeglądarce (komputer i telefon), dopiero potem commit i push do `main`.
 
