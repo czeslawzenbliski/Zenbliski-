@@ -1,0 +1,146 @@
+{
+  "title": "Zenbliski",
+  "description": "Fotografia analogowa i cyfrowa, zdjęcia archiwalne i kolekcja aparatów.",
+  "intro": "Fotografia analogowa i cyfrowa, zdjęcia archiwalne, kolekcja aparatów i materiały z epoki.",
+  "lang": "pl",
+  "root_path": "/Zenbliski-/",
+  "noindex": true,
+  "footer": "© 2026 Zenbliski",
+  "sections": [
+    {
+      "slug": "archiwalne",
+      "title": "Archiwalne",
+      "lead": "Warszawa i Gucin na dawnych zdjęciach.",
+      "children": [
+        {
+          "slug": "warszawa-stare-miasto",
+          "title": "Warszawa, Stare Miasto"
+        },
+        {
+          "slug": "warszawa-srodmiescie",
+          "title": "Warszawa, Śródmieście"
+        },
+        {
+          "slug": "gucin",
+          "title": "Gucin"
+        }
+      ]
+    },
+    {
+      "slug": "cyfrowe",
+      "title": "Cyfrowe",
+      "lead": "Zdjęcia z aparatów cyfrowych."
+    },
+    {
+      "slug": "analogowe",
+      "title": "Analogowe",
+      "lead": "Zdjęcia na filmie. Każda galeria to jeden zestaw: aparat, obiektyw i film.",
+      "children": [
+        {
+          "slug": "nikon-f90x-kentmere-pan-100",
+          "title": "Nikon F90X, Kentmere Pan 100",
+          "plate": [
+            [
+              "Aparat",
+              "Nikon F90X"
+            ],
+            [
+              "Obiektyw",
+              "Nikkor 50 mm 1:1,4"
+            ],
+            [
+              "Film",
+              "Kentmere Pan 100"
+            ]
+          ]
+        },
+        {
+          "slug": "nikon-fa-ilford-hp5-plus",
+          "title": "Nikon FA, Ilford HP5 Plus",
+          "plate": [
+            [
+              "Aparat",
+              "Nikon FA"
+            ],
+            [
+              "Obiektyw",
+              "Nikkor 50 mm 1:1,4"
+            ],
+            [
+              "Film",
+              "Ilford HP5 Plus"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "kolekcja",
+      "title": "Kolekcja",
+      "lead": "Aparaty z kolekcji i jej aktualny spis.",
+      "children": [
+        {
+          "slug": "nikon-f2a",
+          "title": "Nikon F2A"
+        },
+        {
+          "slug": "rolleiflex-3-5-f-planar",
+          "title": "Rolleiflex 3,5 F Planar"
+        },
+        {
+          "slug": "stan-kolekcji",
+          "title": "Stan kolekcji na 18.08.2024",
+          "kind": "text",
+          "empty": "Spis kolekcji jest w przygotowaniu."
+        }
+      ]
+    },
+    {
+      "slug": "akcesoria",
+      "title": "Akcesoria foto",
+      "lead": "Akcesoria fotograficzne z kolekcji."
+    },
+    {
+      "slug": "materialy-reklamowe",
+      "title": "Materiały reklamowe",
+      "lead": "Prospekty i materiały reklamowe aparatów Praktica.",
+      "children": [
+        {
+          "slug": "praktica-lb2",
+          "title": "Praktica LB2"
+        },
+        {
+          "slug": "praktica-lb",
+          "title": "Praktica LB"
+        },
+        {
+          "slug": "praktica-l",
+          "title": "Praktica L"
+        },
+        {
+          "slug": "praktica-ee3",
+          "title": "Praktica EE3"
+        }
+      ]
+    },
+    {
+      "slug": "artykuly",
+      "title": "Artykuły",
+      "kind": "text",
+      "empty": "Artykuły są w przygotowaniu."
+    },
+    {
+      "slug": "ciekawostki",
+      "title": "Foto ciekawostki",
+      "kind": "text",
+      "children": [
+        {
+          "slug": "fotoskoda",
+          "title": "Fotoskoda",
+          "kind": "text",
+          "empty": "Ten wpis jest w przygotowaniu."
+        }
+      ]
+    }
+  ]
+}
