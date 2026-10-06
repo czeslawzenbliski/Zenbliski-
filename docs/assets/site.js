@@ -97,6 +97,7 @@
     current = (i + links.length) % links.length;
     var a = links[current];
     var thumb = a.querySelector("img");
+    dialog.classList.remove("is-fallback");
     img.src = a.href;
     img.width = Number(a.dataset.w) || 0;
     img.height = Number(a.dataset.h) || 0;
@@ -142,6 +143,16 @@
   window.addEventListener("resize", refreshZoom);
   // Zdjęcie ma znany rozmiar dopiero po wczytaniu, więc sprawdzamy jeszcze raz.
   img.addEventListener("load", refreshZoom);
+  // Duże zdjęcia są w formacie AVIF. Urządzenie, które go nie otwiera (albo zerwane
+  // połączenie), dostaje w podglądzie miniaturę, żeby nie zobaczyć pustego ekranu.
+  img.addEventListener("error", function () {
+    var thumb = links[current].querySelector("img");
+    var fallback = thumb && (thumb.currentSrc || thumb.src);
+    if (fallback && img.getAttribute("src") && img.src !== fallback) {
+      dialog.classList.add("is-fallback");
+      img.src = fallback;
+    }
+  });
 
   dialog.addEventListener("keydown", function (e) {
     if (e.key === "ArrowLeft") show(current - 1);

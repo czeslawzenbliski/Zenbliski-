@@ -11,7 +11,7 @@ Zmiany na stronie wprowadzasz i publikujesz sam; jego rolą jest dostarczyć zdj
 - `content/site.json` – cała struktura: działy, galerie, tytuły, opisy. Jedyne źródło prawdy o nawigacji.
 - `content/teksty/<ścieżka z "--" zamiast "/">.html` – opcjonalna treść podstrony (fragment HTML), np. `kolekcja--stan-kolekcji.html`.
 - `build.py` – generator. Czyta `content/` i manifesty zdjęć, zapisuje HTML do `docs/`. Tylko biblioteka standardowa.
-- `tools/add_photos.py` – zmniejsza zdjęcia, robi miniatury, usuwa EXIF, dopisuje do manifestu galerii. Wymaga Pillow.
+- `tools/add_photos.py` – zmniejsza zdjęcia, robi miniatury, usuwa EXIF, dopisuje do manifestu galerii. Duże zdjęcie zapisuje jako AVIF, miniaturę jako WebP. Wymaga Pillow z obsługą AVIF.
 - `tools/check_viewer.py` – test podglądu zdjęć (dotyk, mysz, klawiatura). Wymaga Playwrighta.
 - `docs/` – to, co widzi świat. HTML jest generowany, nie edytuj go ręcznie.
   - `docs/assets/` – `style.css`, `site.js`, fonty (edytowane ręcznie).
@@ -23,6 +23,8 @@ Dodanie zdjęć do galerii:
 
     python3 tools/add_photos.py archiwalne/gucin /ścieżka/do/oryginałów
     python3 build.py
+
+Dział Materiały reklamowe ma trzy poddziały: `foldery-i-prospekty` (po 1945 roku, wszystkie firmy, tytuł galerii to marka i model), `reklama-do-1945` (foldery, cenniki i ogłoszenia do 1945 roku; epoka ma pierwszeństwo przed rodzajem materiału) i `gadzety-reklamowe` (przedmioty z logo). Nową galerię dopisz jako dziecko właściwego poddziału, np. `materialy-reklamowe/foldery-i-prospekty/praktica-lb2`.
 
 Skany z drobnym tekstem (prospekty w dziale Materiały reklamowe) dodawaj z `--edge=2400`, żeby tekst był ostry po powiększeniu.
 Do czytania służy w podglądzie przycisk „Powiększ” (na komputerze) albo powiększenie dwoma palcami (na telefonie).
@@ -37,6 +39,7 @@ Skrypt stuka w strzałki i przesuwa palcem tak jak człowiek na telefonie. Sam z
 
 ## Zasady
 
+- Format zdjęć: duże w AVIF (jakość 68), miniatury w WebP (jakość 80). Ustawienia dobrane pomiarem tak, żeby wierność nie była niższa niż JPEG 85/78, przy ok. 40% mniejszej wadze. Nie obniżaj jakości „na oko”; właścicielowi zależy na braku widocznej straty. Miniatury zostają w WebP, bo starsze urządzenia nie otwierają AVIF i pokazują wtedy w podglądzie miniaturę.
 - Do repozytorium trafiają tylko zdjęcia po `add_photos.py`, nigdy oryginały ani skany w pełnej rozdzielczości. Limit GitHub Pages to 1 GB na całą stronę; skrypt wypisuje bieżące zużycie.
 - Nie wymyślaj treści w imieniu właściciela: opisów zdjęć, dat, historii sprzętu. Jeśli czegoś brakuje, zostaw stan „w przygotowaniu” i zapytaj.
 - Wszystkie linki wewnętrzne są względne, więc strona działa i pod adresem tymczasowym, i pod własną domeną. Wyjątkiem jest `404.html`, który korzysta z `root_path`.

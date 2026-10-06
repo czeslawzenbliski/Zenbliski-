@@ -1,6 +1,7 @@
 [
   {
-    "file": "gucin-02.jpg",
+    "file": "gucin-02.avif",
+    "mini": "gucin-02.webp",
     "w": 2000,
     "h": 1999,
     "mw": 900,
@@ -8,7 +9,8 @@
     "caption": ""
   },
   {
-    "file": "gucin-03.jpg",
+    "file": "gucin-03.avif",
+    "mini": "gucin-03.webp",
     "w": 1978,
     "h": 2000,
     "mw": 890,
@@ -16,7 +18,8 @@
     "caption": ""
   },
   {
-    "file": "gucin-04.jpg",
+    "file": "gucin-04.avif",
+    "mini": "gucin-04.webp",
     "w": 2000,
     "h": 1999,
     "mw": 900,

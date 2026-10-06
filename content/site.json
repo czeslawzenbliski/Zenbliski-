@@ -23,7 +23,7 @@
         {
           "slug": "gucin",
           "title": "Gucin",
-          "cover": "gucin-02.jpg",
+          "cover": "gucin-02",
           "cover_pos": "50% 20%"
         }
       ]
@@ -105,29 +105,49 @@
     {
       "slug": "materialy-reklamowe",
       "title": "Materiały reklamowe",
-      "lead": "Prospekty i materiały reklamowe aparatów Praktica.",
+      "lead": "Foldery, reklamy i gadżety firm fotograficznych.",
       "children": [
         {
-          "slug": "praktica-lb2",
-          "title": "Praktica LB2",
-          "unit": "strona"
+          "slug": "foldery-i-prospekty",
+          "title": "Foldery i prospekty",
+          "lead": "Foldery i prospekty firm fotograficznych wydane po 1945 roku.",
+          "empty": "Ten dział jest w przygotowaniu.",
+          "children": [
+            {
+              "slug": "praktica-lb2",
+              "title": "Praktica LB2",
+              "unit": "strona"
+            },
+            {
+              "slug": "praktica-lb",
+              "title": "Praktica LB",
+              "unit": "strona"
+            },
+            {
+              "slug": "praktica-l",
+              "title": "Praktica L",
+              "unit": "strona",
+              "cover_pos": "50% 90%"
+            },
+            {
+              "slug": "praktica-ee3",
+              "title": "Praktica EE3",
+              "unit": "strona",
+              "cover_pos": "50% 100%"
+            }
+          ]
         },
         {
-          "slug": "praktica-lb",
-          "title": "Praktica LB",
-          "unit": "strona"
+          "slug": "reklama-do-1945",
+          "title": "Reklama do 1945 roku",
+          "lead": "Foldery, cenniki i ogłoszenia firm fotograficznych do 1945 roku, polskie i zagraniczne.",
+          "empty": "Ten dział jest w przygotowaniu."
         },
         {
-          "slug": "praktica-l",
-          "title": "Praktica L",
-          "unit": "strona",
-          "cover_pos": "50% 90%"
-        },
-        {
-          "slug": "praktica-ee3",
-          "title": "Praktica EE3",
-          "unit": "strona",
-          "cover_pos": "50% 100%"
+          "slug": "gadzety-reklamowe",
+          "title": "Gadżety reklamowe",
+          "lead": "Długopisy, breloki, podstawki, pudełka z logo firm i inne przedmioty reklamowe.",
+          "empty": "Ten dział jest w przygotowaniu."
         }
       ]
     },

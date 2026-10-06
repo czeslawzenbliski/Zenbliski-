@@ -92,7 +92,8 @@ class Node:
         if photos:
             wanted = self.data.get("cover")
             for p in photos:
-                if p["file"] == wanted:
+                # Porównujemy bez rozszerzenia, żeby zmiana formatu pliku nie gubiła okładki.
+                if wanted and Path(p["file"]).stem == Path(wanted).stem:
                     return self, p
             return self, photos[0]
         for child in self.children:
@@ -105,6 +106,8 @@ class Node:
         if self.children:
             kinds = {c.kind for c in self.children}
             n = len(self.children)
+            if any(c.children for c in self.children):
+                return plural(n, "dział", "działy", "działów")
             if kinds == {"gallery"}:
                 return plural(n, "galeria", "galerie", "galerii")
             if kinds == {"text"}:
@@ -181,7 +184,7 @@ def frame(node: Node, prefix: str, heading: str = "h2") -> str:
     cover = node.cover()
     if cover:
         owner, p = cover
-        src = f"{prefix}zdjecia/{owner.path}/mini/{p['file']}"
+        src = f"{prefix}zdjecia/{owner.path}/mini/{p.get('mini', p['file'])}"
         # "cover_pos" przesuwa kadr okładki (CSS object-position), np. "50% 20%".
         pos = owner.data.get("cover_pos")
         pos_attr = f' style="object-position:{escape(pos, quote=True)}"' if pos else ""
@@ -212,7 +215,7 @@ def photo_grid(node: Node, prefix: str) -> str:
         cap_attr = f' data-caption="{escape(caption, quote=True)}"' if caption else ""
         out.append(
             f'  <a href="{base}{p["file"]}" style="--r:{ratio}" data-w="{p["w"]}" data-h="{p["h"]}"{cap_attr}>'
-            f'<img src="{base}mini/{p["file"]}" width="{p["mw"]}" height="{p["mh"]}" '
+            f'<img src="{base}mini/{p.get("mini", p["file"])}" width="{p["mw"]}" height="{p["mh"]}" '
             f'alt="{escape(alt, quote=True)}" loading="lazy" decoding="async"></a>'
         )
     out.append("</div>")

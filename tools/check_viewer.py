@@ -105,6 +105,25 @@ async def check_touch(browser, url, total, width, height, failures):
     await ctx.close()
 
 
+async def check_no_avif(browser, url, failures):
+    """Urządzenie, które nie otwiera dużych zdjęć (AVIF), ma zobaczyć w podglądzie miniaturę."""
+    page = await browser.new_page(viewport={"width": 1440, "height": 900})
+    await page.route("**/*.avif", lambda route: route.abort())
+    await page.goto(url, wait_until="networkidle")
+    await page.click(".photos a")
+    try:
+        await page.wait_for_function(
+            "(() => { const i = document.querySelector('.lb__img');"
+            " return i.complete && i.naturalWidth > 0 && i.src.includes('/mini/'); })()", timeout=5000)
+    except Exception:
+        failures.append("bez AVIF: podgląd nie pokazuje miniatury zamiast dużego zdjęcia")
+    await page.click(".lb__next")
+    await page.wait_for_timeout(600)
+    if not await page.evaluate("document.querySelector('.lb__img').naturalWidth > 0"):
+        failures.append("bez AVIF: po przejściu do następnego zdjęcia podgląd jest pusty")
+    await page.close()
+
+
 async def check_desktop(browser, url, total, failures):
     page = await browser.new_page(viewport={"width": 1440, "height": 900})
     await page.goto(url, wait_until="networkidle")
@@ -157,13 +176,14 @@ async def main() -> None:
         for width, height in [(360, 740), (390, 844), (844, 390), (820, 1180)]:
             await check_touch(browser, url, total, width, height, failures)
         await check_desktop(browser, url, total, failures)
+        await check_no_avif(browser, url, failures)
         await browser.close()
     if failures:
         print("Podgląd zdjęć NIE działa poprawnie:")
         for f in failures:
             print("  -", f)
         sys.exit(1)
-    print(f"Podgląd zdjęć działa (galeria „{gallery}”, {total} zdjęcia): strzałki, przesuwanie palcem, mysz, klawiatura, powiększanie.")
+    print(f"Podgląd zdjęć działa (galeria „{gallery}”, {total} zdjęcia): strzałki, przesuwanie palcem, mysz, klawiatura, powiększanie, zapas dla urządzeń bez AVIF.")
 
 
 if __name__ == "__main__":
