@@ -1,0 +1,38 @@
+[
+  {
+    "file": "rollei-35-01.avif",
+    "mini": "rollei-35-01.webp",
+    "w": 2000,
+    "h": 1316,
+    "mw": 900,
+    "mh": 592,
+    "caption": ""
+  },
+  {
+    "file": "rollei-35-02.avif",
+    "mini": "rollei-35-02.webp",
+    "w": 2000,
+    "h": 1502,
+    "mw": 900,
+    "mh": 676,
+    "caption": ""
+  },
+  {
+    "file": "rollei-35-03.avif",
+    "mini": "rollei-35-03.webp",
+    "w": 1953,
+    "h": 2000,
+    "mw": 879,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "rollei-35-04.avif",
+    "mini": "rollei-35-04.webp",
+    "w": 2000,
+    "h": 1248,
+    "mw": 900,
+    "mh": 562,
+    "caption": ""
+  }
+]

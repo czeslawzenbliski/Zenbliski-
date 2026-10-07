@@ -204,8 +204,10 @@ def frame(node: Node, prefix: str, heading: str = "h2") -> str:
 
 def photo_grid(node: Node, prefix: str) -> str:
     photos = node.photos
-    # Przy kilku zdjęciach rząd wypełnia całą szerokość zamiast zostawiać pustą przestrzeń.
-    cls = "photos photos--few" if len(photos) <= 4 else "photos"
+    # Przy dwóch-trzech zdjęciach rząd wypełnia całą szerokość zamiast zostawiać pustą przestrzeń.
+    # Od czterech zdjęć galeria układa się zwykle w dwa rzędy; wtedy samotne zdjęcie w drugim
+    # rzędzie rozciągało się na pół strony, więc traktujemy ją jak zwykłą galerię.
+    cls = "photos photos--few" if len(photos) <= 3 else "photos"
     out = [f'<div class="{cls}" data-lightbox>']
     for p in photos:
         base = f"{prefix}zdjecia/{node.path}/"
