@@ -26,13 +26,29 @@ from playwright.async_api import async_playwright
 DOCS = Path(__file__).resolve().parent.parent / "docs"
 
 
-def find_gallery() -> tuple[str, int]:
-    """Pierwsza galeria z co najmniej dwoma zdjęciami."""
+def find_gallery() -> tuple[str, list[dict]]:
+    """Pierwsza galeria z co najmniej dwoma zdjęciami. Zwraca ścieżkę i listę zdjęć."""
     for manifest in sorted((DOCS / "zdjecia").rglob("index.json")):
-        n = len(json.loads(manifest.read_text(encoding="utf-8")))
-        if n >= 2:
-            return manifest.parent.relative_to(DOCS / "zdjecia").as_posix(), n
+        photos = json.loads(manifest.read_text(encoding="utf-8"))
+        if len(photos) >= 2:
+            return manifest.parent.relative_to(DOCS / "zdjecia").as_posix(), photos
     sys.exit("Brak galerii z co najmniej dwoma zdjęciami, nie ma czego sprawdzać.")
+
+
+def split_by_zoom(photos: list[dict], width: int = 1440, height: int = 900) -> tuple[int | None, int | None]:
+    """Numery zdjęć: pierwszego, które w oknie komputera powinno dać się powiększyć,
+    i pierwszego, które nie powinno (szerokie, prawie wypełnia okno).
+
+    Rachunek z dużym zapasem, żeby nie zależał od dokładnych marginesów podglądu."""
+    zoomable = flat = None
+    for i, p in enumerate(photos):
+        fitted = min(width, height * p["w"] / p["h"])     # górne oszacowanie szerokości w oknie
+        gain = min(p["w"], width) / fitted
+        if zoomable is None and gain > 1.6:
+            zoomable = i
+        if flat is None and p["w"] / p["h"] > 1.7:
+            flat = i
+    return zoomable, flat
 
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
@@ -126,42 +142,63 @@ async def check_no_avif(browser, url, failures):
     await page.close()
 
 
-async def check_desktop(browser, url, total, failures):
+async def check_desktop(browser, url, photos, failures):
+    total = len(photos)
+    zoomable, flat = split_by_zoom(photos)
+    width = "document.querySelector('.lb__img').getBoundingClientRect().width"
     page = await browser.new_page(viewport={"width": 1440, "height": 900})
     await page.goto(url, wait_until="networkidle")
+
+    # Powiększenie do szerokości okna: przyciskiem i kliknięciem w zdjęcie.
+    # Sprawdzane zaraz po pierwszym otwarciu, zanim zdjęcie trafi do pamięci przeglądarki.
+    if zoomable is None:
+        print("Uwaga: w tej galerii nie ma zdjęcia, które dałoby się powiększyć; powiększanie niesprawdzone.")
+    else:
+        await page.click(f".photos a >> nth={zoomable}")
+        try:
+            await page.wait_for_selector(".lb__zoom", state="visible", timeout=5000)
+        except Exception:
+            failures.append("komputer: po pierwszym otwarciu zdjęcia nie pojawia się przycisk Powiększ")
+        if await page.locator(".lb__zoom").is_visible():
+            fitted = await page.evaluate(width)
+            await page.click(".lb__zoom")
+            if await page.evaluate(width) < fitted * 1.2:
+                failures.append("komputer: przycisk Powiększ nie powiększa zdjęcia")
+            if await page.locator(".lb__next").is_visible():
+                failures.append("komputer: w powiększeniu strzałki powinny być ukryte")
+            await page.click(".lb__img", position={"x": 200, "y": 200})
+            if abs(await page.evaluate(width) - fitted) > 2:
+                failures.append("komputer: kliknięcie w powiększone zdjęcie nie pomniejsza go")
+            await page.click(".lb__img")
+            if await page.evaluate(width) < fitted * 1.2:
+                failures.append("komputer: kliknięcie w zdjęcie nie powiększa go")
+            await page.keyboard.press("ArrowRight")
+            if await page.evaluate("document.querySelector('dialog.lb').classList.contains('is-full')"):
+                failures.append("komputer: przejście do następnego zdjęcia nie wyłącza powiększenia")
+        await page.keyboard.press("Escape")
+        await page.wait_for_timeout(200)
+
+    # Szerokie zdjęcie prawie wypełnia okno; przycisk, który nic nie daje, ma się nie pokazywać.
+    if flat is not None:
+        await page.click(f".photos a >> nth={flat}")
+        await page.wait_for_function(
+            "(() => { const i = document.querySelector('.lb__img'); return i.complete && i.naturalWidth > 0; })()", timeout=5000)
+        await page.wait_for_timeout(200)
+        if await page.locator(".lb__zoom").is_visible():
+            fitted = await page.evaluate(width)
+            await page.click(".lb__zoom")
+            if await page.evaluate(width) < fitted * 1.2:
+                failures.append("komputer: przycisk Powiększ pokazuje się przy zdjęciu, którego prawie nie powiększa")
+        await page.keyboard.press("Escape")
+        await page.wait_for_timeout(200)
+
     await page.click(".photos a")
-    # Zaraz po pierwszym otwarciu, zanim zdjęcie trafi do pamięci przeglądarki.
-    try:
-        await page.wait_for_selector(".lb__zoom", state="visible", timeout=5000)
-    except Exception:
-        failures.append("komputer: po pierwszym otwarciu zdjęcia nie pojawia się przycisk Powiększ")
     await page.click(".lb__next")
     if await page.inner_text(".lb__count") != f"2 z {total}":
         failures.append("komputer: kliknięcie strzałki następne nie działa")
     await page.keyboard.press("ArrowLeft")
     if await page.inner_text(".lb__count") != f"1 z {total}":
         failures.append("komputer: klawisz strzałki w lewo nie działa")
-
-    # Powiększenie do szerokości okna: przyciskiem i kliknięciem w zdjęcie.
-    width = "document.querySelector('.lb__img').getBoundingClientRect().width"
-    if await page.locator(".lb__zoom").is_visible():
-        fitted = await page.evaluate(width)
-        await page.click(".lb__zoom")
-        if await page.evaluate(width) < fitted * 1.2:
-            failures.append("komputer: przycisk Powiększ nie powiększa zdjęcia")
-        if await page.locator(".lb__next").is_visible():
-            failures.append("komputer: w powiększeniu strzałki powinny być ukryte")
-        await page.click(".lb__img", position={"x": 200, "y": 200})
-        if abs(await page.evaluate(width) - fitted) > 2:
-            failures.append("komputer: kliknięcie w powiększone zdjęcie nie pomniejsza go")
-        await page.click(".lb__img")
-        if await page.evaluate(width) < fitted * 1.2:
-            failures.append("komputer: kliknięcie w zdjęcie nie powiększa go")
-        await page.keyboard.press("ArrowRight")
-        if await page.evaluate("document.querySelector('dialog.lb').classList.contains('is-full')"):
-            failures.append("komputer: przejście do następnego zdjęcia nie wyłącza powiększenia")
-    else:
-        failures.append("komputer: brak przycisku Powiększ przy zdjęciu większym niż okno")
     await page.keyboard.press("Escape")
     await page.wait_for_timeout(200)
     if await page.evaluate("document.querySelector('dialog.lb').open"):
@@ -170,14 +207,15 @@ async def check_desktop(browser, url, total, failures):
 
 
 async def main() -> None:
-    gallery, total = find_gallery()
+    gallery, photos = find_gallery()
+    total = len(photos)
     url = f"{serve()}/{gallery}/"
     failures: list[str] = []
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         for width, height in [(360, 740), (390, 844), (844, 390), (820, 1180)]:
             await check_touch(browser, url, total, width, height, failures)
-        await check_desktop(browser, url, total, failures)
+        await check_desktop(browser, url, photos, failures)
         await check_no_avif(browser, url, failures)
         await browser.close()
     if failures:

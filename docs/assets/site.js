@@ -87,10 +87,13 @@
     stage.scrollTop = on ? Math.max(0, (at || 0) * img.offsetHeight - stage.clientHeight / 2) : 0;
   }
 
-  // Przycisk ma sens tylko wtedy, gdy zdjęcie jest wyraźnie większe niż jego widok.
+  // Przycisk ma sens tylko wtedy, gdy powiększenie da wyraźnie większy obraz.
+  // Powiększone zdjęcie ma szerokość okna (albo swoją własną, jeśli jest węższe),
+  // więc szerokie zdjęcie, które już prawie wypełnia okno, nic by nie zyskało.
   function refreshZoom() {
     if (!dialog.open || isFull()) return;
-    var can = finePointer && img.clientWidth > 0 && (Number(links[current].dataset.w) || 0) > img.clientWidth * 1.2;
+    var enlarged = Math.min(Number(links[current].dataset.w) || 0, dialog.clientWidth);
+    var can = finePointer && img.clientWidth > 0 && enlarged > img.clientWidth * 1.2;
     zoomBtn.hidden = !can;
     dialog.classList.toggle("can-zoom", can);
   }
