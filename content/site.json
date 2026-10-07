@@ -140,7 +140,14 @@
           "slug": "reklama-do-1945",
           "title": "Reklama do 1945 roku",
           "lead": "Foldery, cenniki i ogłoszenia firm fotograficznych do 1945 roku, polskie i zagraniczne.",
-          "empty": "Ten dział jest w przygotowaniu."
+          "empty": "Ten dział jest w przygotowaniu.",
+          "children": [
+            {
+              "slug": "reklamy-z-prasy-fotograficznej",
+              "title": "Reklamy z przedwojennej polskiej prasy fotograficznej",
+              "cover": "reklama-prasowa-03"
+            }
+          ]
         },
         {
           "slug": "gadzety-reklamowe",
