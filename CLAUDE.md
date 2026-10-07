@@ -13,6 +13,7 @@ Zmiany na stronie wprowadzasz i publikujesz sam; jego rolą jest dostarczyć zdj
 - `build.py` – generator. Czyta `content/` i manifesty zdjęć, zapisuje HTML do `docs/`. Tylko biblioteka standardowa.
 - `tools/add_photos.py` – zmniejsza zdjęcia, robi miniatury, usuwa EXIF, dopisuje do manifestu galerii. Duże zdjęcie zapisuje jako AVIF, miniaturę jako WebP. Wymaga Pillow z obsługą AVIF.
 - `tools/check_viewer.py` – test podglądu zdjęć (dotyk, mysz, klawiatura). Wymaga Playwrighta.
+- `tools/vault.py` – szyfrowanie galerii na hasło; `tools/check_protected.py` – test takiej galerii od początku do końca.
 - `docs/` – to, co widzi świat. HTML jest generowany, nie edytuj go ręcznie.
   - `docs/assets/` – `style.css`, `site.js`, fonty (edytowane ręcznie).
   - `docs/zdjecia/<ścieżka>/` – zdjęcia galerii, miniatury w `mini/`, manifest `index.json` (tu wpisuje się podpisy: pole `caption`).
@@ -36,6 +37,22 @@ Po każdej zmianie: uruchom `build.py`, obejrzyj wynik w przeglądarce (komputer
 
 Po zmianach w `docs/assets/site.js` albo w stylach podglądu zdjęć (`.lb…`) uruchom też `python3 tools/check_viewer.py`.
 Skrypt stuka w strzałki i przesuwa palcem tak jak człowiek na telefonie. Sam zrzut ekranu tego nie wykaże: pierwsza wersja podglądu wyglądała dobrze, a na telefonie nie działała.
+
+## Galerie na hasło
+
+Dla zdjęć, których nie mają oglądać postronni (u właściciela: rodzinne zdjęcia z ludźmi). Repozytorium i strona są publiczne, więc takie zdjęcia trafiają tu wyłącznie zaszyfrowane, a przeglądarka odszyfrowuje je po wpisaniu hasła. Szczegóły w `tools/vault.py`.
+
+    HASLO_GALERII='...' python3 tools/add_photos.py --protect <ścieżka-galerii> /ścieżka/do/oryginałów
+    python3 build.py
+
+- Galerię trzeba najpierw dopisać w `content/site.json` jak każdą inną. `--protect` jest potrzebne tylko przy zakładaniu; przy kolejnych dodaniach wystarczy hasło.
+- Hasło podaje właściciel w rozmowie. Nigdy nie zapisuj go w repozytorium, w komunikacie commita, w dokumentach projektu ani w pamięci. Bez hasła nie da się dodać zdjęć do istniejącej galerii, więc poproś o nie.
+- Hasło musi być długie (kilka przypadkowych słów, minimum 12 znaków). Zaszyfrowane pliki są publiczne i każdy może zgadywać hasło u siebie bez ograniczeń; narzędzie odrzuca krótsze.
+- Oryginały i odszyfrowane kopie trzymaj poza repozytorium (katalog roboczy sesji). Przed commitem sprawdź `git status`: w katalogu galerii mają być tylko `lock.json` i pliki `*.bin`.
+- Galeria na hasło nie ma okładki ani licznika; na listach widać przy niej „na hasło”. Tytuł, opis i ewentualny tekst z `content/teksty/` pozostają jawne.
+- Nie da się mieszać w jednej galerii zdjęć jawnych i zaszyfrowanych.
+- Zmiana hasła nie zabezpieczy zdjęć dodanych wcześniej: stare zaszyfrowane pliki zostają w historii repozytorium i otwiera je stare hasło. Powiedz to właścicielowi, jeśli hasło wycieknie.
+- Po zmianach w `tools/vault.py`, w trybie `--protect` albo w części „galeria na hasło” pliku `site.js` uruchom `python3 tools/check_protected.py` oraz `python3 tools/check_viewer.py`.
 
 ## Zasady
 

@@ -14,8 +14,10 @@
   }
 
   // ------------------------------------------------------- podgląd zdjęcia
-  var grid = document.querySelector("[data-lightbox]");
-  if (!grid || typeof HTMLDialogElement === "undefined") return;
+  // resolve(a, "full" | "mini") jest podawane tylko dla galerii na hasło:
+  // zwraca obietnicę adresu odszyfrowanego zdjęcia zamiast zwykłego a.href.
+  function initGallery(grid, resolve) {
+  if (typeof HTMLDialogElement === "undefined") return;
 
   var links = Array.prototype.slice.call(grid.querySelectorAll("a"));
   if (!links.length) return;
@@ -93,12 +95,34 @@
     dialog.classList.toggle("can-zoom", can);
   }
 
+  // Zamiast dużego zdjęcia pokaż miniaturę (brak obsługi AVIF albo zerwane połączenie).
+  function useThumb() {
+    if (dialog.classList.contains("is-fallback")) return;
+    dialog.classList.add("is-fallback");
+    var token = shown;
+    var thumb = links[current].querySelector("img");
+    function set(url) { if (url && token === shown && dialog.open) img.src = url; }
+    if (resolve) resolve(links[current], "mini").then(set, function () {});
+    else set(thumb && (thumb.currentSrc || thumb.src));
+  }
+
+  var shown = 0; // numer kolejnego wyświetlenia; spóźnione odszyfrowanie nie podmieni nowszego zdjęcia
+
   function show(i) {
     current = (i + links.length) % links.length;
     var a = links[current];
     var thumb = a.querySelector("img");
+    var token = ++shown;
     dialog.classList.remove("is-fallback");
-    img.src = a.href;
+    if (resolve) {
+      img.removeAttribute("src");
+      resolve(a, "full").then(
+        function (url) { if (token === shown && dialog.open) img.src = url; },
+        function () { if (token === shown) useThumb(); }
+      );
+    } else {
+      img.src = a.href;
+    }
     img.width = Number(a.dataset.w) || 0;
     img.height = Number(a.dataset.h) || 0;
     img.alt = thumb ? thumb.alt : "";
@@ -110,7 +134,11 @@
     prev.hidden = single;
     next.hidden = single;
     // Wczytaj sąsiednie zdjęcie z wyprzedzeniem.
-    if (!single) new Image().src = links[(current + 1) % links.length].href;
+    if (!single) {
+      var following = links[(current + 1) % links.length];
+      if (resolve) resolve(following, "full").catch(function () {});
+      else new Image().src = following.href;
+    }
     refreshZoom();
   }
 
@@ -146,12 +174,7 @@
   // Duże zdjęcia są w formacie AVIF. Urządzenie, które go nie otwiera (albo zerwane
   // połączenie), dostaje w podglądzie miniaturę, żeby nie zobaczyć pustego ekranu.
   img.addEventListener("error", function () {
-    var thumb = links[current].querySelector("img");
-    var fallback = thumb && (thumb.currentSrc || thumb.src);
-    if (fallback && img.getAttribute("src") && img.src !== fallback) {
-      dialog.classList.add("is-fallback");
-      img.src = fallback;
-    }
+    if (img.getAttribute("src")) useThumb();
   });
 
   dialog.addEventListener("keydown", function (e) {
@@ -164,6 +187,7 @@
   });
 
   dialog.addEventListener("close", function () {
+    shown++;
     img.removeAttribute("src");
     setFull(false);
     links[current].focus();
@@ -197,4 +221,175 @@
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) show(current + (dx < 0 ? 1 : -1));
   }, { passive: true });
   dialog.addEventListener("touchcancel", function () { touch = null; }, { passive: true });
+  } // initGallery
+
+  // ------------------------------------------------------ galeria na hasło
+  // Zdjęcia leżą na serwerze zaszyfrowane (tools/vault.py). Hasło nie opuszcza
+  // przeglądarki: służy do odszyfrowania klucza, a klucz do odszyfrowania zdjęć.
+  function initVault(vault, grid) {
+    var form = vault.querySelector("form");
+    if (!form) return;
+    var input = form.querySelector("#haslo");
+    var reveal = form.querySelector("#pokaz-haslo");
+    var button = form.querySelector('button[type="submit"]');
+    var msg = form.querySelector(".vault__msg");
+    var base = vault.dataset.vault;
+    var title = vault.dataset.title || "";
+
+    function say(text) { msg.textContent = text; msg.hidden = !text; }
+    function busy(on) {
+      button.disabled = on;
+      button.textContent = on ? "Otwieram…" : "Otwórz galerię";
+    }
+
+    if (!window.crypto || !window.crypto.subtle || !window.TextEncoder || !window.fetch) {
+      say("Ta przeglądarka nie potrafi otworzyć zaszyfrowanej galerii. Zaktualizuj ją albo użyj innej.");
+      input.disabled = true;
+      button.disabled = true;
+      return;
+    }
+    var subtle = window.crypto.subtle;
+
+    reveal.addEventListener("change", function () { input.type = reveal.checked ? "text" : "password"; });
+
+    function bytes(b64) {
+      var bin = atob(b64);
+      var out = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+      return out;
+    }
+    // Każdy blok: 12 bajtów wartości jednorazowej, potem szyfrogram AES-GCM.
+    function unseal(key, data) {
+      return subtle.decrypt({ name: "AES-GCM", iv: data.subarray(0, 12) }, key, data.subarray(12));
+    }
+    function download(file) {
+      return fetch(base + file, { cache: "no-cache" }).then(function (r) {
+        if (!r.ok) throw new Error("network");
+        return r;
+      });
+    }
+
+    var lock = null;
+    function loadLock() {
+      if (lock) return Promise.resolve(lock);
+      return download("lock.json").then(function (r) { return r.json(); }).then(function (json) { return (lock = json); });
+    }
+
+    function unlock(password) {
+      var stage = "network";
+      return loadLock().then(function (l) {
+        stage = "password";
+        return subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"])
+          .then(function (material) {
+            return subtle.deriveKey(
+              { name: "PBKDF2", hash: "SHA-256", salt: bytes(l.salt), iterations: l.iter },
+              material, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+          })
+          .then(function (kek) { return unseal(kek, bytes(l.key)); })
+          .then(function (raw) { return subtle.importKey("raw", raw, "AES-GCM", false, ["decrypt"]); })
+          .then(function (key) {
+            stage = "data";
+            return unseal(key, bytes(l.manifest)).then(function (buf) {
+              return { key: key, items: JSON.parse(new TextDecoder().decode(buf)) };
+            });
+          });
+      }).catch(function (err) { err.stage = stage; throw err; });
+    }
+
+    function build(key, items) {
+      vault.hidden = true;
+      if (!items.length) {
+        var empty = document.createElement("div");
+        empty.className = "empty";
+        empty.innerHTML = "<p>Zdjęcia do tej galerii są w przygotowaniu.</p>";
+        vault.parentNode.insertBefore(empty, vault);
+        return;
+      }
+
+      var cache = {};
+      function blobUrl(file, type) {
+        if (!cache[file]) {
+          cache[file] = download(file)
+            .then(function (r) { return r.arrayBuffer(); })
+            .then(function (buf) { return unseal(key, new Uint8Array(buf)); })
+            .then(function (plain) { return URL.createObjectURL(new Blob([plain], { type: type })); });
+          cache[file].catch(function () { delete cache[file]; });
+        }
+        return cache[file];
+      }
+      function resolve(a, which) {
+        var p = a._photo;
+        return which === "mini" ? blobUrl(p.mini, p.mtype) : blobUrl(p.file, p.type);
+      }
+
+      items.forEach(function (p) {
+        var a = document.createElement("a");
+        a.href = "#";
+        a._photo = p;
+        a.style.setProperty("--r", (p.w / p.h).toFixed(4));
+        a.style.aspectRatio = p.w + " / " + p.h;
+        a.dataset.w = p.w;
+        a.dataset.h = p.h;
+        if (p.caption) a.dataset.caption = p.caption;
+        var thumb = document.createElement("img");
+        thumb.width = p.mw;
+        thumb.height = p.mh;
+        thumb.alt = p.caption || title;
+        thumb.decoding = "async";
+        a.appendChild(thumb);
+        grid.appendChild(a);
+      });
+      if (items.length <= 3) grid.classList.add("photos--few");
+      grid.hidden = false;
+
+      // Miniatury odszyfrowujemy dopiero, gdy zbliżają się do ekranu.
+      function loadThumb(a) {
+        resolve(a, "mini").then(function (url) { a.firstChild.src = url; }, function () {});
+      }
+      var anchors = Array.prototype.slice.call(grid.children);
+      if ("IntersectionObserver" in window) {
+        var watcher = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            watcher.unobserve(entry.target);
+            loadThumb(entry.target);
+          });
+        }, { rootMargin: "600px" });
+        anchors.forEach(function (a) { watcher.observe(a); });
+      } else {
+        anchors.forEach(loadThumb);
+      }
+
+      initGallery(grid, resolve);
+      anchors[0].focus({ preventScroll: true });
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var password = input.value.normalize("NFC").trim();
+      if (!password) return;
+      say("");
+      busy(true);
+      unlock(password).then(
+        function (opened) { input.value = ""; build(opened.key, opened.items); },
+        function (err) {
+          busy(false);
+          if (err.stage === "password") {
+            say("To hasło nie pasuje. Sprawdź wielkie i małe litery i spróbuj jeszcze raz.");
+            input.select();
+          } else if (err.stage === "data") {
+            say("Galeria jest uszkodzona i nie da się jej otworzyć. Daj znać właścicielowi strony.");
+          } else {
+            say("Nie udało się pobrać galerii. Sprawdź połączenie z internetem i spróbuj ponownie.");
+          }
+        }
+      );
+    });
+  }
+
+  // ----------------------------------------------------------------- start
+  var gridEl = document.querySelector("[data-lightbox]");
+  var vaultEl = document.querySelector("[data-vault]");
+  if (vaultEl && gridEl) initVault(vaultEl, gridEl);
+  else if (gridEl) initGallery(gridEl);
 })();

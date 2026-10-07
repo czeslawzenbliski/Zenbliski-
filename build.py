@@ -75,6 +75,11 @@ class Node:
         return self.parent.top if self.parent else self
 
     @property
+    def locked(self) -> bool:
+        """Galeria na hasło: zdjęcia i ich lista leżą zaszyfrowane (patrz tools/vault.py)."""
+        return (PHOTOS / self.path / "lock.json").exists()
+
+    @property
     def photos(self) -> list[dict]:
         manifest = PHOTOS / self.path / "index.json"
         if not manifest.exists():
@@ -113,6 +118,8 @@ class Node:
             if kinds == {"text"}:
                 return plural(n, "wpis", "wpisy", "wpisów")
             return plural(n, "pozycja", "pozycje", "pozycji")
+        if self.locked:
+            return "na hasło"
         n = len(self.photos)
         if n:
             # "unit": "strona" dla skanów prospektów i instrukcji (8 stron zamiast 8 zdjęć).
@@ -224,6 +231,23 @@ def photo_grid(node: Node, prefix: str) -> str:
     return "\n".join(out)
 
 
+def vault_form(node: Node, prefix: str) -> str:
+    """Formularz hasła i pusta siatka, którą site.js wypełnia po odszyfrowaniu."""
+    base = f"{prefix}zdjecia/{node.path}/"
+    return f"""<div class="vault" data-vault="{base}" data-title="{escape(node.title, quote=True)}">
+  <form class="vault__form" autocomplete="off">
+    <p class="vault__lead">Ta galeria jest dostępna na hasło.</p>
+    <label for="haslo">Hasło</label>
+    <input id="haslo" name="haslo" type="password" required autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="off">
+    <label class="vault__show"><input id="pokaz-haslo" type="checkbox"> Pokaż hasło</label>
+    <button type="submit">Otwórz galerię</button>
+    <p class="vault__msg" role="alert" hidden></p>
+  </form>
+  <noscript><p class="vault__msg">Do otwarcia tej galerii potrzebna jest przeglądarka z włączoną obsługą JavaScript.</p></noscript>
+</div>
+<div class="photos" data-lightbox hidden></div>"""
+
+
 def empty_state(text: str) -> str:
     return f'<div class="empty"><p>{escape(text)}</p></div>'
 
@@ -300,7 +324,9 @@ def render_node(site: dict, sections: list[Node], node: Node) -> str:
         parts.append(f'<section class="shelf" aria-label="Zawartość działu">\n{frames}\n</section>')
     if photos:
         parts.append(photo_grid(node, prefix))
-    if not (body or node.children or photos):
+    if node.locked:
+        parts.append(vault_form(node, prefix))
+    if not (body or node.children or photos or node.locked):
         default = ("Zdjęcia do tej galerii są w przygotowaniu."
                    if node.kind == "gallery" else "Ta strona jest w przygotowaniu.")
         parts.append(empty_state(node.data.get("empty", default)))
