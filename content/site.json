@@ -110,6 +110,11 @@
           "slug": "reflekta-ii",
           "title": "Reflekta II",
           "cover": "reflekta-ii-06"
+        },
+        {
+          "slug": "praktica-electronic",
+          "title": "Praktica Electronic",
+          "cover_pos": "50% 35%"
         }
       ]
     },

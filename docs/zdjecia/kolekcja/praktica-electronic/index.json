@@ -1,0 +1,38 @@
+[
+  {
+    "file": "praktica-electronic-01.avif",
+    "mini": "praktica-electronic-01.webp",
+    "w": 2000,
+    "h": 1727,
+    "mw": 900,
+    "mh": 777,
+    "caption": ""
+  },
+  {
+    "file": "praktica-electronic-02.avif",
+    "mini": "praktica-electronic-02.webp",
+    "w": 2000,
+    "h": 1800,
+    "mw": 900,
+    "mh": 810,
+    "caption": ""
+  },
+  {
+    "file": "praktica-electronic-03.avif",
+    "mini": "praktica-electronic-03.webp",
+    "w": 1250,
+    "h": 2000,
+    "mw": 562,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "praktica-electronic-04.avif",
+    "mini": "praktica-electronic-04.webp",
+    "w": 2000,
+    "h": 1349,
+    "mw": 900,
+    "mh": 607,
+    "caption": ""
+  }
+]
