@@ -194,6 +194,8 @@
           "slug": "fotoskoda",
           "title": "Fotoskoda",
           "kind": "text",
+          "cover": "fotoskoda-03",
+          "cover_pos": "50% 8%",
           "empty": "Ten wpis jest w przygotowaniu."
         }
       ]
