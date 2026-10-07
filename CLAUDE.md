@@ -9,7 +9,7 @@ Zmiany na stronie wprowadzasz i publikujesz sam; jego rolą jest dostarczyć zdj
 ## Układ repozytorium
 
 - `content/site.json` – cała struktura: działy, galerie, tytuły, opisy. Jedyne źródło prawdy o nawigacji.
-- `content/teksty/<ścieżka z "--" zamiast "/">.html` – opcjonalna treść podstrony (fragment HTML), np. `kolekcja--stan-kolekcji.html`.
+- `content/teksty/<ścieżka z "--" zamiast "/">.html` – opcjonalna treść podstrony (fragment HTML), np. `kolekcja--mamiya-c330s.html`.
 - `build.py` – generator. Czyta `content/` i manifesty zdjęć, zapisuje HTML do `docs/`. Tylko biblioteka standardowa.
 - `tools/add_photos.py` – zmniejsza zdjęcia, robi miniatury, usuwa EXIF, dopisuje do manifestu galerii. Duże zdjęcie zapisuje jako AVIF, miniaturę jako WebP. Wymaga Pillow z obsługą AVIF.
 - `tools/check_viewer.py` – test podglądu zdjęć (dotyk, mysz, klawiatura). Wymaga Playwrighta.
