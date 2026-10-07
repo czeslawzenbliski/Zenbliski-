@@ -211,6 +211,48 @@ a:hover { color: var(--papier); }
   color: var(--papier);
 }
 
+/* Wyszukiwarka. Bez skryptu pozostaje ukryta (atrybut hidden w HTML). */
+.search { max-width: 34rem; margin: clamp(1.5rem, 3vw, 2.5rem) 0 0; }
+.search__field {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.9rem;
+  background: var(--skaj);
+  border: 1px solid var(--linia);
+  color: var(--mosiadz);
+  cursor: text;
+}
+.search__field:focus-within { border-color: var(--mosiadz-jasny); outline: 1px solid var(--mosiadz-jasny); outline-offset: 0; }
+.search__field svg { flex: none; }
+.search__field input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.8rem 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  color: var(--papier);
+  font: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.search__field input:focus { outline: none; }
+.search__field input::placeholder { color: var(--szary); opacity: 1; }
+.search__status { margin: 0.75rem 0 0; font-size: 0.9375rem; color: var(--szary); }
+.search__status:empty, .search__results:empty { display: none; }
+.search__results { list-style: none; margin: 0.6rem 0 0; padding: 0; border-top: 1px solid var(--linia); }
+.search__results a {
+  display: block;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--linia);
+  text-decoration: none;
+}
+.search__title { display: block; font: 400 1.25rem/1.25 var(--serif); color: var(--mosiadz-jasny); }
+.search__meta { display: block; margin-top: 0.2rem; font-size: 0.9375rem; line-height: 1.4; color: var(--szary); }
+.search__results a:hover .search__title,
+.search__results a:focus-visible .search__title { color: var(--papier); }
+
 .index,
 .shelf {
   display: grid;
@@ -599,7 +641,7 @@ a:hover { color: var(--papier); }
 
 /* Playfair ma domyślnie cyfry nautyczne („HP5", „100" wyglądają wtedy jak litery).
    Skrót `font:` zeruje font-variant, więc cyfry zwykłe ustawiamy tu osobno. */
-.brand, .hero__name, .frame__title, .page__title, .pager a,
+.brand, .hero__name, .frame__title, .page__title, .pager a, .search__title,
 .prose h2, .prose h3, .nav a, .empty p { font-variant-numeric: lining-nums; }
 
 @media (prefers-reduced-motion: reduce) {

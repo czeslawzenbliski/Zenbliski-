@@ -10,10 +10,11 @@ Zmiany na stronie wprowadzasz i publikujesz sam; jego rolą jest dostarczyć zdj
 
 - `content/site.json` – cała struktura: działy, galerie, tytuły, opisy. Jedyne źródło prawdy o nawigacji.
 - `content/teksty/<ścieżka z "--" zamiast "/">.html` – opcjonalna treść podstrony (fragment HTML), np. `kolekcja--mamiya-c330s.html`.
-- `build.py` – generator. Czyta `content/` i manifesty zdjęć, zapisuje HTML do `docs/`. Tylko biblioteka standardowa.
+- `build.py` – generator. Czyta `content/` i manifesty zdjęć, zapisuje HTML do `docs/` oraz spis dla wyszukiwarki `docs/szukaj.json`. Tylko biblioteka standardowa.
 - `tools/add_photos.py` – zmniejsza zdjęcia, robi miniatury, usuwa EXIF, dopisuje do manifestu galerii. Duże zdjęcie zapisuje jako AVIF, miniaturę jako WebP. Wymaga Pillow z obsługą AVIF.
 - `tools/check_viewer.py` – test podglądu zdjęć (dotyk, mysz, klawiatura). Wymaga Playwrighta.
 - `tools/vault.py` – szyfrowanie galerii na hasło; `tools/check_protected.py` – test takiej galerii od początku do końca.
+- `tools/check_search.py` – test wyszukiwarki (komputer i telefon). Wymaga Playwrighta.
 - `docs/` – to, co widzi świat. HTML jest generowany, nie edytuj go ręcznie.
   - `docs/assets/` – `style.css`, `site.js`, fonty (edytowane ręcznie).
   - `docs/zdjecia/<ścieżka>/` – zdjęcia galerii, miniatury w `mini/`, manifest `index.json` (tu wpisuje się podpisy: pole `caption`).
@@ -31,12 +32,21 @@ Skany z drobnym tekstem (prospekty w dziale Materiały reklamowe) dodawaj z `--e
 Do czytania służy w podglądzie przycisk „Powiększ” (na komputerze) albo powiększenie dwoma palcami (na telefonie).
 
 Nowa galeria lub dział: dopisz wpis w `content/site.json`, potem `python3 build.py`.
-Pola wpisu: `slug`, `title`, opcjonalnie `lead`, `kind` (`gallery` domyślnie albo `text`), `plate` (metryczka: aparat, obiektyw, film), `cover` (nazwa pliku okładki), `cover_pos` (przesunięcie kadru okładki, np. `50% 20%`), `unit` (`strona` dla skanów prospektów, wtedy licznik pokazuje „8 stron”), `empty` (tekst pustej strony), `children`.
+Pola wpisu: `slug`, `title`, opcjonalnie `lead`, `kind` (`gallery` domyślnie albo `text`), `plate` (metryczka: aparat, obiektyw, film), `cover` (nazwa pliku okładki), `cover_pos` (przesunięcie kadru okładki, np. `50% 20%`), `unit` (`strona` dla skanów prospektów, wtedy licznik pokazuje „8 stron”), `empty` (tekst pustej strony), `keywords` (lista słów, po których stronę ma znajdować wyszukiwarka, niewidoczna na stronie), `children`.
 
 Po każdej zmianie: uruchom `build.py`, obejrzyj wynik w przeglądarce (komputer i telefon), dopiero potem commit i push do `main`.
 
 Po zmianach w `docs/assets/site.js` albo w stylach podglądu zdjęć (`.lb…`) uruchom też `python3 tools/check_viewer.py`.
 Skrypt stuka w strzałki i przesuwa palcem tak jak człowiek na telefonie. Sam zrzut ekranu tego nie wykaże: pierwsza wersja podglądu wyglądała dobrze, a na telefonie nie działała.
+
+## Wyszukiwarka
+
+Pole z lupką na stronie głównej. Działa w całości w przeglądarce: `build.py` zapisuje spis `docs/szukaj.json`, a `site.js` (funkcja `initSearch`) go przeszukuje. Żadnej zewnętrznej usługi.
+
+- Szuka tylko w tekście: tytuły, opisy (`lead`), metryczki (`plate`: aparat, obiektyw, film), słowa kluczowe (`keywords`), podpisy zdjęć (`caption` w manifeście galerii) i treść z `content/teksty/`. Tego, co widać wyłącznie na zdjęciu, nie znajdzie.
+- Żeby galerię dało się znaleźć po czymś, czego nie ma w tytule (np. po nazwie filmu albo po markach widocznych na zdjęciach), dopisz to w `plate`, w podpisach albo w `keywords`. Słowa podaje właściciel; nie wymyślaj ich.
+- Z galerii na hasło do spisu trafia tylko to, co jawne (tytuł, opis). Podpisy jej zdjęć są zaszyfrowane.
+- Po zmianach w `initSearch`, w stylach `.search…` albo w `search_index` w `build.py` uruchom `python3 tools/check_search.py`.
 
 ## Galerie na hasło
 

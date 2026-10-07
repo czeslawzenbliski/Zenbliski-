@@ -1,4 +1,4 @@
-/* zenbliski.pl: menu na telefonie i podgląd zdjęć. Bez zewnętrznych bibliotek. */
+/* zenbliski.pl: menu na telefonie, podgląd zdjęć, wyszukiwarka. Bez zewnętrznych bibliotek. */
 (function () {
   "use strict";
 
@@ -390,7 +390,136 @@
     });
   }
 
+  // ---------------------------------------------------------- wyszukiwarka
+  // Szuka w spisie szukaj.json, który build.py układa z tytułów, opisów,
+  // metryczek, podpisów zdjęć i treści wpisów. Wszystko dzieje się w przeglądarce.
+  function initSearch(form) {
+    if (!window.fetch || !window.Promise) return; // bardzo stara przeglądarka: pole zostaje ukryte
+    var input = form.querySelector("input");
+    var status = form.querySelector(".search__status");
+    var list = form.querySelector(".search__results");
+    var index = null, loading = null, failed = false;
+    var LIMIT = 20;
+
+    // Małe litery i bez polskich znaków, znak w znak (długość tekstu się nie zmienia).
+    function fold(s) {
+      s = String(s).toLowerCase().replace(/ł/g, "l");
+      return s.normalize ? s.normalize("NFD").replace(/[\u0300-\u036f]/g, "") : s;
+    }
+    // Do porównywania: dodatkowo wszystko poza literami i cyframi staje się odstępem,
+    // żeby „FED-Atlas", „fed atlas" i „3,5" / „3.5" znaczyły to samo.
+    function norm(s) { return fold(s).replace(/[^a-z0-9]+/g, " ").trim(); }
+
+    function load() {
+      if (!loading) {
+        loading = fetch(form.getAttribute("data-search"))
+          .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+          .then(function (data) {
+            index = data.map(function (e) {
+              return { u: e.u, t: e.t, p: e.p, x: e.x, nt: norm(e.t), np: norm(e.p), nx: e.x.map(norm) };
+            });
+          })
+          .catch(function () { failed = true; });
+      }
+      return loading;
+    }
+
+    // Każde wpisane słowo musi gdzieś wystąpić. Tytuł liczy się najbardziej,
+    // potem teksty strony, na końcu nazwa działu nadrzędnego.
+    function find(tokens) {
+      var hits = [];
+      index.forEach(function (e, order) {
+        var score = 0, where = -1;
+        for (var i = 0; i < tokens.length; i++) {
+          var t = tokens[i], s = 0, at = e.nt.indexOf(t);
+          if (at !== -1) {
+            s = (at === 0 || e.nt.charAt(at - 1) === " ") ? 8 : 6;
+          } else {
+            for (var j = 0; j < e.nx.length && !s; j++) {
+              if (e.nx[j].indexOf(t) !== -1) { s = 3; if (where === -1) where = j; }
+            }
+            if (!s && e.np.indexOf(t) !== -1) s = 1;
+          }
+          if (!s) return;
+          score += s;
+        }
+        hits.push({ e: e, score: score, where: where, order: order });
+      });
+      hits.sort(function (a, b) { return b.score - a.score || a.order - b.order; });
+      return hits;
+    }
+
+    // Fragment tekstu wokół znalezionego słowa.
+    function excerpt(text, tokens) {
+      if (text.length <= 110) return text;
+      var folded = fold(text), at = -1;
+      for (var i = 0; i < tokens.length && at === -1; i++) at = folded.indexOf(tokens[i]);
+      var from = Math.max(0, (at === -1 ? 0 : at) - 45), to = Math.min(text.length, from + 110);
+      if (from > 0) from = text.indexOf(" ", from) + 1;
+      if (to < text.length) to = text.lastIndexOf(" ", to);
+      return (from > 0 ? "… " : "") + text.slice(from, to) + (to < text.length ? " …" : "");
+    }
+
+    function remember(q) {
+      if (!window.history || !history.replaceState) return;
+      try { history.replaceState(null, "", q ? "?q=" + encodeURIComponent(q) : location.pathname); } catch (err) {}
+    }
+
+    function render() {
+      var q = input.value.trim(), tokens = norm(q).split(" ").filter(Boolean);
+      list.textContent = "";
+      if (norm(q).length < 2) { status.textContent = ""; remember(""); return; }
+      if (failed) { status.textContent = "Wyszukiwarka jest chwilowo niedostępna. Spróbuj ponownie za chwilę."; return; }
+      if (!index) { status.textContent = "Szukam…"; load().then(render); return; }
+      remember(q);
+
+      var hits = find(tokens);
+      if (!hits.length) { status.textContent = "Nic nie znaleziono dla „" + q + "”."; return; }
+      status.textContent = "Znaleziono: " + hits.length +
+        (hits.length > LIMIT ? ", poniżej pierwsze " + LIMIT + "." : "");
+      hits.slice(0, LIMIT).forEach(function (h) {
+        var a = document.createElement("a"), title = document.createElement("span");
+        a.href = h.e.u;
+        title.className = "search__title";
+        title.textContent = h.e.t;
+        a.appendChild(title);
+        var meta = [h.e.p, h.where === -1 ? "" : excerpt(h.e.x[h.where], tokens)].filter(Boolean).join(" · ");
+        if (meta) {
+          var line = document.createElement("span");
+          line.className = "search__meta";
+          line.textContent = meta;
+          a.appendChild(line);
+        }
+        var li = document.createElement("li");
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+    }
+
+    form.hidden = false;
+    input.addEventListener("focus", load);
+    input.addEventListener("input", render);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && input.value) { input.value = ""; render(); }
+    });
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      render();
+      // Na telefonie schowaj klawiaturę, żeby było widać wyniki.
+      if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) input.blur();
+    });
+
+    // Powrót z wyniku na stronę główną: pokaż to samo wyszukiwanie.
+    var saved = /[?&]q=([^&]*)/.exec(location.search);
+    if (saved) {
+      try { input.value = decodeURIComponent(saved[1].replace(/\+/g, " ")); } catch (err) {}
+    }
+    if (input.value) render();
+  }
+
   // ----------------------------------------------------------------- start
+  var searchEl = document.querySelector("[data-search]");
+  if (searchEl) initSearch(searchEl);
   var gridEl = document.querySelector("[data-lightbox]");
   var vaultEl = document.querySelector("[data-vault]");
   if (vaultEl && gridEl) initVault(vaultEl, gridEl);

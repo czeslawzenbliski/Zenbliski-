@@ -3,7 +3,8 @@
 
 Czyta strukturę z content/site.json, teksty z content/teksty/ i manifesty
 zdjęć z docs/zdjecia/<ścieżka>/index.json, a zapisuje gotowe pliki HTML
-do docs/ (to ten katalog publikuje GitHub Pages).
+do docs/ (to ten katalog publikuje GitHub Pages). Zapisuje też docs/szukaj.json,
+czyli spis tekstów dla wyszukiwarki na stronie głównej.
 
 Użycie:  python3 build.py
 Wymaga tylko biblioteki standardowej Pythona 3.9+.
@@ -12,8 +13,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import shutil
-from html import escape
+from html import escape, unescape
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -287,7 +289,24 @@ def siblings_nav(node: Node, prefix: str) -> str:
 
 # -------------------------------------------------------------------- strony
 
-def render_home(site: dict, sections: list[Node]) -> str:
+SEARCH_ICON = ('<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" '
+               'stroke-width="1.75" stroke-linecap="round" aria-hidden="true">'
+               '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>')
+
+
+def search_form(index_url: str) -> str:
+    """Pole wyszukiwania. Bez skryptu zostaje ukryte; site.js je odsłania i obsługuje."""
+    return f"""<form class="search" role="search" data-search="{index_url}" hidden>
+      <label class="search__field">
+        {SEARCH_ICON}
+        <input type="search" name="q" aria-label="Szukaj na stronie" placeholder="Szukaj, np. Praktica albo Ilford" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search">
+      </label>
+      <p class="search__status" role="status"></p>
+      <ol class="search__results"></ol>
+    </form>"""
+
+
+def render_home(site: dict, sections: list[Node], index_url: str) -> str:
     frames = "\n".join(frame(s, "") for s in sections)
     return (
         head(site, f"{site['title']} – fotografia", site["description"], "")
@@ -296,6 +315,7 @@ def render_home(site: dict, sections: list[Node]) -> str:
   <section class="hero">
     <h1 class="hero__name">{escape(site['title'])}</h1>
     <p class="hero__intro">{escape(site['intro'])}</p>
+    {search_form(index_url)}
   </section>
   <section class="index" aria-label="Działy">
 {frames}
@@ -367,6 +387,44 @@ def walk(nodes: list[Node]):
         yield from walk(n.children)
 
 
+def plain(html_text: str) -> str:
+    """Sam tekst z fragmentu HTML, w jednej linii."""
+    return " ".join(unescape(re.sub(r"<[^>]+>", " ", html_text)).split())
+
+
+def search_index(sections: list[Node]) -> list[dict]:
+    """Spis dla wyszukiwarki: jedna pozycja na stronę.
+
+    u = adres względem strony głównej, t = tytuł, p = działy nadrzędne,
+    x = pozostałe teksty tej strony: opis, metryczka (aparat, obiektyw, film),
+    słowa kluczowe (pole "keywords" w site.json), podpisy zdjęć i treść wpisu.
+    Trafia tu wyłącznie to, co i tak jest jawne. Podpisy zdjęć z galerii na hasło
+    są zaszyfrowane razem z listą zdjęć, więc w spisie ich nie ma.
+    """
+    entries = []
+    for node in walk(sections):
+        trail, n = [], node.parent
+        while n:
+            trail.append(n.title)
+            n = n.parent
+        extra = []
+        if node.lead:
+            extra.append(node.lead)
+        extra += [f"{k}: {v}" for k, v in node.plate]
+        keywords = node.data.get("keywords", [])
+        if keywords:
+            extra.append(", ".join(keywords))
+        for p in node.photos:
+            caption = p.get("caption", "").strip()
+            if caption and caption not in extra:
+                extra.append(caption)
+        body = plain(node.body)
+        if body:
+            extra.append(body)
+        entries.append({"u": f"{node.path}/", "t": node.title, "p": " › ".join(reversed(trail)), "x": extra})
+    return entries
+
+
 def main() -> None:
     site = json.loads((CONTENT / "site.json").read_text(encoding="utf-8"))
     sections = [Node(s) for s in site["sections"]]
@@ -377,8 +435,12 @@ def main() -> None:
             continue
         shutil.rmtree(item) if item.is_dir() else item.unlink()
 
+    index_json = json.dumps(search_index(sections), ensure_ascii=False, separators=(",", ":"))
+    (OUT / "szukaj.json").write_text(index_json + "\n", encoding="utf-8")
+    index_url = "szukaj.json?v=" + hashlib.sha1(index_json.encode("utf-8")).hexdigest()[:8]
+
     pages = 0
-    (OUT / "index.html").write_text(render_home(site, sections), encoding="utf-8")
+    (OUT / "index.html").write_text(render_home(site, sections, index_url), encoding="utf-8")
     (OUT / "404.html").write_text(render_404(site, sections), encoding="utf-8")
     pages += 2
     for node in walk(sections):
