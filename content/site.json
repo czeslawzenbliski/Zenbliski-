@@ -105,6 +105,11 @@
         {
           "slug": "fed-atlas",
           "title": "FED-Atlas"
+        },
+        {
+          "slug": "reflekta-ii",
+          "title": "Reflekta II",
+          "cover": "reflekta-ii-06"
         }
       ]
     },
