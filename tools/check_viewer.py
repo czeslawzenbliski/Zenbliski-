@@ -81,6 +81,8 @@ async def check_touch(browser, url, total, width, height, failures):
         if got != want:
             failures.append(f"{name}: {step}: jest „{got}”, powinno być „{want}”")
 
+    # W galerii z metryczką pierwsze zdjęcie bywa poniżej dolnej krawędzi niskiego ekranu.
+    await page.locator(".photos a").first.scroll_into_view_if_needed()
     await page.touchscreen.tap(*await centre(page, ".photos a"))
     await page.wait_for_timeout(400)
     expect("otwarcie", await count(), f"1 z {total}")
