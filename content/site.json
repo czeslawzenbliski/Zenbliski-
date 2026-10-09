@@ -199,6 +199,11 @@
               "slug": "canon-ae-1-program",
               "title": "Canon AE-1 Program",
               "unit": "strona"
+            },
+            {
+              "slug": "canon-canonet-ql17-ql19-ql25",
+              "title": "Canon Canonet QL17, QL19, QL25",
+              "unit": "strona"
             }
           ]
         },

@@ -1,0 +1,38 @@
+[
+  {
+    "file": "canonet-ql-01.avif",
+    "mini": "canonet-ql-01.webp",
+    "w": 2400,
+    "h": 2132,
+    "mw": 900,
+    "mh": 800,
+    "caption": ""
+  },
+  {
+    "file": "canonet-ql-02.avif",
+    "mini": "canonet-ql-02.webp",
+    "w": 2400,
+    "h": 2135,
+    "mw": 900,
+    "mh": 801,
+    "caption": ""
+  },
+  {
+    "file": "canonet-ql-03.avif",
+    "mini": "canonet-ql-03.webp",
+    "w": 2400,
+    "h": 2010,
+    "mw": 900,
+    "mh": 754,
+    "caption": ""
+  },
+  {
+    "file": "canonet-ql-04.avif",
+    "mini": "canonet-ql-04.webp",
+    "w": 2382,
+    "h": 2258,
+    "mw": 900,
+    "mh": 853,
+    "caption": ""
+  }
+]
