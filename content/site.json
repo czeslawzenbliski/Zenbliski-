@@ -194,6 +194,11 @@
               "slug": "canon-2000",
               "title": "Canon 2000",
               "unit": "strona"
+            },
+            {
+              "slug": "canon-ae-1-program",
+              "title": "Canon AE-1 Program",
+              "unit": "strona"
             }
           ]
         },
