@@ -600,6 +600,10 @@ a:hover { color: var(--papier); }
    na ekranie dotykowym nic (przesuwanie palcem, stuknięcie wraca do podglądu). */
 .lb.is-immersive .lb__stage { inset: 0; }
 .lb.is-immersive .lb__img { cursor: pointer; }
+/* Na pełnym ekranie gesty (powiększanie dwoma palcami, przesuwanie) obsługuje skrypt. */
+.lb.is-immersive, .lb.is-immersive .lb__frame { touch-action: none; }
+.lb.is-immersive.is-magnified .lb__img { cursor: grab; }
+.lb.is-immersive.is-magnified .lb__img:active { cursor: grabbing; }
 .lb.is-immersive .lb__count,
 .lb.is-immersive .lb__zoom,
 .lb.is-immersive .lb__close,

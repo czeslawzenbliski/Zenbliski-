@@ -75,6 +75,21 @@ async def swipe(cdp, x1, y1, x2, y2, steps=8):
     await asyncio.sleep(0.3)
 
 
+async def pinch(cdp, cx, cy, start, end, steps=8):
+    """Rozsunięcie (albo zsunięcie) dwóch palców wokół punktu (cx, cy)."""
+    def points(gap):
+        return [{"x": cx - gap / 2, "y": cy, "id": 0}, {"x": cx + gap / 2, "y": cy, "id": 1}]
+    await cdp.send("Input.dispatchTouchEvent", {"type": "touchStart", "touchPoints": points(start)})
+    for i in range(1, steps + 1):
+        await cdp.send("Input.dispatchTouchEvent", {"type": "touchMove", "touchPoints": points(start + (end - start) * i / steps)})
+        await asyncio.sleep(0.016)
+    await cdp.send("Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []})
+    await asyncio.sleep(0.3)
+
+
+IMG_WIDTH = "document.querySelector('.lb__img').getBoundingClientRect().width"
+
+
 async def centre(page, selector):
     box = await page.locator(selector).first.bounding_box()
     return box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
@@ -141,6 +156,28 @@ async def check_touch(browser, url, total, width, height, failures):
         expect("przesunięcie w lewo na pełnym ekranie", await count(), f"2 z {total}")
         if not await immersive():
             failures.append(f"{name}: przesunięcie palcem wyłącza pełny ekran")
+
+        # Powiększanie dwoma palcami na pełnym ekranie (przeglądarka sama tego tam nie robi).
+        whole = await page.evaluate(IMG_WIDTH)
+        await pinch(cdp, width / 2, height / 2, 60, 260)
+        bigger = await page.evaluate(IMG_WIDTH)
+        if bigger < whole * 1.8:
+            failures.append(f"{name}: na pełnym ekranie nie da się powiększyć zdjęcia dwoma palcami")
+        else:
+            # Powiększone zdjęcie przesuwa się palcem zamiast zmieniać na następne.
+            before = await page.evaluate("document.querySelector('.lb__img').getBoundingClientRect().left")
+            await swipe(cdp, width * 0.6, height * 0.5, width * 0.3, height * 0.5)
+            expect("przesuwanie powiększonego zdjęcia nie zmienia zdjęcia", await count(), f"2 z {total}")
+            after = await page.evaluate("document.querySelector('.lb__img').getBoundingClientRect().left")
+            if abs(after - before) < 20:
+                failures.append(f"{name}: powiększonego zdjęcia nie da się przesunąć palcem")
+            # Stuknięcie w powiększone zdjęcie wraca do całego zdjęcia, nadal na pełnym ekranie.
+            await page.touchscreen.tap(width / 2, height / 2)
+            await page.wait_for_timeout(300)
+            if abs(await page.evaluate(IMG_WIDTH) - whole) > 2:
+                failures.append(f"{name}: stuknięcie w powiększone zdjęcie nie wraca do całego zdjęcia")
+            if not await immersive():
+                failures.append(f"{name}: stuknięcie w powiększone zdjęcie wychodzi z pełnego ekranu (powinno najpierw pomniejszyć)")
         # Ponowne stuknięcie w zdjęcie wraca do zwykłego podglądu (nie zamyka go).
         await page.touchscreen.tap(*await centre(page, ".lb__img"))
         await page.wait_for_timeout(300)
@@ -264,6 +301,28 @@ async def check_desktop(browser, url, photos, failures):
             await page.click(".lb__next")
             if await page.inner_text(".lb__count") != f"2 z {total}":
                 failures.append("komputer: na pełnym ekranie strzałka następne nie działa")
+            # Kółko myszy powiększa, kliknięcie w powiększone zdjęcie wraca do całego.
+            await page.wait_for_timeout(300)
+            whole = await page.evaluate(IMG_WIDTH)
+            await page.mouse.move(720, 450)
+            for _ in range(6):
+                await page.mouse.wheel(0, -120)
+                await page.wait_for_timeout(30)
+            if await page.evaluate(IMG_WIDTH) < whole * 1.5:
+                failures.append("komputer: na pełnym ekranie kółko myszy nie powiększa zdjęcia")
+            else:
+                await page.mouse.down()
+                await page.mouse.move(520, 450, steps=5)
+                await page.mouse.up()
+                if not await page.evaluate(fs_on):
+                    failures.append("komputer: przeciągnięcie powiększonego zdjęcia wychodzi z pełnego ekranu")
+                await page.wait_for_timeout(350)
+                await page.mouse.click(720, 450)
+                await page.wait_for_timeout(200)
+                if abs(await page.evaluate(IMG_WIDTH) - whole) > 2:
+                    failures.append("komputer: kliknięcie w powiększone zdjęcie nie wraca do całego zdjęcia")
+                if not await page.evaluate(fs_on):
+                    failures.append("komputer: kliknięcie w powiększone zdjęcie wychodzi z pełnego ekranu (powinno najpierw pomniejszyć)")
             await page.click(".lb__img")
             try:
                 await page.wait_for_function(f"!{fs_on}", timeout=3000)
@@ -312,7 +371,7 @@ async def main() -> None:
         for f in failures:
             print("  -", f)
         sys.exit(1)
-    print(f"Podgląd zdjęć działa (galeria „{gallery}”, {total} zdjęcia): pełny ekran, strzałki, przesuwanie palcem, mysz, klawiatura, powiększanie, zapas dla urządzeń bez AVIF.")
+    print(f"Podgląd zdjęć działa (galeria „{gallery}”, {total} zdjęcia): pełny ekran z powiększaniem, strzałki, przesuwanie palcem, mysz, klawiatura, powiększanie, zapas dla urządzeń bez AVIF.")
 
 
 if __name__ == "__main__":

@@ -131,6 +131,7 @@
   function isImmersive() { return dialog.classList.contains("is-immersive"); }
   function setImmersive(on) {
     if (on) setFull(false);
+    resetZoom();
     dialog.classList.toggle("is-immersive", on);
     fsBtn.setAttribute("aria-pressed", String(on));
     fsBtn.setAttribute("aria-label", on ? "Zamknij pełny ekran" : "Pełny ekran");
@@ -141,6 +142,7 @@
   // Wyjście z pełnego ekranu klawiszem Esc albo gestem „wstecz" na Androidzie.
   function syncFs() {
     if (!fsElement() && isImmersive()) {
+      resetZoom();
       dialog.classList.remove("is-immersive");
       fsBtn.setAttribute("aria-pressed", "false");
       fsBtn.setAttribute("aria-label", "Pełny ekran");
@@ -169,6 +171,7 @@
     var a = links[current];
     var thumb = a.querySelector("img");
     var token = ++shown;
+    resetZoom();
     dialog.classList.remove("is-fallback");
     if (resolve) {
       img.removeAttribute("src");
@@ -226,6 +229,8 @@
   dialog.addEventListener("click", function (e) {
     if (justTapped()) return;
     if (!isImmersive() || (e.target.closest && e.target.closest("button"))) return;
+    if (Date.now() - dragEnded < 300) return; // koniec przeciągania myszą to nie kliknięcie
+    if (magnified()) { resetZoom(); return; }
     setImmersive(false);
   });
   img.addEventListener("click", function (e) {
@@ -247,6 +252,12 @@
 
   dialog.addEventListener("keydown", function (e) {
     if ((e.key === "f" || e.key === "F") && !e.ctrlKey && !e.metaKey && !e.altKey) setImmersive(!isImmersive());
+    if (isImmersive() && !e.ctrlKey && !e.metaKey) {
+      var c = centreOf();
+      if (e.key === "+" || e.key === "=") zoomAt(zs * 1.5, c.x, c.y);
+      if (e.key === "-") zoomAt(zs / 1.5, c.x, c.y);
+      if (e.key === "0") resetZoom();
+    }
     if (e.key === "ArrowLeft") show(current - 1);
     if (e.key === "ArrowRight") show(current + 1);
     if (!isFull()) return;
@@ -273,14 +284,127 @@
     });
   }
 
+  // ------------------------------------------ powiększanie na pełnym ekranie
+  // Na pełnym ekranie przeglądarka nie powiększa strony dwoma palcami, a na
+  // komputerze kliknięcie służy do wyjścia, więc zdjęcie powiększamy sami:
+  // dwoma palcami albo kółkiem myszy; powiększone przesuwa się palcem lub myszą.
+  // Stuknięcie (kliknięcie) w powiększone zdjęcie wraca do całego zdjęcia,
+  // dopiero następne wychodzi z pełnego ekranu.
+  var zs = 1, zx = 0, zy = 0; // skala i przesunięcie zdjęcia względem środka ekranu
+  var ZOOM_MAX = 6;
+  function magnified() { return zs > 1.01; }
+  function applyZoom() {
+    // Zdjęcie nie może odjechać tak, żeby z boku zostało puste pole.
+    var mx = Math.max(0, (img.offsetWidth * zs - stage.clientWidth) / 2);
+    var my = Math.max(0, (img.offsetHeight * zs - stage.clientHeight) / 2);
+    zx = Math.max(-mx, Math.min(mx, zx));
+    zy = Math.max(-my, Math.min(my, zy));
+    img.style.transform = magnified() ? "translate(" + zx + "px," + zy + "px) scale(" + zs + ")" : "";
+    dialog.classList.toggle("is-magnified", magnified());
+  }
+  function resetZoom() { zs = 1; zx = 0; zy = 0; applyZoom(); }
+  function centreOf() {
+    var r = stage.getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  }
+  // Nowa skala s; punkt ekranu (px, py) zostaje pod palcem albo kursorem.
+  function zoomAt(s, px, py) {
+    s = Math.max(1, Math.min(ZOOM_MAX, s));
+    var c = centreOf(), cx = px - c.x, cy = py - c.y;
+    zx = cx - (cx - zx) * (s / zs);
+    zy = cy - (cy - zy) * (s / zs);
+    zs = s;
+    if (!magnified()) { zs = 1; zx = 0; zy = 0; }
+    applyZoom();
+  }
+  window.addEventListener("resize", function () { if (magnified()) applyZoom(); });
+
+  // Kółko myszy.
+  dialog.addEventListener("wheel", function (e) {
+    if (!isImmersive()) return;
+    e.preventDefault();
+    var step = e.deltaMode ? e.deltaY * 33 : e.deltaY;
+    zoomAt(zs * Math.exp(-step * 0.0015), e.clientX, e.clientY);
+  }, { passive: false });
+
+  // Przeciąganie powiększonego zdjęcia myszą.
+  var drag = null, dragEnded = 0;
+  img.addEventListener("mousedown", function (e) {
+    if (!isImmersive() || !magnified() || e.button !== 0) return;
+    e.preventDefault();
+    drag = { x: e.clientX, y: e.clientY, zx: zx, zy: zy, moved: false };
+  });
+  window.addEventListener("mousemove", function (e) {
+    if (!drag) return;
+    var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (Math.abs(dx) + Math.abs(dy) > 4) drag.moved = true;
+    zx = drag.zx + dx;
+    zy = drag.zy + dy;
+    applyZoom();
+  });
+  window.addEventListener("mouseup", function () {
+    if (drag && drag.moved) dragEnded = Date.now();
+    drag = null;
+  });
+
+  // Gesty dotykowe na pełnym ekranie: dwa palce powiększają, jeden przesuwa
+  // powiększone zdjęcie albo (gdy nie jest powiększone) zmienia zdjęcie.
+  var g = null;
+  function dist(a, b) { return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY) || 1; }
+  function mid(a, b) { return { x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 }; }
+  function pan(t, afterPinch) {
+    return { pinch: false, sx: t.clientX, sy: t.clientY, x: zx, y: zy, at: Date.now(), moved: afterPinch, afterPinch: afterPinch };
+  }
+  function gestureStart(e) {
+    var t = e.touches;
+    if (t.length >= 2) g = { pinch: true, d: dist(t[0], t[1]), s: zs, m: mid(t[0], t[1]), x: zx, y: zy };
+    else if (t.length === 1) g = pan(t[0], false);
+  }
+  function gestureMove(e) {
+    var t = e.touches;
+    if (g.pinch && t.length >= 2) {
+      var s = Math.max(1, Math.min(ZOOM_MAX, g.s * dist(t[0], t[1]) / g.d));
+      var c = centreOf(), m = mid(t[0], t[1]);
+      zx = (m.x - c.x) - (g.m.x - c.x - g.x) * (s / g.s);
+      zy = (m.y - c.y) - (g.m.y - c.y - g.y) * (s / g.s);
+      zs = s;
+      applyZoom();
+    } else if (!g.pinch && t.length === 1) {
+      var dx = t[0].clientX - g.sx, dy = t[0].clientY - g.sy;
+      if (Math.abs(dx) > 10 || Math.abs(dy) > 10) g.moved = true;
+      if (magnified()) { zx = g.x + dx; zy = g.y + dy; applyZoom(); }
+    }
+  }
+  function gestureEnd(e) {
+    if (e.touches.length === 1) { g = pan(e.touches[0], true); return; } // z dwóch palców został jeden
+    if (e.touches.length) return;
+    var was = g;
+    g = null;
+    if (zs < 1.05) resetZoom();
+    if (was.pinch || was.afterPinch) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - was.sx, dy = t.clientY - was.sy;
+    if (!was.moved && Date.now() - was.at < 500) {
+      if (t.target && t.target.closest && t.target.closest("button")) return;
+      tapHandled = Date.now();
+      if (magnified()) resetZoom(); else setImmersive(false);
+      return;
+    }
+    if (magnified() || links.length < 2) return;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) show(current + (dx < 0 ? 1 : -1));
+  }
+  dialog.addEventListener("touchmove", function (e) { if (g) gestureMove(e); }, { passive: true });
+
   var touch = null;
   dialog.addEventListener("touchstart", function (e) {
+    if (isImmersive()) { touch = null; gestureStart(e); return; }
     // Jeden palec i brak powiększenia; dwa palce to powiększanie zdjęcia.
     touch = e.touches.length === 1 && !zoomed() && !isFull()
       ? { x: e.touches[0].clientX, y: e.touches[0].clientY, at: Date.now() }
       : null;
   }, { passive: true });
   dialog.addEventListener("touchend", function (e) {
+    if (g) { gestureEnd(e); return; }
     if (!touch || e.touches.length) { touch = null; return; }
     var t = e.changedTouches[0];
     var dx = t.clientX - touch.x;
@@ -300,7 +424,7 @@
     // Wyraźny ruch w poziomie: w lewo następne zdjęcie, w prawo poprzednie.
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) show(current + (dx < 0 ? 1 : -1));
   }, { passive: true });
-  dialog.addEventListener("touchcancel", function () { touch = null; }, { passive: true });
+  dialog.addEventListener("touchcancel", function () { touch = null; g = null; }, { passive: true });
   } // initGallery
 
   // ------------------------------------------------------ galeria na hasło
