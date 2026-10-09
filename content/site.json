@@ -184,6 +184,11 @@
               "title": "Praktica EE3",
               "unit": "strona",
               "cover_pos": "50% 100%"
+            },
+            {
+              "slug": "aparaty-produkcji-zsrr",
+              "title": "Aparaty produkcji ZSRR, broszura",
+              "unit": "strona"
             }
           ]
         },
