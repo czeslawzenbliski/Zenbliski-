@@ -487,6 +487,15 @@ a:hover { color: var(--papier); }
 .prose ul, .prose ol { padding-left: 1.25rem; }
 .prose li { margin-bottom: 0.4rem; }
 .prose img { margin: 1.75rem 0; }
+/* Odnośniki do cudzych artykułów (dział Artykuły – blog). */
+.prose .ref { padding: 1.5rem 0; border-bottom: 1px solid var(--linia); }
+.prose .ref:first-child { padding-top: 0; }
+.prose .ref h2 { margin: 0 0 0.4rem; font-size: 1.5rem; line-height: 1.25; }
+.prose .ref h2 a { color: var(--papier); text-decoration: none; }
+.prose .ref h2 a:hover { color: var(--mosiadz-jasny); text-decoration: underline; text-decoration-color: var(--mosiadz); }
+.prose .ref h2 a::after { content: " ↗"; font-size: 0.75em; color: var(--mosiadz); }
+.prose .ref__meta { margin: 0 0 0.75rem; font-size: 0.9375rem; color: var(--szary); }
+.prose .ref p:last-child { margin-bottom: 0; }
 .prose table { width: 100%; border-collapse: collapse; font-size: 1rem; margin: 1.5rem 0; }
 .prose th { text-align: left; font-weight: 500; color: var(--szary); border-bottom: 1px solid var(--mosiadz); padding: 0.5rem 1rem 0.5rem 0; }
 .prose td { border-bottom: 1px solid var(--linia); padding: 0.6rem 1rem 0.6rem 0; vertical-align: top; }
