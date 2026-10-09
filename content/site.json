@@ -83,38 +83,56 @@
     {
       "slug": "kolekcja",
       "title": "Kolekcja",
-      "lead": "Aparaty z kolekcji.",
+      "lead": "Aparaty z kolekcji i jej zmiany na przestrzeni lat.",
       "children": [
         {
-          "slug": "nikon-f2a",
-          "title": "Nikon F2A"
+          "slug": "aparaty",
+          "title": "Aparaty",
+          "lead": "Każdy aparat osobno: zdjęcia i opis.",
+          "children": [
+            {
+              "slug": "nikon-f2a",
+              "title": "Nikon F2A"
+            },
+            {
+              "slug": "rolleiflex-3-5-f-planar",
+              "title": "Rolleiflex 3,5 F Planar"
+            },
+            {
+              "slug": "mamiya-c330s",
+              "title": "Mamiya C330S",
+              "cover": "mamiya-c330s-02"
+            },
+            {
+              "slug": "rollei-35",
+              "title": "Rollei 35"
+            },
+            {
+              "slug": "fed-atlas",
+              "title": "FED-Atlas"
+            },
+            {
+              "slug": "reflekta-ii",
+              "title": "Reflekta II",
+              "cover": "reflekta-ii-06"
+            },
+            {
+              "slug": "praktica-electronic",
+              "title": "Praktica Electronic",
+              "cover_pos": "50% 35%"
+            }
+          ]
         },
         {
-          "slug": "rolleiflex-3-5-f-planar",
-          "title": "Rolleiflex 3,5 F Planar"
-        },
-        {
-          "slug": "mamiya-c330s",
-          "title": "Mamiya C330S",
-          "cover": "mamiya-c330s-02"
-        },
-        {
-          "slug": "rollei-35",
-          "title": "Rollei 35"
-        },
-        {
-          "slug": "fed-atlas",
-          "title": "FED-Atlas"
-        },
-        {
-          "slug": "reflekta-ii",
-          "title": "Reflekta II",
-          "cover": "reflekta-ii-06"
-        },
-        {
-          "slug": "praktica-electronic",
-          "title": "Praktica Electronic",
-          "cover_pos": "50% 35%"
+          "slug": "na-przestrzeni-lat",
+          "title": "Kolekcja na przestrzeni lat",
+          "lead": "Zdjęcia witryny z kolekcją, od najstarszych do najnowszych.",
+          "children": [
+            {
+              "slug": "2026-styczen",
+              "title": "Styczeń 2026"
+            }
+          ]
         }
       ]
     },

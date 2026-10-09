@@ -28,6 +28,8 @@ Dodanie zdjęć do galerii:
 
 Dział Materiały reklamowe ma trzy poddziały: `foldery-i-prospekty` (po 1945 roku, wszystkie firmy, tytuł galerii to marka i model), `reklama-do-1945` (foldery, cenniki i ogłoszenia do 1945 roku; epoka ma pierwszeństwo przed rodzajem materiału) i `gadzety-reklamowe` (przedmioty z logo). Nową galerię dopisz jako dziecko właściwego poddziału, np. `materialy-reklamowe/foldery-i-prospekty/praktica-lb2`.
 
+Dział Kolekcja ma dwa poddziały: `aparaty` (jedna galeria na model, np. `kolekcja/aparaty/nikon-f2a`) i `na-przestrzeni-lat` (zdjęcia witryny z kolekcją, jedna galeria na datę, tytuł np. „Styczeń 2026”, slug `2026-styczen`; nowe daty dopisuj na końcu, kolejność od najstarszej). Panoramy półek dodawaj z `--edge=3600`, bo są bardzo szerokie.
+
 Skany z drobnym tekstem (prospekty w dziale Materiały reklamowe) dodawaj z `--edge=2400`, żeby tekst był ostry po powiększeniu.
 Do czytania służy w podglądzie przycisk „Powiększ” (na komputerze) albo powiększenie dwoma palcami (na telefonie).
 
