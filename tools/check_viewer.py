@@ -93,6 +93,9 @@ async def check_touch(browser, url, total, width, height, failures):
     async def count():
         return await page.inner_text(".lb__count")
 
+    async def immersive():
+        return await page.evaluate("document.querySelector('dialog.lb').classList.contains('is-immersive')")
+
     def expect(step, got, want):
         if got != want:
             failures.append(f"{name}: {step}: jest „{got}”, powinno być „{want}”")
@@ -102,6 +105,34 @@ async def check_touch(browser, url, total, width, height, failures):
     await page.touchscreen.tap(*await centre(page, ".photos a"))
     await page.wait_for_timeout(400)
     expect("otwarcie", await count(), f"1 z {total}")
+
+    # Stuknięcie w miniaturę otwiera zdjęcie od razu na pełnym ekranie, bez przycisków.
+    if not await immersive():
+        failures.append(f"{name}: stuknięcie w miniaturę nie otwiera zdjęcia na pełnym ekranie")
+    if await page.locator(".lb__next").is_visible() or await page.locator(".lb__close").is_visible():
+        failures.append(f"{name}: na pełnym ekranie widać przyciski")
+    box = await page.locator(".lb__img").bounding_box()
+    if box and max(box["width"] / width, box["height"] / height) < 0.97:
+        failures.append(f"{name}: na pełnym ekranie zdjęcie nie wypełnia ekranu")
+    await swipe(cdp, width * 0.8, height * 0.45, width * 0.2, height * 0.45)
+    expect("przesunięcie w lewo na pełnym ekranie", await count(), f"2 z {total}")
+    if not await immersive():
+        failures.append(f"{name}: przesunięcie palcem wyłącza pełny ekran")
+    await swipe(cdp, width * 0.2, height * 0.45, width * 0.8, height * 0.45)
+    expect("przesunięcie w prawo na pełnym ekranie", await count(), f"1 z {total}")
+    # Ponowne stuknięcie w zdjęcie wraca do zwykłego podglądu.
+    await page.touchscreen.tap(*await centre(page, ".lb__img"))
+    await page.wait_for_timeout(300)
+    if await immersive():
+        failures.append(f"{name}: stuknięcie w zdjęcie na pełnym ekranie nie wraca do zwykłego podglądu")
+    if not await page.locator(".lb__close").is_visible():
+        failures.append(f"{name}: po wyjściu z pełnego ekranu nie widać przycisku Zamknij")
+    if not await page.evaluate("document.querySelector('dialog.lb').open"):
+        failures.append(f"{name}: stuknięcie na pełnym ekranie zamyka podgląd zamiast wrócić do niego")
+    if await immersive() or not await page.locator(".lb__next").is_visible():
+        await ctx.close()
+        return  # dalsze kroki wymagają zwykłego podglądu ze strzałkami
+
     await page.touchscreen.tap(*await centre(page, ".lb__next"))
     await page.wait_for_timeout(250)
     expect("strzałka następne", await count(), f"2 z {total}")
@@ -116,6 +147,13 @@ async def check_touch(browser, url, total, width, height, failures):
     expect("ruch pionowy nie zmienia zdjęcia", await count(), f"1 z {total}")
     if await page.locator(".lb__zoom").is_visible():
         failures.append(f"{name}: przycisk Powiększ nie powinien być widoczny na ekranie dotykowym")
+    # W zwykłym podglądzie stuknięcie w zdjęcie znów włącza pełny ekran.
+    await page.touchscreen.tap(*await centre(page, ".lb__img"))
+    await page.wait_for_timeout(300)
+    if not await immersive():
+        failures.append(f"{name}: stuknięcie w zdjęcie w zwykłym podglądzie nie włącza pełnego ekranu")
+    await page.touchscreen.tap(*await centre(page, ".lb__img"))
+    await page.wait_for_timeout(300)
     await page.touchscreen.tap(*await centre(page, ".lb__close"))
     await page.wait_for_timeout(250)
     if await page.evaluate("document.querySelector('dialog.lb').open"):
@@ -192,6 +230,48 @@ async def check_desktop(browser, url, photos, failures):
         await page.keyboard.press("Escape")
         await page.wait_for_timeout(200)
 
+    # Pełny ekran przyciskiem w rogu, powrót kliknięciem w zdjęcie.
+    fs_on = ("(() => !!(document.fullscreenElement || document.webkitFullscreenElement)"
+             " && document.querySelector('dialog.lb').classList.contains('is-immersive'))()")
+    await page.click(".photos a")
+    if not await page.locator(".lb__fs").is_visible():
+        failures.append("komputer: brak przycisku pełnego ekranu")
+    else:
+        await page.click(".lb__fs")
+        try:
+            await page.wait_for_function(fs_on, timeout=3000)
+        except Exception:
+            failures.append("komputer: przycisk w rogu nie włącza pełnego ekranu")
+        else:
+            if not await page.locator(".lb__fs").is_visible() or not await page.locator(".lb__next").is_visible():
+                failures.append("komputer: na pełnym ekranie brakuje przycisku w rogu albo strzałek")
+            if await page.locator(".lb__close").is_visible():
+                failures.append("komputer: na pełnym ekranie nie powinno być paska z napisami")
+            # Na pełny ekran ma przejść warstwa wewnątrz podglądu. Gdy przechodziła cała
+            # strona, przeglądarka rysowała ją na wierzchu i zasłaniała zdjęcie, choć
+            # wszystkie inne sprawdzenia przechodziły.
+            if not await page.evaluate("document.querySelector('dialog.lb').contains(document.fullscreenElement)"):
+                failures.append("komputer: na pełny ekran przechodzi cała strona i przykrywa zdjęcie")
+            await page.click(".lb__next")
+            if await page.inner_text(".lb__count") != f"2 z {total}":
+                failures.append("komputer: na pełnym ekranie strzałka następne nie działa")
+            await page.click(".lb__img")
+            try:
+                await page.wait_for_function(f"!{fs_on}", timeout=3000)
+            except Exception:
+                failures.append("komputer: kliknięcie w zdjęcie na pełnym ekranie nie wraca do zwykłego podglądu")
+            if not await page.evaluate("document.querySelector('dialog.lb').open"):
+                failures.append("komputer: kliknięcie na pełnym ekranie zamyka podgląd zamiast wrócić do niego")
+            # Zamknięcie podglądu na pełnym ekranie wyłącza też pełny ekran przeglądarki.
+            await page.click(".lb__fs")
+            await page.wait_for_function(fs_on, timeout=3000)
+            await page.evaluate("document.querySelector('dialog.lb').close()")
+            await page.wait_for_timeout(300)
+            if await page.evaluate("!!document.fullscreenElement"):
+                failures.append("komputer: po zamknięciu podglądu przeglądarka zostaje na pełnym ekranie")
+    await page.keyboard.press("Escape")
+    await page.wait_for_timeout(200)
+
     await page.click(".photos a")
     await page.click(".lb__next")
     if await page.inner_text(".lb__count") != f"2 z {total}":
@@ -223,7 +303,7 @@ async def main() -> None:
         for f in failures:
             print("  -", f)
         sys.exit(1)
-    print(f"Podgląd zdjęć działa (galeria „{gallery}”, {total} zdjęcia): strzałki, przesuwanie palcem, mysz, klawiatura, powiększanie, zapas dla urządzeń bez AVIF.")
+    print(f"Podgląd zdjęć działa (galeria „{gallery}”, {total} zdjęcia): pełny ekran, strzałki, przesuwanie palcem, mysz, klawiatura, powiększanie, zapas dla urządzeń bez AVIF.")
 
 
 if __name__ == "__main__":

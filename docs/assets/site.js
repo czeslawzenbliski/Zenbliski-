@@ -55,13 +55,17 @@
   dialog.className = "lb";
   dialog.setAttribute("aria-label", "Podgląd zdjęcia");
   dialog.innerHTML =
-    '<div class="lb__bar"><span class="lb__count" aria-live="polite"></span>' +
+    '<div class="lb__frame"><div class="lb__bar"><span class="lb__count" aria-live="polite"></span>' +
     '<span class="lb__tools"><button class="lb__zoom" type="button" aria-pressed="false" hidden>Powiększ</button>' +
+    '<button class="lb__fs" type="button" aria-pressed="false" aria-label="Pełny ekran" title="Pełny ekran">' +
+    '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" aria-hidden="true">' +
+    '<path class="lb__fs-on" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/>' +
+    '<path class="lb__fs-off" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg></button>' +
     '<button class="lb__close" type="button">Zamknij</button></span></div>' +
     '<div class="lb__stage"><img class="lb__img" alt=""></div>' +
     '<button class="lb__prev" type="button" aria-label="Poprzednie zdjęcie"></button>' +
     '<button class="lb__next" type="button" aria-label="Następne zdjęcie"></button>' +
-    '<p class="lb__caption"></p>';
+    '<p class="lb__caption"></p></div>';
   document.body.appendChild(dialog);
 
   var img = dialog.querySelector(".lb__img");
@@ -71,6 +75,7 @@
   var next = dialog.querySelector(".lb__next");
   var stage = dialog.querySelector(".lb__stage");
   var zoomBtn = dialog.querySelector(".lb__zoom");
+  var fsBtn = dialog.querySelector(".lb__fs");
   var current = 0;
 
   // Powiększenie do szerokości okna, do czytania skanów z drobnym tekstem.
@@ -92,11 +97,58 @@
   // więc szerokie zdjęcie, które już prawie wypełnia okno, nic by nie zyskało.
   function refreshZoom() {
     if (!dialog.open || isFull()) return;
+    if (isImmersive()) { zoomBtn.hidden = true; dialog.classList.remove("can-zoom"); return; }
     var enlarged = Math.min(Number(links[current].dataset.w) || 0, dialog.clientWidth);
     var can = finePointer && img.clientWidth > 0 && enlarged > img.clientWidth * 1.2;
     zoomBtn.hidden = !can;
     dialog.classList.toggle("can-zoom", can);
   }
+
+  // Pełny ekran: samo zdjęcie, bez napisów i przycisków. Na telefonie i tablecie
+  // włącza się od razu po stuknięciu w miniaturę, na komputerze przyciskiem w rogu.
+  // Ponowne stuknięcie (kliknięcie) w zdjęcie wraca do zwykłego podglądu.
+  // Gdzie przeglądarka pozwala, chowamy też jej pasek adresu (Fullscreen API).
+  // iPhone na to nie pozwala: tam zdjęcie zajmuje całe okno przeglądarki.
+  var root = dialog.querySelector(".lb__frame");
+  var canFullscreen = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+  var touchFirst = !finePointer;
+
+  function fsElement() { return document.fullscreenElement || document.webkitFullscreenElement || null; }
+  function quiet(result) { if (result && result.catch) result.catch(function () {}); }
+  function enterFs() {
+    if (!canFullscreen || fsElement()) return;
+    // Na pełny ekran przechodzi warstwa wewnątrz okna podglądu: samego okna
+    // dialogowego przeglądarki nie wpuszczają na pełny ekran, a cała strona
+    // przykryłaby podgląd.
+    try { quiet((root.requestFullscreen || root.webkitRequestFullscreen).call(root)); } catch (err) {}
+  }
+  function exitFs() {
+    if (!fsElement()) return;
+    try { quiet((document.exitFullscreen || document.webkitExitFullscreen).call(document)); } catch (err) {}
+  }
+
+  function isImmersive() { return dialog.classList.contains("is-immersive"); }
+  function setImmersive(on) {
+    if (on) setFull(false);
+    dialog.classList.toggle("is-immersive", on);
+    fsBtn.setAttribute("aria-pressed", String(on));
+    fsBtn.setAttribute("aria-label", on ? "Zamknij pełny ekran" : "Pełny ekran");
+    fsBtn.title = fsBtn.getAttribute("aria-label");
+    if (on) enterFs(); else exitFs();
+    refreshZoom();
+  }
+  // Wyjście z pełnego ekranu klawiszem Esc albo gestem „wstecz" na Androidzie.
+  function syncFs() {
+    if (!fsElement() && isImmersive()) {
+      dialog.classList.remove("is-immersive");
+      fsBtn.setAttribute("aria-pressed", "false");
+      fsBtn.setAttribute("aria-label", "Pełny ekran");
+      fsBtn.title = "Pełny ekran";
+      refreshZoom();
+    }
+  }
+  document.addEventListener("fullscreenchange", syncFs);
+  document.addEventListener("webkitfullscreenchange", syncFs);
 
   // Zamiast dużego zdjęcia pokaż miniaturę (brak obsługi AVIF albo zerwane połączenie).
   function useThumb() {
@@ -156,16 +208,25 @@
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
       e.preventDefault();
       open(i);
+      if (touchFirst) setImmersive(true);
     });
   });
 
   prev.addEventListener("click", function () { show(current - 1); });
   next.addEventListener("click", function () { show(current + 1); });
   dialog.querySelector(".lb__close").addEventListener("click", function () { dialog.close(); });
-  stage.addEventListener("click", function (e) { if (e.target === stage) dialog.close(); });
+  stage.addEventListener("click", function (e) { if (e.target === stage && !isImmersive()) dialog.close(); });
 
   zoomBtn.addEventListener("click", function () { setFull(!isFull()); });
+  fsBtn.addEventListener("click", function () { setImmersive(!isImmersive()); });
+  // W pełnym ekranie stuknięcie w dowolne miejsce poza przyciskami wraca do zwykłego podglądu.
+  dialog.addEventListener("click", function (e) {
+    if (!isImmersive() || (e.target.closest && e.target.closest("button"))) return;
+    setImmersive(false);
+  });
   img.addEventListener("click", function (e) {
+    if (isImmersive()) return; // obsługuje to słuchacz na całym podglądzie
+    if (touchFirst) { e.stopPropagation(); setImmersive(true); return; }
     if (isFull()) { setFull(false); return; }
     if (!dialog.classList.contains("can-zoom")) return;
     var box = img.getBoundingClientRect();
@@ -181,6 +242,7 @@
   });
 
   dialog.addEventListener("keydown", function (e) {
+    if ((e.key === "f" || e.key === "F") && !e.ctrlKey && !e.metaKey && !e.altKey) setImmersive(!isImmersive());
     if (e.key === "ArrowLeft") show(current - 1);
     if (e.key === "ArrowRight") show(current + 1);
     if (!isFull()) return;
@@ -190,6 +252,7 @@
   });
 
   dialog.addEventListener("close", function () {
+    if (isImmersive()) setImmersive(false);
     shown++;
     img.removeAttribute("src");
     setFull(false);

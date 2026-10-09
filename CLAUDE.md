@@ -33,6 +33,8 @@ Dział Kolekcja ma dwa poddziały: `aparaty` (jedna galeria na model, np. `kolek
 Skany z drobnym tekstem (prospekty w dziale Materiały reklamowe) dodawaj z `--edge=2400`, żeby tekst był ostry po powiększeniu.
 Do czytania służy w podglądzie przycisk „Powiększ” (na komputerze) albo powiększenie dwoma palcami (na telefonie).
 
+Pełny ekran w podglądzie: na telefonie i tablecie stuknięcie w miniaturę otwiera zdjęcie od razu na pełnym ekranie (bez przycisków, przesuwanie palcem działa), stuknięcie w zdjęcie wraca do zwykłego podglądu. Na komputerze przycisk z ikoną w prawym górnym rogu (albo klawisz F), powrót kliknięciem w zdjęcie lub Esc. Na pełny ekran przechodzi warstwa `.lb__frame` wewnątrz okna podglądu, nie cała strona (strona przykryłaby zdjęcie). iPhone nie pozwala stronom chować paska Safari, więc tam zdjęcie zajmuje całe okno przeglądarki.
+
 Nowa galeria lub dział: dopisz wpis w `content/site.json`, potem `python3 build.py`.
 Pola wpisu: `slug`, `title`, opcjonalnie `lead`, `kind` (`gallery` domyślnie albo `text`), `plate` (metryczka: aparat, obiektyw, film), `cover` (nazwa pliku okładki), `cover_pos` (przesunięcie kadru okładki, np. `50% 20%`), `unit` (`strona` dla skanów prospektów, wtedy licznik pokazuje „8 stron”), `empty` (tekst pustej strony), `keywords` (lista słów, po których stronę ma znajdować wyszukiwarka, niewidoczna na stronie), `children`.
 

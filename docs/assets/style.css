@@ -543,6 +543,8 @@ a:hover { color: var(--papier); }
 /* Po powiększeniu dwoma palcami oddajemy przesuwanie przeglądarce. */
 .lb.is-zoomed, .lb.is-full { touch-action: auto; }
 .lb::backdrop { background: #0d0c0b; }
+/* Warstwa ze wszystkim, co w podglądzie; to ona przechodzi na pełny ekran. */
+.lb__frame { position: absolute; inset: 0; background: #0d0c0b; touch-action: inherit; }
 .lb__bar {
   position: absolute;
   inset: 0 0 auto 0;
@@ -590,7 +592,29 @@ a:hover { color: var(--papier); }
 .lb__tools { display: flex; align-items: center; gap: 0.75rem; }
 .lb__close, .lb__zoom { padding: 0.5rem 0.75rem; }
 .lb__close { margin-right: -0.75rem; }
-.lb__close:hover, .lb__zoom:hover { color: var(--mosiadz-jasny); }
+.lb__close:hover, .lb__zoom:hover, .lb__fs:hover { color: var(--mosiadz-jasny); }
+.lb__fs { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; }
+.lb__fs-off { display: none; }
+
+/* Pełny ekran: samo zdjęcie. Na komputerze zostają strzałki i przycisk w rogu,
+   na ekranie dotykowym nic (przesuwanie palcem, stuknięcie wraca do podglądu). */
+.lb.is-immersive .lb__stage { inset: 0; }
+.lb.is-immersive .lb__img { cursor: pointer; }
+.lb.is-immersive .lb__count,
+.lb.is-immersive .lb__zoom,
+.lb.is-immersive .lb__close,
+.lb.is-immersive .lb__caption { display: none; }
+.lb.is-immersive .lb__bar { inset: 0.75rem 0.75rem auto auto; height: auto; padding: 0; z-index: 2; }
+.lb.is-immersive .lb__fs { background: rgba(13, 12, 11, 0.6); }
+.lb.is-immersive .lb__fs-on { display: none; }
+.lb.is-immersive .lb__fs-off { display: inline; }
+.lb.is-immersive .lb__prev,
+.lb.is-immersive .lb__next { top: 0; bottom: 0; height: auto; }
+@media (hover: none), (pointer: coarse) {
+  .lb.is-immersive .lb__bar,
+  .lb.is-immersive .lb__prev,
+  .lb.is-immersive .lb__next { display: none; }
+}
 
 /* Powiększenie: zdjęcie na całą szerokość okna, przewijane w pionie. */
 .lb.can-zoom .lb__img { cursor: zoom-in; }
