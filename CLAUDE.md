@@ -30,6 +30,8 @@ Dział Materiały reklamowe ma trzy poddziały: `foldery-i-prospekty` (po 1945 r
 
 Dział Kolekcja ma dwa poddziały: `aparaty` (jedna galeria na model, np. `kolekcja/aparaty/nikon-f2a`) i `na-przestrzeni-lat` (zdjęcia witryny z kolekcją, jedna galeria na datę, tytuł np. „Styczeń 2026”, slug `2026-styczen`; nowe daty dopisuj na końcu, kolejność od najstarszej). Panoramy półek dodawaj z `--edge=3600`, bo są bardzo szerokie.
 
+Dział Artykuły – blog (`artykuly-blog`) ma dwie podstrony tekstowe: `artykuly` (odnośniki do cudzych artykułów z gazet i portali, z krótkim omówieniem napisanym przez właściciela; bez kopiowania cudzego tekstu i zdjęć) i `blog` (własne wpisy i artykuły właściciela). Treść obu jest w `content/teksty/artykuly-blog--artykuly.html` i `content/teksty/artykuly-blog--blog.html`. Dział Cyfrowe stoi celowo na końcu menu.
+
 Skany z drobnym tekstem (prospekty w dziale Materiały reklamowe) dodawaj z `--edge=2400`, żeby tekst był ostry po powiększeniu.
 Do czytania służy w podglądzie przycisk „Powiększ” (na komputerze) albo powiększenie dwoma palcami (na telefonie).
 

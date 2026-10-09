@@ -109,7 +109,14 @@ class Node:
                 return found
         return None
 
+    def has_content(self) -> bool:
+        """Czy jest tu cokolwiek do obejrzenia: zdjęcia, tekst, galeria na hasło albo pełne podstrony."""
+        return bool(self.photos or self.body or self.locked or any(c.has_content() for c in self.children))
+
     def count_label(self) -> str:
+        # Dział z samymi pustymi podstronami (np. świeżo założony) nie udaje, że ma „2 wpisy”.
+        if self.children and not self.has_content():
+            return "w przygotowaniu"
         if self.children:
             kinds = {c.kind for c in self.children}
             n = len(self.children)

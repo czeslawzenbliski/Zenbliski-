@@ -33,11 +33,6 @@
       ]
     },
     {
-      "slug": "cyfrowe",
-      "title": "Cyfrowe",
-      "lead": "Zdjęcia z aparatów cyfrowych."
-    },
-    {
       "slug": "analogowe",
       "title": "Analogowe",
       "lead": "Zdjęcia na filmie. Każda galeria to jeden zestaw: aparat, obiektyw i film.",
@@ -198,10 +193,26 @@
       ]
     },
     {
-      "slug": "artykuly",
-      "title": "Artykuły",
+      "slug": "artykuly-blog",
+      "title": "Artykuły – blog",
+      "lead": "Polecane artykuły z innych stron i moje własne wpisy.",
       "kind": "text",
-      "empty": "Artykuły są w przygotowaniu."
+      "children": [
+        {
+          "slug": "artykuly",
+          "title": "Artykuły",
+          "kind": "text",
+          "lead": "Odnośniki do artykułów z gazet, portali i innych stron, z krótkim omówieniem.",
+          "empty": "Artykuły są w przygotowaniu."
+        },
+        {
+          "slug": "blog",
+          "title": "Blog",
+          "kind": "text",
+          "lead": "Moje wpisy i artykuły.",
+          "empty": "Wpisy są w przygotowaniu."
+        }
+      ]
     },
     {
       "slug": "ciekawostki",
@@ -217,6 +228,11 @@
           "empty": "Ten wpis jest w przygotowaniu."
         }
       ]
+    },
+    {
+      "slug": "cyfrowe",
+      "title": "Cyfrowe",
+      "lead": "Zdjęcia z aparatów cyfrowych."
     }
   ]
 }
