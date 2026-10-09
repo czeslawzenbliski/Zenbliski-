@@ -197,6 +197,11 @@
               "slug": "reklamy-z-prasy-fotograficznej",
               "title": "Reklamy z przedwojennej polskiej prasy fotograficznej",
               "cover": "reklama-prasowa-03"
+            },
+            {
+              "slug": "25-lat-welta-1939",
+              "title": "25 lat Welta, 1939 r.",
+              "unit": "strona"
             }
           ]
         },
