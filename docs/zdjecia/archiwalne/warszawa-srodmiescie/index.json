@@ -70,5 +70,59 @@
     "mw": 900,
     "mh": 860,
     "caption": ""
+  },
+  {
+    "file": "warszawa-srodmiescie-09.avif",
+    "mini": "warszawa-srodmiescie-09.webp",
+    "w": 1280,
+    "h": 1243,
+    "mw": 900,
+    "mh": 874,
+    "caption": ""
+  },
+  {
+    "file": "warszawa-srodmiescie-10.avif",
+    "mini": "warszawa-srodmiescie-10.webp",
+    "w": 1280,
+    "h": 1208,
+    "mw": 900,
+    "mh": 849,
+    "caption": ""
+  },
+  {
+    "file": "warszawa-srodmiescie-11.avif",
+    "mini": "warszawa-srodmiescie-11.webp",
+    "w": 1044,
+    "h": 1280,
+    "mw": 734,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "warszawa-srodmiescie-12.avif",
+    "mini": "warszawa-srodmiescie-12.webp",
+    "w": 1280,
+    "h": 1003,
+    "mw": 900,
+    "mh": 705,
+    "caption": ""
+  },
+  {
+    "file": "warszawa-srodmiescie-13.avif",
+    "mini": "warszawa-srodmiescie-13.webp",
+    "w": 1280,
+    "h": 1140,
+    "mw": 900,
+    "mh": 802,
+    "caption": ""
+  },
+  {
+    "file": "warszawa-srodmiescie-14.avif",
+    "mini": "warszawa-srodmiescie-14.webp",
+    "w": 1280,
+    "h": 1280,
+    "mw": 900,
+    "mh": 900,
+    "caption": ""
   }
 ]
