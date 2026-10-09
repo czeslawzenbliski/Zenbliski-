@@ -82,11 +82,17 @@ class Node:
         return (PHOTOS / self.path / "lock.json").exists()
 
     @property
-    def photos(self) -> list[dict]:
+    def manifest(self) -> list[dict]:
         manifest = PHOTOS / self.path / "index.json"
         if not manifest.exists():
             return []
         return json.loads(manifest.read_text(encoding="utf-8"))
+
+    @property
+    def photos(self) -> list[dict]:
+        # "cover_only": true – zdjęcia tego wpisu służą tylko za okładkę na liście działów
+        # (np. dział tekstowy Artykuły – blog); nie ma ich w galerii, licznikach ani wyszukiwarce.
+        return [] if self.data.get("cover_only") else self.manifest
 
     @property
     def body(self) -> str:
@@ -95,7 +101,7 @@ class Node:
 
     def cover(self) -> tuple["Node", dict] | None:
         """Zdjęcie okładkowe: własne (pole "cover" albo pierwsze) lub pierwsze z podstron."""
-        photos = self.photos
+        photos = self.manifest
         if photos:
             wanted = self.data.get("cover")
             for p in photos:
@@ -114,6 +120,9 @@ class Node:
         return bool(self.photos or self.body or self.locked or any(c.has_content() for c in self.children))
 
     def count_label(self) -> str:
+        # "meta" w site.json zastępuje wyliczony podpis pod tytułem ("" = bez podpisu).
+        if "meta" in self.data:
+            return self.data["meta"]
         # Dział z samymi pustymi podstronami (np. świeżo założony) nie udaje, że ma „2 wpisy”.
         if self.children and not self.has_content():
             return "w przygotowaniu"

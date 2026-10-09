@@ -197,6 +197,9 @@
       "title": "Artykuły – blog",
       "lead": "Polecane artykuły z innych stron i moje własne wpisy.",
       "kind": "text",
+      "cover_only": true,
+      "cover_pos": "50% 50%",
+      "meta": "artykuły i własne wpisy",
       "children": [
         {
           "slug": "artykuly",
