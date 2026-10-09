@@ -104,8 +104,9 @@
     dialog.classList.toggle("can-zoom", can);
   }
 
-  // Pełny ekran: samo zdjęcie, bez napisów i przycisków. Na telefonie i tablecie
-  // włącza się od razu po stuknięciu w miniaturę, na komputerze przyciskiem w rogu.
+  // Pełny ekran: samo zdjęcie, bez napisów i przycisków. Kolejność jak chce właściciel:
+  // miniatura → zwykły podgląd → pełny ekran → zwykły podgląd. Na telefonie i tablecie
+  // pełny ekran włącza stuknięcie w zdjęcie, na komputerze przycisk w rogu.
   // Ponowne stuknięcie (kliknięcie) w zdjęcie wraca do zwykłego podglądu.
   // Gdzie przeglądarka pozwala, chowamy też jej pasek adresu (Fullscreen API).
   // iPhone na to nie pozwala: tam zdjęcie zajmuje całe okno przeglądarki.
@@ -208,24 +209,27 @@
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
       e.preventDefault();
       open(i);
-      if (touchFirst) setImmersive(true);
     });
   });
 
   prev.addEventListener("click", function () { show(current - 1); });
   next.addEventListener("click", function () { show(current + 1); });
   dialog.querySelector(".lb__close").addEventListener("click", function () { dialog.close(); });
-  stage.addEventListener("click", function (e) { if (e.target === stage && !isImmersive()) dialog.close(); });
+  stage.addEventListener("click", function (e) { if (e.target === stage && !isImmersive() && !justTapped()) dialog.close(); });
 
   zoomBtn.addEventListener("click", function () { setFull(!isFull()); });
   fsBtn.addEventListener("click", function () { setImmersive(!isImmersive()); });
   // W pełnym ekranie stuknięcie w dowolne miejsce poza przyciskami wraca do zwykłego podglądu.
+  // Stuknięcie obsłużone już przy zdarzeniu dotykowym (patrz niżej) nie może przełączyć drugi raz.
+  var tapHandled = 0;
+  function justTapped() { return Date.now() - tapHandled < 800; }
   dialog.addEventListener("click", function (e) {
+    if (justTapped()) return;
     if (!isImmersive() || (e.target.closest && e.target.closest("button"))) return;
     setImmersive(false);
   });
   img.addEventListener("click", function (e) {
-    if (isImmersive()) return; // obsługuje to słuchacz na całym podglądzie
+    if (isImmersive() || justTapped()) return; // obsługuje to słuchacz na całym podglądzie
     if (touchFirst) { e.stopPropagation(); setImmersive(true); return; }
     if (isFull()) { setFull(false); return; }
     if (!dialog.classList.contains("can-zoom")) return;
@@ -273,7 +277,7 @@
   dialog.addEventListener("touchstart", function (e) {
     // Jeden palec i brak powiększenia; dwa palce to powiększanie zdjęcia.
     touch = e.touches.length === 1 && !zoomed() && !isFull()
-      ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+      ? { x: e.touches[0].clientX, y: e.touches[0].clientY, at: Date.now() }
       : null;
   }, { passive: true });
   dialog.addEventListener("touchend", function (e) {
@@ -281,7 +285,17 @@
     var t = e.changedTouches[0];
     var dx = t.clientX - touch.x;
     var dy = t.clientY - touch.y;
+    var quick = Date.now() - touch.at < 500;
     touch = null;
+    // Krótkie stuknięcie bez ruchu przełącza pełny ekran już tutaj. Samo zdarzenie
+    // „click" przeglądarka potrafi pominąć, gdy stuknięcie wypada tuż po przesunięciu.
+    if (quick && Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+      var el = t.target;
+      if (el && el.closest && el.closest("button")) return;
+      if (isImmersive()) { tapHandled = Date.now(); setImmersive(false); }
+      else if (el === img) { tapHandled = Date.now(); setImmersive(true); }
+      return;
+    }
     if (links.length < 2) return;
     // Wyraźny ruch w poziomie: w lewo następne zdjęcie, w prawo poprzednie.
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) show(current + (dx < 0 ? 1 : -1));

@@ -106,32 +106,11 @@ async def check_touch(browser, url, total, width, height, failures):
     await page.wait_for_timeout(400)
     expect("otwarcie", await count(), f"1 z {total}")
 
-    # Stuknięcie w miniaturę otwiera zdjęcie od razu na pełnym ekranie, bez przycisków.
-    if not await immersive():
-        failures.append(f"{name}: stuknięcie w miniaturę nie otwiera zdjęcia na pełnym ekranie")
-    if await page.locator(".lb__next").is_visible() or await page.locator(".lb__close").is_visible():
-        failures.append(f"{name}: na pełnym ekranie widać przyciski")
-    box = await page.locator(".lb__img").bounding_box()
-    if box and max(box["width"] / width, box["height"] / height) < 0.97:
-        failures.append(f"{name}: na pełnym ekranie zdjęcie nie wypełnia ekranu")
-    await swipe(cdp, width * 0.8, height * 0.45, width * 0.2, height * 0.45)
-    expect("przesunięcie w lewo na pełnym ekranie", await count(), f"2 z {total}")
-    if not await immersive():
-        failures.append(f"{name}: przesunięcie palcem wyłącza pełny ekran")
-    await swipe(cdp, width * 0.2, height * 0.45, width * 0.8, height * 0.45)
-    expect("przesunięcie w prawo na pełnym ekranie", await count(), f"1 z {total}")
-    # Ponowne stuknięcie w zdjęcie wraca do zwykłego podglądu.
-    await page.touchscreen.tap(*await centre(page, ".lb__img"))
-    await page.wait_for_timeout(300)
+    # Stuknięcie w miniaturę otwiera zwykły podgląd (pełny ekran dopiero po stuknięciu w zdjęcie).
     if await immersive():
-        failures.append(f"{name}: stuknięcie w zdjęcie na pełnym ekranie nie wraca do zwykłego podglądu")
-    if not await page.locator(".lb__close").is_visible():
-        failures.append(f"{name}: po wyjściu z pełnego ekranu nie widać przycisku Zamknij")
-    if not await page.evaluate("document.querySelector('dialog.lb').open"):
-        failures.append(f"{name}: stuknięcie na pełnym ekranie zamyka podgląd zamiast wrócić do niego")
-    if await immersive() or not await page.locator(".lb__next").is_visible():
+        failures.append(f"{name}: stuknięcie w miniaturę powinno otworzyć zwykły podgląd, a nie pełny ekran")
         await ctx.close()
-        return  # dalsze kroki wymagają zwykłego podglądu ze strzałkami
+        return
 
     await page.touchscreen.tap(*await centre(page, ".lb__next"))
     await page.wait_for_timeout(250)
@@ -147,13 +126,43 @@ async def check_touch(browser, url, total, width, height, failures):
     expect("ruch pionowy nie zmienia zdjęcia", await count(), f"1 z {total}")
     if await page.locator(".lb__zoom").is_visible():
         failures.append(f"{name}: przycisk Powiększ nie powinien być widoczny na ekranie dotykowym")
-    # W zwykłym podglądzie stuknięcie w zdjęcie znów włącza pełny ekran.
+    # Stuknięcie w zdjęcie: pełny ekran, bez przycisków, zdjęcie na cały ekran.
     await page.touchscreen.tap(*await centre(page, ".lb__img"))
     await page.wait_for_timeout(300)
     if not await immersive():
         failures.append(f"{name}: stuknięcie w zdjęcie w zwykłym podglądzie nie włącza pełnego ekranu")
+    else:
+        if await page.locator(".lb__next").is_visible() or await page.locator(".lb__close").is_visible():
+            failures.append(f"{name}: na pełnym ekranie widać przyciski")
+        box = await page.locator(".lb__img").bounding_box()
+        if box and max(box["width"] / width, box["height"] / height) < 0.97:
+            failures.append(f"{name}: na pełnym ekranie zdjęcie nie wypełnia ekranu")
+        await swipe(cdp, width * 0.8, height * 0.45, width * 0.2, height * 0.45)
+        expect("przesunięcie w lewo na pełnym ekranie", await count(), f"2 z {total}")
+        if not await immersive():
+            failures.append(f"{name}: przesunięcie palcem wyłącza pełny ekran")
+        # Ponowne stuknięcie w zdjęcie wraca do zwykłego podglądu (nie zamyka go).
+        await page.touchscreen.tap(*await centre(page, ".lb__img"))
+        await page.wait_for_timeout(300)
+        if await immersive():
+            failures.append(f"{name}: stuknięcie w zdjęcie na pełnym ekranie nie wraca do zwykłego podglądu")
+        if not await page.evaluate("document.querySelector('dialog.lb').open"):
+            failures.append(f"{name}: stuknięcie na pełnym ekranie zamyka podgląd zamiast wrócić do niego")
+            await ctx.close()
+            return
+    # Na pełnym ekranie stuknięcie w czarne pole obok zdjęcia też wraca do podglądu, nie zamyka go.
     await page.touchscreen.tap(*await centre(page, ".lb__img"))
     await page.wait_for_timeout(300)
+    await page.touchscreen.tap(width / 2, 12)
+    await page.wait_for_timeout(400)
+    if not await page.evaluate("document.querySelector('dialog.lb').open"):
+        failures.append(f"{name}: stuknięcie obok zdjęcia na pełnym ekranie zamyka podgląd")
+        await ctx.close()
+        return
+    if await immersive():
+        failures.append(f"{name}: na końcu podgląd nadal jest na pełnym ekranie")
+        await ctx.close()
+        return
     await page.touchscreen.tap(*await centre(page, ".lb__close"))
     await page.wait_for_timeout(250)
     if await page.evaluate("document.querySelector('dialog.lb').open"):
