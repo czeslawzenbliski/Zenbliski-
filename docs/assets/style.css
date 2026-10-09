@@ -197,9 +197,25 @@ a:hover { color: var(--papier); }
   margin: 0 auto;
   padding: clamp(1rem, 5vw, 4rem) var(--gutter) clamp(2.5rem, 6vw, 5rem);
 }
+/* Napis i logo FotoHobby obok siebie; na wąskim ekranie logo pod napisem. */
+.hero__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(1.25rem, 4vw, 3.5rem);
+}
+/* Logo ma własne białe tło (czarne litery), więc stoi na nim jak odbitka na passe-partout. */
+.hero__logo {
+  display: block;
+  flex: 0 1 auto;
+  width: clamp(14rem, 38vw, 30rem);
+  height: auto;
+  border-radius: 2px;
+}
+@media (max-width: 34rem) { .hero__logo { width: 100%; max-width: 24rem; } }
 .hero__name {
   margin: 0 0 0 -0.04em;
-  font: 400 clamp(3.75rem, 17.5vw, 16rem)/0.92 var(--serif);
+  font: 400 clamp(3rem, 9vw, 8rem)/0.92 var(--serif);
   letter-spacing: -0.035em;
   color: var(--mosiadz-jasny);
 }

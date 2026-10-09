@@ -329,7 +329,10 @@ def render_home(site: dict, sections: list[Node], index_url: str) -> str:
         + header(site, sections, "", None, home=True)
         + f"""<main id="tresc">
   <section class="hero">
-    <h1 class="hero__name">{escape(site['title'])}</h1>
+    <div class="hero__head">
+      <h1 class="hero__name">{escape(site['title'])}</h1>
+      <img class="hero__logo" src="assets/fotohobby-logo.webp" width="934" height="663" alt="FotoHobby">
+    </div>
     <p class="hero__intro">{escape(site['intro'])}</p>
     {search_form(index_url)}
   </section>
