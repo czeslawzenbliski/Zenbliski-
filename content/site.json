@@ -298,28 +298,6 @@
           "empty": "Ten dział jest w przygotowaniu.",
           "children": [
             {
-              "slug": "praktica-lb2",
-              "title": "Praktica LB2",
-              "unit": "strona"
-            },
-            {
-              "slug": "praktica-lb",
-              "title": "Praktica LB",
-              "unit": "strona"
-            },
-            {
-              "slug": "praktica-l",
-              "title": "Praktica L",
-              "unit": "strona",
-              "cover_pos": "50% 90%"
-            },
-            {
-              "slug": "praktica-ee3",
-              "title": "Praktica EE3",
-              "unit": "strona",
-              "cover_pos": "50% 100%"
-            },
-            {
               "slug": "aparaty-produkcji-zsrr",
               "title": "Aparaty produkcji ZSRR, broszura",
               "unit": "strona"
@@ -342,6 +320,33 @@
             {
               "slug": "minolta-hi-matic",
               "title": "Minolta Hi-Matic",
+              "unit": "strona"
+            },
+            {
+              "slug": "minolta-xg-1",
+              "title": "Minolta XG-1",
+              "unit": "strona"
+            },
+            {
+              "slug": "praktica-ee3",
+              "title": "Praktica EE3",
+              "unit": "strona",
+              "cover_pos": "50% 100%"
+            },
+            {
+              "slug": "praktica-l",
+              "title": "Praktica L",
+              "unit": "strona",
+              "cover_pos": "50% 90%"
+            },
+            {
+              "slug": "praktica-lb",
+              "title": "Praktica LB",
+              "unit": "strona"
+            },
+            {
+              "slug": "praktica-lb2",
+              "title": "Praktica LB2",
               "unit": "strona"
             }
           ]

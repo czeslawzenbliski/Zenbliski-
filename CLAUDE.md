@@ -26,7 +26,7 @@ Dodanie zdjęć do galerii:
     python3 tools/add_photos.py archiwalne/gucin /ścieżka/do/oryginałów
     python3 build.py
 
-Dział Materiały reklamowe ma trzy poddziały: `foldery-i-prospekty` (po 1945 roku, wszystkie firmy, tytuł galerii to marka i model), `reklama-do-1945` (foldery, cenniki i ogłoszenia do 1945 roku; epoka ma pierwszeństwo przed rodzajem materiału) i `gadzety-reklamowe` (przedmioty z logo). Nową galerię dopisz jako dziecko właściwego poddziału, np. `materialy-reklamowe/foldery-i-prospekty/praktica-lb2`.
+Dział Materiały reklamowe ma trzy poddziały: `foldery-i-prospekty` (po 1945 roku, wszystkie firmy, tytuł galerii to marka i model), `reklama-do-1945` (foldery, cenniki i ogłoszenia do 1945 roku; epoka ma pierwszeństwo przed rodzajem materiału) i `gadzety-reklamowe` (przedmioty z logo). Nową galerię dopisz jako dziecko właściwego poddziału, np. `materialy-reklamowe/foldery-i-prospekty/praktica-lb2`. Galerie w `foldery-i-prospekty` są ułożone alfabetycznie według tytułu (czyli marki); nowy prospekt wstaw we właściwe miejsce.
 
 Dział Kolekcja ma dwa poddziały: `aparaty` (jedna galeria na model, np. `kolekcja/aparaty/nikon-f2a`) i `na-przestrzeni-lat` (zdjęcia witryny z kolekcją, jedna galeria na datę, tytuł np. „Styczeń 2026”, slug `2026-styczen`; nowe daty dopisuj na końcu, kolejność od najstarszej). Panoramy półek dodawaj z `--edge=3600`, bo są bardzo szerokie.
 
