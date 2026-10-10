@@ -299,32 +299,32 @@
           "children": [
             {
               "slug": "aparaty-produkcji-zsrr",
-              "title": "Aparaty produkcji ZSRR, broszura",
+              "title": "Aparaty produkcji ZSRR, broszura, polski",
               "unit": "strona"
             },
             {
               "slug": "canon-2000",
-              "title": "Canon 2000",
+              "title": "Canon 2000, niemiecki",
               "unit": "strona"
             },
             {
               "slug": "canon-ae-1-program",
-              "title": "Canon AE-1 Program",
+              "title": "Canon AE-1 Program, szwedzki",
               "unit": "strona"
             },
             {
               "slug": "canon-canonet-ql17-ql19-ql25",
-              "title": "Canon Canonet QL17, QL19, QL25",
+              "title": "Canon Canonet QL17, QL19, QL25, angielski",
               "unit": "strona"
             },
             {
               "slug": "minolta-hi-matic",
-              "title": "Minolta Hi-Matic",
+              "title": "Minolta Hi-Matic, szwedzki",
               "unit": "strona"
             },
             {
               "slug": "minolta-xg-1",
-              "title": "Minolta XG-1",
+              "title": "Minolta XG-1, szwedzki",
               "unit": "strona"
             },
             {
@@ -339,29 +339,29 @@
             },
             {
               "slug": "olympus-xa-xa2",
-              "title": "Olympus XA i XA2",
+              "title": "Olympus XA i XA2, szwedzki",
               "unit": "strona"
             },
             {
               "slug": "praktica-ee3",
-              "title": "Praktica EE3",
+              "title": "Praktica EE3, polski",
               "unit": "strona",
               "cover_pos": "50% 100%"
             },
             {
               "slug": "praktica-l",
-              "title": "Praktica L",
+              "title": "Praktica L, polski",
               "unit": "strona",
               "cover_pos": "50% 90%"
             },
             {
               "slug": "praktica-lb",
-              "title": "Praktica LB",
+              "title": "Praktica LB, polski",
               "unit": "strona"
             },
             {
               "slug": "praktica-lb2",
-              "title": "Praktica LB2",
+              "title": "Praktica LB2, polski",
               "unit": "strona"
             }
           ]
@@ -379,22 +379,22 @@
             },
             {
               "slug": "25-lat-welta-1939",
-              "title": "25 lat Welta, 1939 r.",
+              "title": "25 lat Welta, 1939 r., polski",
               "unit": "strona"
             },
             {
               "slug": "fotografujcie-przyborami-agfa",
-              "title": "Fotografujcie przyborami AGFA",
+              "title": "Fotografujcie przyborami AGFA, polski",
               "unit": "strona"
             },
             {
               "slug": "welta-dla-kazdego-odpowiedni-aparat",
-              "title": "Welta – Dla każdego odpowiedni aparat",
+              "title": "Welta – Dla każdego odpowiedni aparat, polski",
               "unit": "strona"
             },
             {
               "slug": "kine-exakta-1938",
-              "title": "Kine Exakta – lustrzanka kinowa 24×36 mm, 1938 r.",
+              "title": "Kine Exakta – lustrzanka kinowa 24×36 mm, 1938 r., polski",
               "unit": "strona"
             }
           ]
