@@ -718,7 +718,49 @@
     if (input.value) render();
   }
 
+  // ------------------------------------------------- filtr listy w dziale
+  // Zawęża kafelki na tej samej stronie po tytule (marka, model, rok, język).
+  function initShelfFilter(form) {
+    var input = form.querySelector("input");
+    var status = form.querySelector(".search__status");
+    var shelf = document.querySelector(".shelf");
+    if (!shelf) return;
+    function norm(s) {
+      s = (s || "").toLowerCase().replace(/\u0142/g, "l");
+      if (s.normalize) s = s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      return s.replace(/[^a-z0-9]+/g, " ").trim();
+    }
+    // "ae-1" i "ae1" mają znaczyć to samo, więc porównujemy też tekst bez odstępów.
+    var items = Array.prototype.map.call(shelf.children, function (el) {
+      var t = el.querySelector(".frame__title");
+      var n = norm(t ? t.textContent : el.textContent);
+      return { el: el, n: " " + n + " ", c: n.replace(/ /g, "") };
+    });
+    function render() {
+      var tokens = norm(input.value).split(" ").filter(Boolean), shown = 0;
+      items.forEach(function (it) {
+        var ok = tokens.every(function (tk) { return it.n.indexOf(tk) >= 0 || it.c.indexOf(tk) >= 0; });
+        it.el.hidden = !ok;
+        if (ok) shown++;
+      });
+      status.textContent = !tokens.length ? "" :
+        shown ? "Pasuje: " + shown + " z " + items.length + "." : "Nic nie pasuje. Spróbuj samej marki albo roku.";
+    }
+    form.hidden = false;
+    input.addEventListener("input", render);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && input.value) { input.value = ""; render(); }
+    });
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) input.blur();
+    });
+    if (input.value) render();
+  }
+
   // ----------------------------------------------------------------- start
+  var shelfFilterEl = document.querySelector("[data-shelf-filter]");
+  if (shelfFilterEl) initShelfFilter(shelfFilterEl);
   var searchEl = document.querySelector("[data-search]");
   if (searchEl) initSearch(searchEl);
   var gridEl = document.querySelector("[data-lightbox]");

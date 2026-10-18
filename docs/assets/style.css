@@ -721,3 +721,7 @@ a:hover { color: var(--papier); }
 .prose .more__close, .prose .more[open] .more__open { display: none; }
 .prose .more[open] .more__close { display: inline; }
 .prose a { overflow-wrap: anywhere; }
+
+/* Filtr listy galerii w dziale (np. Foldery i prospekty) */
+.search--shelf { margin-bottom: clamp(1.5rem, 3vw, 2rem); }
+.shelf > [hidden] { display: none !important; }

@@ -384,7 +384,8 @@
               "title": "Yashica catalogue général 1973, francuski",
               "unit": "strona"
             }
-          ]
+          ],
+          "filter": true
         },
         {
           "slug": "reklama-do-1945",
