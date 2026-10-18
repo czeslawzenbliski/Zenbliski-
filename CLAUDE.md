@@ -42,6 +42,8 @@ Pełny ekran w podglądzie, kolejność wybrana przez właściciela: miniatura �
 Nowa galeria lub dział: dopisz wpis w `content/site.json`, potem `python3 build.py`.
 Pola wpisu: `slug`, `title`, opcjonalnie `lead`, `kind` (`gallery` domyślnie albo `text`), `plate` (metryczka: aparat, obiektyw, film), `cover` (nazwa pliku okładki), `cover_pos` (przesunięcie kadru okładki, np. `50% 20%`), `unit` (`strona` dla skanów prospektów, wtedy licznik pokazuje „8 stron”), `empty` (tekst pustej strony), `keywords` (lista słów, po których stronę ma znajdować wyszukiwarka, niewidoczna na stronie), `cover_only` (`true`: zdjęcia tego wpisu służą tylko za okładkę na liście działów, np. okładka działu tekstowego; dodaje się je zwykłym `add_photos.py`), `meta` (podpis pod tytułem na liście zamiast wyliczonej liczby, `""` = bez podpisu), `children`.
 
+Po każdej publikacji podaj właścicielowi pełny link do dodanej lub zmienionej podstrony (adres strony + ścieżka z `site.json` + `/`, np. `https://czeslawzenbliski.github.io/Zenbliski-/materialy-reklamowe/foldery-i-prospekty/canon-compact-1977/`; po przepięciu domeny `https://zenbliski.pl/...`).
+
 Po każdej zmianie: uruchom `build.py`, obejrzyj wynik w przeglądarce (komputer i telefon), dopiero potem commit i push do `main`.
 
 Po zmianach w `docs/assets/site.js` albo w stylach podglądu zdjęć (`.lb…`) uruchom też `python3 tools/check_viewer.py`.
