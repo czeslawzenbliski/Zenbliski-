@@ -32,6 +32,8 @@ Dział Kolekcja ma dwa poddziały: `aparaty` (jedna galeria na model, np. `kolek
 
 Dział Artykuły – blog (`artykuly-blog`) ma dwie podstrony tekstowe: `artykuly` (odnośniki do cudzych artykułów z gazet i portali, z krótkim omówieniem napisanym przez właściciela; bez kopiowania cudzego tekstu i zdjęć) i `blog` (własne wpisy i artykuły właściciela). Treść obu jest w `content/teksty/artykuly-blog--artykuly.html` i `content/teksty/artykuly-blog--blog.html`. Dział Cyfrowe stoi celowo na końcu menu.
 
+Długi tekst nad galerią można przyciąć do początku z rozwijaniem: w pliku z `content/teksty/` po pierwszym fragmencie wstaw `<details class="more"><summary><span class="more__open">więcej</span><span class="more__close">zwiń</span></summary>`, a na końcu `</details>` (przykład: Franaszek w `reklama-do-1945`). Działa bez skryptu.
+
 Skany z drobnym tekstem (prospekty w dziale Materiały reklamowe) dodawaj z `--edge=2400`, żeby tekst był ostry po powiększeniu.
 Do czytania służy w podglądzie przycisk „Powiększ” (na komputerze) albo powiększenie dwoma palcami (na telefonie).
 

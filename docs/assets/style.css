@@ -712,3 +712,12 @@ a:hover { color: var(--papier); }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; }
 }
+
+/* Rozwijany dalszy ciąg tekstu („więcej” / „zwiń”) */
+.prose .more > summary { display: inline-block; margin: 0 0 1.1rem; cursor: pointer; list-style: none; color: var(--mosiadz-jasny); text-decoration: underline; text-decoration-color: var(--mosiadz); text-underline-offset: 0.2em; }
+.prose .more > summary::-webkit-details-marker { display: none; }
+.prose .more > summary::after { content: " ↓"; }
+.prose .more[open] > summary::after { content: " ↑"; }
+.prose .more__close, .prose .more[open] .more__open { display: none; }
+.prose .more[open] .more__close { display: inline; }
+.prose a { overflow-wrap: anywhere; }
