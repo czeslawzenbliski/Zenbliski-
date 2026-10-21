@@ -475,7 +475,8 @@
           "title": "Blog",
           "kind": "text",
           "lead": "Moje wpisy i artykuły.",
-          "empty": "Wpisy są w przygotowaniu."
+          "empty": "Wpisy są w przygotowaniu.",
+          "cover_only": true
         }
       ]
     },
