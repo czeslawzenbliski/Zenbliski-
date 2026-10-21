@@ -466,7 +466,7 @@
           "slug": "artykuly",
           "title": "Artykuły",
           "kind": "text",
-          "lead": "Odnośniki do artykułów z gazet, portali i innych stron, z krótkim omówieniem.",
+          "lead": "Linki do artykułów z gazet, portali i innych stron.",
           "empty": "Artykuły są w przygotowaniu."
         },
         {
