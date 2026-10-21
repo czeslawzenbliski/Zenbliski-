@@ -467,7 +467,8 @@
           "title": "Artykuły",
           "kind": "text",
           "lead": "Linki do artykułów z gazet, portali i innych stron.",
-          "empty": "Artykuły są w przygotowaniu."
+          "empty": "Artykuły są w przygotowaniu.",
+          "cover_only": true
         },
         {
           "slug": "blog",
