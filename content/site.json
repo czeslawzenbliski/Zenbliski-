@@ -748,6 +748,15 @@
               "unit": "strona"
             },
             {
+              "slug": "praktica-ltl3",
+              "title": "Praktica LTL 3, 1975 r., polski",
+              "unit": "strona",
+              "keywords": [
+                "LTL3",
+                "Pentacon"
+              ]
+            },
+            {
               "slug": "praktica-ltl",
               "title": "Praktica LTL, 1973 r., polski",
               "unit": "strona"
