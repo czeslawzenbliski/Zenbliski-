@@ -790,7 +790,15 @@
             },
             {
               "slug": "praktica-super-tl-1968",
-              "title": "Praktica super TL, 1968 r., polski",
+              "title": "Praktica super TL, 1968 r., polski (broszura)",
+              "unit": "strona",
+              "keywords": [
+                "Pentacon"
+              ]
+            },
+            {
+              "slug": "praktica-super-tl-1968-ulotka",
+              "title": "Praktica super TL, 1968 r., polski (ulotka)",
               "unit": "strona",
               "keywords": [
                 "Pentacon"
