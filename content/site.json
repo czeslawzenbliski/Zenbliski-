@@ -599,7 +599,8 @@
     {
       "slug": "akcesoria",
       "title": "Akcesoria foto",
-      "lead": "Akcesoria fotograficzne z kolekcji."
+      "lead": "Akcesoria fotograficzne z kolekcji.",
+      "cover": "akcesoria-09.avif"
     },
     {
       "slug": "materialy-reklamowe",
