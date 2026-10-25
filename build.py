@@ -310,12 +310,18 @@ SEARCH_ICON = ('<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stro
                '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>')
 
 
-def search_form(index_url: str) -> str:
-    """Pole wyszukiwania. Bez skryptu zostaje ukryte; site.js je odsłania i obsługuje."""
-    return f"""<form class="search" role="search" data-search="{index_url}" hidden>
+def search_form(index_url: str, scope: str = "", base: str = "", hint: str = "Szukaj, np. Praktica albo Ilford",
+                label: str = "Szukaj na stronie") -> str:
+    """Pole wyszukiwania. Bez skryptu zostaje ukryte; site.js je odsłania i obsługuje.
+
+    scope – ścieżka działu (np. "analogowe/"): szuka tylko w tym dziale i jego podstronach.
+    base – prefiks adresów względem strony głównej (na podstronach "../").
+    """
+    extra = f' data-scope="{escape(scope, quote=True)}" data-base="{base}"' if scope else ""
+    return f"""<form class="search{' search--scoped' if scope else ''}" role="search" data-search="{base}{index_url}"{extra} hidden>
       <label class="search__field">
         {SEARCH_ICON}
-        <input type="search" name="q" aria-label="Szukaj na stronie" placeholder="Szukaj, np. Praktica albo Ilford" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search">
+        <input type="search" name="q" aria-label="{escape(label, quote=True)}" placeholder="{escape(hint, quote=True)}" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search">
       </label>
       <p class="search__status" role="status"></p>
       <ol class="search__results"></ol>
@@ -357,7 +363,7 @@ def render_home(site: dict, sections: list[Node], index_url: str) -> str:
     )
 
 
-def render_node(site: dict, sections: list[Node], node: Node) -> str:
+def render_node(site: dict, sections: list[Node], node: Node, index_url: str = "") -> str:
     prefix = "../" * node.depth
     parts = [breadcrumb(node, prefix)]
     parts.append(f'<h1 class="page__title">{escape(node.title)}</h1>')
@@ -373,8 +379,13 @@ def render_node(site: dict, sections: list[Node], node: Node) -> str:
     if node.children:
         frames = "\n".join(frame(c, prefix) for c in node.children)
         # "filter": true – nad listą pole zawężające ją po tytule (marka, model, rok, język).
+        # W pozostałych działach: wyszukiwarka ograniczona do tego działu i jego podstron.
         if node.data.get("filter"):
             parts.append(shelf_filter(node.data["filter"]))
+        elif index_url:
+            parts.append(search_form(index_url, scope=f"{node.path}/", base=prefix,
+                                     hint=f"Szukaj w dziale „{node.title}”",
+                                     label=f"Szukaj w dziale {node.title}"))
         parts.append(f'<section class="shelf" aria-label="Zawartość działu">\n{frames}\n</section>')
     if photos:
         parts.append(photo_grid(node, prefix))
@@ -480,7 +491,7 @@ def main() -> None:
     for node in walk(sections):
         target = OUT / node.path
         target.mkdir(parents=True, exist_ok=True)
-        (target / "index.html").write_text(render_node(site, sections, node), encoding="utf-8")
+        (target / "index.html").write_text(render_node(site, sections, node, index_url), encoding="utf-8")
         pages += 1
 
     photos = sum(len(n.photos) for n in walk(sections))

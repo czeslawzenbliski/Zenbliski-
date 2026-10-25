@@ -601,6 +601,8 @@
     var list = form.querySelector(".search__results");
     var index = null, loading = null, failed = false;
     var LIMIT = 20;
+    // Wyszukiwarka działu: tylko podstrony tego działu, adresy liczone od bieżącej strony.
+    var scope = form.getAttribute("data-scope") || "", base = form.getAttribute("data-base") || "";
 
     // Małe litery i bez polskich znaków, znak w znak (długość tekstu się nie zmienia).
     function fold(s) {
@@ -616,7 +618,9 @@
         loading = fetch(form.getAttribute("data-search"))
           .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
           .then(function (data) {
-            index = data.map(function (e) {
+            index = data.filter(function (e) {
+              return !scope || (e.u.indexOf(scope) === 0 && e.u !== scope);
+            }).map(function (e) {
               return { u: e.u, t: e.t, p: e.p, x: e.x, nt: norm(e.t), np: norm(e.p), nx: e.x.map(norm) };
             });
           })
@@ -675,12 +679,15 @@
       remember(q);
 
       var hits = find(tokens);
-      if (!hits.length) { status.textContent = "Nic nie znaleziono dla „" + q + "”."; return; }
+      if (!hits.length) {
+        status.textContent = "Nic nie znaleziono dla „" + q + "”" + (scope ? " w tym dziale. Spróbuj wyszukiwarki na stronie głównej." : ".");
+        return;
+      }
       status.textContent = "Znaleziono: " + hits.length +
         (hits.length > LIMIT ? ", poniżej pierwsze " + LIMIT + "." : "");
       hits.slice(0, LIMIT).forEach(function (h) {
         var a = document.createElement("a"), title = document.createElement("span");
-        a.href = h.e.u;
+        a.href = base + h.e.u;
         title.className = "search__title";
         title.textContent = h.e.t;
         a.appendChild(title);
@@ -761,8 +768,7 @@
   // ----------------------------------------------------------------- start
   var shelfFilterEl = document.querySelector("[data-shelf-filter]");
   if (shelfFilterEl) initShelfFilter(shelfFilterEl);
-  var searchEl = document.querySelector("[data-search]");
-  if (searchEl) initSearch(searchEl);
+  Array.prototype.forEach.call(document.querySelectorAll("[data-search]"), initSearch);
   var gridEl = document.querySelector("[data-lightbox]");
   var vaultEl = document.querySelector("[data-vault]");
   if (vaultEl && gridEl) initVault(vaultEl, gridEl);

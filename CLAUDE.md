@@ -53,6 +53,7 @@ Skrypt stuka w strzałki i przesuwa palcem tak jak człowiek na telefonie. Sam z
 
 Pole z lupką na stronie głównej. Działa w całości w przeglądarce: `build.py` zapisuje spis `docs/szukaj.json`, a `site.js` (funkcja `initSearch`) go przeszukuje. Żadnej zewnętrznej usługi.
 
+- Na każdej stronie działu z podstronami (Archiwalne, Analogowe, Kolekcja, Aparaty, Materiały reklamowe itd.) jest wyszukiwarka tylko dla tego działu: ten sam spis `szukaj.json`, zawężony w `initSearch` do adresów zaczynających się od ścieżki działu (`data-scope`, `data-base` w `search_form`). Wyjątek: działy z polem `filter` (Foldery i prospekty) mają zamiast niej filtr listy.
 - Szuka tylko w tekście: tytuły, opisy (`lead`), metryczki (`plate`: aparat, obiektyw, film), słowa kluczowe (`keywords`), podpisy zdjęć (`caption` w manifeście galerii) i treść z `content/teksty/`. Tego, co widać wyłącznie na zdjęciu, nie znajdzie.
 - Żeby galerię dało się znaleźć po czymś, czego nie ma w tytule (np. po nazwie filmu albo po markach widocznych na zdjęciach), dopisz to w `plate`, w podpisach albo w `keywords`. Słowa podaje właściciel; nie wymyślaj ich.
 - Z galerii na hasło do spisu trafia tylko to, co jawne (tytuł, opis). Podpisy jej zdjęć są zaszyfrowane.
