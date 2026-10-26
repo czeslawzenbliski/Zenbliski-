@@ -328,10 +328,13 @@ def search_form(index_url: str, scope: str = "", base: str = "", hint: str = "Sz
     </form>"""
 
 
-def shelf_filter(cfg) -> str:
-    """Pole zawężające listę galerii na tej samej stronie. Bez skryptu zostaje ukryte."""
-    hint = cfg if isinstance(cfg, str) else "Szukaj, np. Canon, AE-1 albo 1977"
-    return f"""<form class="search search--shelf" role="search" data-shelf-filter hidden>
+def shelf_filter(cfg, photos: bool = False) -> str:
+    """Pole zawężające listę galerii (albo zdjęcia galerii, po podpisach) na tej samej stronie.
+    Bez skryptu zostaje ukryte."""
+    default = "Szukaj na zdjęciach, np. Leica albo Kodak" if photos else "Szukaj, np. Canon, AE-1 albo 1977"
+    hint = cfg if isinstance(cfg, str) else default
+    attr = " data-photo-filter" if photos else ""
+    return f"""<form class="search search--shelf" role="search" data-shelf-filter{attr} hidden>
       <label class="search__field">
         {SEARCH_ICON}
         <input type="search" aria-label="Szukaj na tej liście" placeholder="{escape(hint, quote=True)}" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search">
@@ -388,6 +391,9 @@ def render_node(site: dict, sections: list[Node], node: Node, index_url: str = "
                                      label=f"Szukaj w dziale {node.title}"))
         parts.append(f'<section class="shelf" aria-label="Zawartość działu">\n{frames}\n</section>')
     if photos:
+        # "filter" w galerii: pole zawężające zdjęcia po podpisach (caption).
+        if node.data.get("filter") and not node.children:
+            parts.append(shelf_filter(node.data["filter"], photos=True))
         parts.append(photo_grid(node, prefix))
     if node.locked:
         parts.append(vault_form(node, prefix))

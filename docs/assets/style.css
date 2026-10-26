@@ -724,7 +724,7 @@ a:hover { color: var(--papier); }
 
 /* Filtr listy galerii w dziale (np. Foldery i prospekty) */
 .search--shelf { margin-bottom: clamp(1.5rem, 3vw, 2rem); }
-.shelf > [hidden] { display: none !important; }
+.shelf > [hidden], .photos > [hidden] { display: none !important; }
 .prose .ref__tr { margin: 0 0 0.4rem; font-style: italic; color: var(--papier); }
 /* Miniatura zdjęcia w tekście wpisu (blog) */
 .prose .post-img { margin: 0.4rem 0 1.4rem; max-width: 20rem; }

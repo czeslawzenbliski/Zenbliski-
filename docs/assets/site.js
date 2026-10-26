@@ -19,15 +19,18 @@
   function initGallery(grid, resolve) {
   if (typeof HTMLDialogElement === "undefined") return;
 
-  var links = Array.prototype.slice.call(grid.querySelectorAll("a"));
-  if (!links.length) return;
+  var all = Array.prototype.slice.call(grid.querySelectorAll("a"));
+  if (!all.length) return;
+  // links = zdjęcia widoczne teraz; filtr galerii ukrywa część i wysyła "photos:filtered".
+  var links = all.slice();
 
   // Ostatni rząd miniatur: ta sama wysokość co rząd wyżej. Bez skryptu rząd
   // jest po prostu trochę niższy (reguła .photos::after w arkuszu stylów).
   function evenLastRow() {
     if (grid.classList.contains("photos--few")) return;
     grid.classList.remove("photos--fill");
-    links.forEach(function (a) { a.style.flex = ""; });
+    all.forEach(function (a) { a.style.flex = ""; });
+    if (!links.length) return;
     var lastTop = links[links.length - 1].offsetTop;
     var first = 0;
     while (links[first].offsetTop !== lastTop) first++;
@@ -207,12 +210,18 @@
     refreshZoom();
   }
 
-  links.forEach(function (a, i) {
+  all.forEach(function (a) {
     a.addEventListener("click", function (e) {
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      var i = links.indexOf(a);
+      if (i < 0) return;
       e.preventDefault();
       open(i);
     });
+  });
+  grid.addEventListener("photos:filtered", function () {
+    links = all.filter(function (a) { return !a.hidden; });
+    evenLastRow();
   });
 
   prev.addEventListener("click", function () { show(current - 1); });
@@ -727,22 +736,26 @@
 
   // ------------------------------------------------- filtr listy w dziale
   // Zawęża kafelki na tej samej stronie po tytule (marka, model, rok, język).
+  // Pole zawężające: listę galerii działu (.shelf, po tytule) albo zdjęcia
+  // galerii (.photos, po podpisie data-caption).
   function initShelfFilter(form) {
     var input = form.querySelector("input");
     var status = form.querySelector(".search__status");
-    var shelf = document.querySelector(".shelf");
-    if (!shelf) return;
+    var photos = form.hasAttribute("data-photo-filter");
+    var box = document.querySelector(photos ? ".photos[data-lightbox]" : ".shelf");
+    if (!box) return;
     function norm(s) {
       s = (s || "").toLowerCase().replace(/\u0142/g, "l");
       if (s.normalize) s = s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       return s.replace(/[^a-z0-9]+/g, " ").trim();
     }
     // "ae-1" i "ae1" mają znaczyć to samo, więc porównujemy też tekst bez odstępów.
-    var items = Array.prototype.map.call(shelf.children, function (el) {
-      var t = el.querySelector(".frame__title");
-      var n = norm(t ? t.textContent : el.textContent);
+    var items = Array.prototype.map.call(box.children, function (el) {
+      var t = photos ? null : el.querySelector(".frame__title");
+      var n = norm(photos ? el.getAttribute("data-caption") : (t ? t.textContent : el.textContent));
       return { el: el, n: " " + n + " ", c: n.replace(/ /g, "") };
     });
+    var what = photos ? "zdjęć" : "";
     function render() {
       var tokens = norm(input.value).split(" ").filter(Boolean), shown = 0;
       items.forEach(function (it) {
@@ -751,7 +764,9 @@
         if (ok) shown++;
       });
       status.textContent = !tokens.length ? "" :
-        shown ? "Pasuje: " + shown + " z " + items.length + "." : "Nic nie pasuje. Spróbuj samej marki albo roku.";
+        shown ? "Pasuje: " + shown + " z " + items.length + (what ? " " + what : "") + "." :
+        (photos ? "Nic nie pasuje. Spróbuj samej marki, np. Leica." : "Nic nie pasuje. Spróbuj samej marki albo roku.");
+      if (photos) box.dispatchEvent(new CustomEvent("photos:filtered"));
     }
     form.hidden = false;
     input.addEventListener("input", render);
