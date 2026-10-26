@@ -1217,6 +1217,10 @@
           "cover": "fotoskoda-03",
           "cover_pos": "50% 8%",
           "empty": "Ten wpis jest w przygotowaniu."
+        },
+        {
+          "slug": "moje-skanery-2018",
+          "title": "Moje „skanery” w roku 2018"
         }
       ]
     },
