@@ -781,6 +781,21 @@
   }
 
   // ----------------------------------------------------------------- start
+  // Strona główna: przy każdym wejściu inne zdjęcie z listy (bez skryptu zostaje pierwsze).
+  var feature = document.querySelector("[data-feature]");
+  if (feature) {
+    try {
+      var list = JSON.parse(feature.getAttribute("data-feature"));
+      var pick = list[Math.floor(Math.random() * list.length)];
+      if (pick && list.length > 1) {
+        var fimg = feature.querySelector("img"), fsrc = feature.querySelector("source");
+        fsrc.srcset = pick.src; fimg.src = pick.mini;
+        fimg.width = pick.w; fimg.height = pick.h; fimg.alt = pick.title;
+        Array.prototype.forEach.call(feature.querySelectorAll("a"), function (a) { a.href = pick.href; });
+        feature.querySelector(".feature__cap a").textContent = pick.title;
+      }
+    } catch (e) {}
+  }
   // Adres e-mail na stronie Kontakt: w HTML jest rozbity, tu składamy klikalny odnośnik.
   Array.prototype.forEach.call(document.querySelectorAll("a[data-mail]"), function (a) {
     var addr = a.getAttribute("data-mail") + "@" + a.getAttribute("data-domain");
