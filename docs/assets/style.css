@@ -730,3 +730,8 @@ a:hover { color: var(--papier); }
 .prose .post-img { margin: 0.4rem 0 1.4rem; max-width: 20rem; }
 .prose .post-img img { display: block; width: 100%; height: auto; margin: 0; }
 .search--scoped { margin-bottom: clamp(1.5rem, 3vw, 2rem); }
+/* Strona Kontakt i odnośnik w stopce */
+.foot a { color: inherit; }
+.foot a:hover { color: var(--papier); }
+.contact p { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; align-items: baseline; }
+.contact__label { min-width: 6rem; color: var(--szary); font-size: 0.9375rem; text-transform: uppercase; letter-spacing: 0.08em; }

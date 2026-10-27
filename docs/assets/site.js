@@ -781,6 +781,12 @@
   }
 
   // ----------------------------------------------------------------- start
+  // Adres e-mail na stronie Kontakt: w HTML jest rozbity, tu składamy klikalny odnośnik.
+  Array.prototype.forEach.call(document.querySelectorAll("a[data-mail]"), function (a) {
+    var addr = a.getAttribute("data-mail") + "@" + a.getAttribute("data-domain");
+    a.href = "mailto:" + addr;
+    a.textContent = addr;
+  });
   var shelfFilterEl = document.querySelector("[data-shelf-filter]");
   if (shelfFilterEl) initShelfFilter(shelfFilterEl);
   Array.prototype.forEach.call(document.querySelectorAll("[data-search]"), initSearch);

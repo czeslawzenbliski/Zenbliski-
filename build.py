@@ -195,8 +195,9 @@ def header(site: dict, sections: list[Node], prefix: str, current: Node | None, 
 
 
 def footer(site: dict, prefix: str) -> str:
+    contact = f' <span aria-hidden="true">·</span> <a href="{prefix}kontakt/">Kontakt</a>' if site.get("contact") else ""
     return f"""<footer class="foot">
-  <p>{escape(site['footer'])}</p>
+  <p>{escape(site['footer'])}{contact}</p>
 </footer>
 <script src="{prefix}{asset('site.js')}" defer></script>
 </body>
@@ -430,6 +431,30 @@ def render_404(site: dict, sections: list[Node]) -> str:
     )
 
 
+def render_contact(site: dict, sections: list[Node]) -> str:
+    """Strona /kontakt/ (poza menu, odnośnik w stopce). Dane w site.json → "contact".
+    Adres e-mail składa skrypt (data-mail), żeby nie leżał w HTML gotowy dla zbieraczy adresów."""
+    c, prefix = site["contact"], "../"
+    rows = []
+    if c.get("email"):
+        user, domain = c["email"].split("@", 1)
+        rows.append(
+            f'<p><span class="contact__label">E-mail</span> '
+            f'<a data-mail="{escape(user, quote=True)}" data-domain="{escape(domain, quote=True)}">'
+            f'{escape(user)} (małpa) {escape(domain)}</a></p>')
+    if c.get("facebook"):
+        rows.append(
+            f'<p><span class="contact__label">Facebook</span> '
+            f'<a href="{escape(c["facebook"], quote=True)}" rel="noopener noreferrer">profil FotoHobby</a></p>')
+    return (
+        head(site, f"Kontakt – {site['title']}", f"Kontakt. {site['description']}", prefix)
+        + header(site, sections, prefix, None, home=False)
+        + '<main id="tresc" class="page">\n<h1 class="page__title">Kontakt</h1>\n'
+        + '<div class="prose contact">\n' + "\n".join(rows) + "\n</div>\n</main>\n"
+        + footer(site, prefix)
+    )
+
+
 # --------------------------------------------------------------------- start
 
 def walk(nodes: list[Node]):
@@ -486,7 +511,10 @@ def main() -> None:
             continue
         shutil.rmtree(item) if item.is_dir() else item.unlink()
 
-    index_json = json.dumps(search_index(sections), ensure_ascii=False, separators=(",", ":"))
+    entries = search_index(sections)
+    if site.get("contact"):
+        entries.append({"u": "kontakt/", "t": "Kontakt", "p": "", "x": ["e-mail, Facebook, FotoHobby, napisz"]})
+    index_json = json.dumps(entries, ensure_ascii=False, separators=(",", ":"))
     (OUT / "szukaj.json").write_text(index_json + "\n", encoding="utf-8")
     index_url = "szukaj.json?v=" + hashlib.sha1(index_json.encode("utf-8")).hexdigest()[:8]
 
@@ -494,6 +522,10 @@ def main() -> None:
     (OUT / "index.html").write_text(render_home(site, sections, index_url), encoding="utf-8")
     (OUT / "404.html").write_text(render_404(site, sections), encoding="utf-8")
     pages += 2
+    if site.get("contact"):
+        (OUT / "kontakt").mkdir(exist_ok=True)
+        (OUT / "kontakt" / "index.html").write_text(render_contact(site, sections), encoding="utf-8")
+        pages += 1
     for node in walk(sections):
         target = OUT / node.path
         target.mkdir(parents=True, exist_ok=True)
