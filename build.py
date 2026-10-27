@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 import re
 import shutil
 from html import escape, unescape
@@ -344,8 +345,111 @@ def shelf_filter(cfg, photos: bool = False) -> str:
     </form>"""
 
 
+def find_node(sections: list[Node], path: str) -> "Node | None":
+    for n in walk(sections):
+        if n.path == path:
+            return n
+    return None
+
+
+def home_photo(site: dict, sections: list[Node]) -> str:
+    """Duże zdjęcie na stronie głównej. Lista w site.json → home.photos (ścieżka galerii/plik);
+    bez skryptu widać pierwsze, skrypt losuje jedno z listy przy każdym wejściu."""
+    items = []
+    for ref in site.get("home", {}).get("photos", []):
+        gpath, fname = ref.rsplit("/", 1)
+        node = find_node(sections, gpath)
+        if not node:
+            continue
+        p = next((x for x in node.photos if x["file"] == fname), None)
+        if not p:
+            continue
+        base = f"zdjecia/{gpath}/"
+        items.append({"src": base + p["file"], "mini": base + "mini/" + p.get("mini", p["file"]),
+                      "w": p["w"], "h": p["h"], "href": f"{gpath}/", "title": node.title})
+    if not items:
+        return ""
+    first = items[0]
+    data = escape(json.dumps(items, ensure_ascii=False), quote=True)
+    return f"""  <section class="feature" aria-label="Zdjęcie z galerii" data-feature="{data}">
+    <a class="feature__link" href="{first['href']}">
+      <picture><source srcset="{first['src']}" type="image/avif"><img src="{first['mini']}" width="{first['w']}" height="{first['h']}" alt="{escape(first['title'], quote=True)}" decoding="async"></picture>
+    </a>
+    <p class="feature__cap">Z galerii <a href="{first['href']}">{escape(first['title'])}</a></p>
+  </section>
+"""
+
+
+def recent_nodes(sections: list[Node], limit: int) -> list[Node]:
+    """Galerie w kolejności dodania (data pierwszego commita z ich manifestem zdjęć)."""
+    try:
+        out = subprocess.run(
+            ["git", "log", "--diff-filter=A", "--name-only", "--format=@%ct", "--", "docs/zdjecia"],
+            cwd=ROOT, capture_output=True, text=True, check=True).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return []
+    seen, order = set(), []
+    for line in out.splitlines():
+        if line.startswith("docs/zdjecia/") and line.endswith("/index.json"):
+            path = line[len("docs/zdjecia/"):-len("/index.json")]
+            if path not in seen:
+                seen.add(path)
+                order.append(path)
+    result = []
+    for path in order:
+        n = find_node(sections, path)
+        if n and n.photos and not n.children and not n.data.get("cover_only"):
+            result.append(n)
+        if len(result) >= limit:
+            break
+    return result
+
+
+def home_recent(site: dict, sections: list[Node]) -> str:
+    nodes = recent_nodes(sections, site.get("home", {}).get("recent", 0))
+    if not nodes:
+        return ""
+    frames = "\n".join(frame(n, "", heading="h3") for n in nodes)
+    return f"""  <section class="home-block" aria-labelledby="nowe">
+    <h2 class="home-block__title" id="nowe">Ostatnio dodane</h2>
+    <div class="index index--recent">
+{frames}
+    </div>
+  </section>
+"""
+
+
+def home_blog(site: dict, sections: list[Node]) -> str:
+    path = site.get("home", {}).get("blog")
+    node = find_node(sections, path) if path else None
+    if not node or not node.body:
+        return ""
+    m = re.search(r'<article class="post">(.*?)</article>', node.body, re.S)
+    if not m:
+        return ""
+    post = m.group(1)
+    title = re.search(r"<h2>(.*?)</h2>", post, re.S)
+    date = re.search(r'<p class="ref__meta">(.*?)</p>', post, re.S)
+    paras = [x for x in re.findall(r"<p>(.*?)</p>", post, re.S)][:1]
+    if not title:
+        return ""
+    lead = "".join(f"<p>{x}</p>" for x in paras)
+    return f"""  <section class="home-block" aria-labelledby="blog">
+    <h2 class="home-block__title" id="blog">Z bloga</h2>
+    <article class="teaser">
+      <h3 class="teaser__title"><a href="{path}/">{title.group(1)}</a></h3>
+      {f'<p class="teaser__date">{date.group(1)}</p>' if date else ''}
+      {lead}
+      <p><a class="teaser__more" href="{path}/">Czytaj dalej</a></p>
+    </article>
+  </section>
+"""
+
+
 def render_home(site: dict, sections: list[Node], index_url: str) -> str:
     frames = "\n".join(frame(s, "") for s in sections)
+    extra = home_photo(site, sections) + home_recent(site, sections) + home_blog(site, sections)
+    sections_title = '  <h2 class="home-block__title home-block__title--index" id="dzialy">Działy</h2>\n' if extra else ""
     return (
         head(site, f"{site['title']} – fotografia", site["description"], "")
         + header(site, sections, "", None, home=True)
@@ -358,7 +462,7 @@ def render_home(site: dict, sections: list[Node], index_url: str) -> str:
     <p class="hero__intro">{escape(site['intro'])}</p>
     {search_form(index_url)}
   </section>
-  <section class="index" aria-label="Działy">
+{extra}{sections_title}  <section class="index" aria-label="Działy">
 {frames}
   </section>
 </main>

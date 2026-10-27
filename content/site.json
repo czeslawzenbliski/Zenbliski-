@@ -10,6 +10,16 @@
     "email": "fotohobbypl@gmail.com",
     "facebook": "https://www.facebook.com/profile.php?id=100073113819581"
   },
+  "home": {
+    "photos": [
+      "analogowe/nikon-fe2-kodak-ektar-100-gdansk-2025/nikon-fe2-gdansk-02.avif",
+      "analogowe/nikon-fg-20-ilford-delta-100-wolomin-2025/nikon-fg-20-wolomin-03.avif",
+      "analogowe/nikon-fe-fomapan-100-szwecja-2022/nikon-fe-szwecja-01.avif",
+      "analogowe/canon-at-1-mazowsze-2025/canon-at1-mazowsze-02.avif"
+    ],
+    "recent": 6,
+    "blog": "artykuly-blog/blog"
+  },
   "sections": [
     {
       "slug": "archiwalne",
