@@ -366,16 +366,17 @@ def home_photo(site: dict, sections: list[Node]) -> str:
             continue
         base = f"zdjecia/{gpath}/"
         items.append({"src": base + p["file"], "mini": base + "mini/" + p.get("mini", p["file"]),
-                      "w": p["w"], "h": p["h"], "href": f"{gpath}/", "title": node.title})
+                      "w": p["w"], "h": p["h"], "href": f"{gpath}/", "title": node.title,
+                      "caption": p.get("caption", "").strip()})
     if not items:
         return ""
     first = items[0]
     data = escape(json.dumps(items, ensure_ascii=False), quote=True)
     return f"""  <section class="feature" aria-label="Zdjęcie z galerii" data-feature="{data}">
     <a class="feature__link" href="{first['href']}">
-      <picture><source srcset="{first['src']}" type="image/avif"><img src="{first['mini']}" width="{first['w']}" height="{first['h']}" alt="{escape(first['title'], quote=True)}" decoding="async"></picture>
+      <picture><source srcset="{first['src']}" type="image/avif"><img src="{first['mini']}" width="{first['w']}" height="{first['h']}" alt="{escape(first['caption'] or first['title'], quote=True)}" decoding="async"></picture>
     </a>
-    <p class="feature__cap">Z galerii <a href="{first['href']}">{escape(first['title'])}</a></p>
+    <p class="feature__cap"><span class="feature__what">{escape(first['caption'] + ' – z galerii') if first['caption'] else 'Z galerii'}</span> <a href="{first['href']}">{escape(first['title'])}</a></p>
   </section>
 """
 

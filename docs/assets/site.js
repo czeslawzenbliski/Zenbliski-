@@ -790,7 +790,8 @@
       if (pick && list.length > 1) {
         var fimg = feature.querySelector("img"), fsrc = feature.querySelector("source");
         fsrc.srcset = pick.src; fimg.src = pick.mini;
-        fimg.width = pick.w; fimg.height = pick.h; fimg.alt = pick.title;
+        fimg.width = pick.w; fimg.height = pick.h; fimg.alt = pick.caption || pick.title;
+        feature.querySelector(".feature__what").textContent = pick.caption ? pick.caption + " – z galerii" : "Z galerii";
         Array.prototype.forEach.call(feature.querySelectorAll("a"), function (a) { a.href = pick.href; });
         feature.querySelector(".feature__cap a").textContent = pick.title;
       }
