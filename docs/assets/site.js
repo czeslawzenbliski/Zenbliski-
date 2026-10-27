@@ -484,15 +484,39 @@
       });
     }
 
-    var lock = null;
-    function loadLock() {
-      if (lock) return Promise.resolve(lock);
-      return download("lock.json").then(function (r) { return r.json(); }).then(function (json) { return (lock = json); });
+    // Sejf (dział na hasło z galeriami w środku): klucz działu po wpisaniu hasła
+    // zostaje w sessionStorage tej karty, więc galerie w środku nie pytają o hasło.
+    // Znika po zamknięciu karty. Samo hasło nigdzie nie jest zapisywane.
+    var mode = vault.dataset.mode || "gallery";
+    var parentBase = vault.dataset.parent || "";
+    var sectionBase = mode === "child" ? parentBase : base;
+    var storeName = "sejf:" + new URL(sectionBase, location.href).pathname;
+    function remember(raw) {
+      try { sessionStorage.setItem(storeName, b64(raw)); } catch (e) {}
     }
-
-    function unlock(password) {
+    function recall() {
+      try { var v = sessionStorage.getItem(storeName); return v ? bytes(v) : null; } catch (e) { return null; }
+    }
+    function forget() { try { sessionStorage.removeItem(storeName); } catch (e) {} }
+    function b64(buf) {
+      var a = new Uint8Array(buf), s = "";
+      for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]);
+      return btoa(s);
+    }
+    function getLock(from) {
+      return fetch(from + "lock.json", { cache: "no-cache" }).then(function (r) {
+        if (!r.ok) throw new Error("network");
+        return r.json();
+      });
+    }
+    function aes(raw) { return subtle.importKey("raw", raw, "AES-GCM", false, ["decrypt"]); }
+    function readManifest(key, l) {
+      return unseal(key, bytes(l.manifest)).then(function (buf) { return JSON.parse(new TextDecoder().decode(buf)); });
+    }
+    // Hasło → klucz danych galerii albo działu (lock.json pod adresem "from").
+    function openWithPassword(from, password) {
       var stage = "network";
-      return loadLock().then(function (l) {
+      return getLock(from).then(function (l) {
         stage = "password";
         return subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"])
           .then(function (material) {
@@ -501,14 +525,94 @@
               material, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
           })
           .then(function (kek) { return unseal(kek, bytes(l.key)); })
-          .then(function (raw) { return subtle.importKey("raw", raw, "AES-GCM", false, ["decrypt"]); })
-          .then(function (key) {
+          .then(function (raw) {
             stage = "data";
-            return unseal(key, bytes(l.manifest)).then(function (buf) {
-              return { key: key, items: JSON.parse(new TextDecoder().decode(buf)) };
+            return aes(raw).then(function (key) {
+              return readManifest(key, l).then(function (items) { return { raw: raw, key: key, items: items }; });
             });
           });
-      }).catch(function (err) { err.stage = stage; throw err; });
+      }).catch(function (err) { err.stage = err.stage || stage; throw err; });
+    }
+    // Zapamiętany klucz działu → lista galerii.
+    function openWithRaw(from, raw) {
+      return getLock(from).then(function (l) {
+        return aes(raw).then(function (key) {
+          return readManifest(key, l).then(function (items) { return { raw: raw, key: key, items: items }; });
+        });
+      });
+    }
+    // Galeria w sejfie: jej klucz jest zaszyfrowany kluczem działu.
+    function openChild(from, sectionKey) {
+      return getLock(from).then(function (l) {
+        return unseal(sectionKey, bytes(l.key)).then(aes).then(function (key) {
+          return readManifest(key, l).then(function (items) { return { key: key, items: items }; });
+        });
+      });
+    }
+
+    function unlock(password) {
+      return openWithPassword(base, password);
+    }
+
+    function polish(n, one, few, many) {
+      var w = n === 1 ? one : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? few : many;
+      return n + " " + w;
+    }
+
+    // Sejf otwarty: kadry z galeriami (okładka = pierwsza miniatura, odszyfrowana).
+    function showSection(section) {
+      vault.hidden = true;
+      var list = vault.parentNode.querySelector("[data-vault-list]");
+      if (!section.items.length) {
+        var empty = document.createElement("div");
+        empty.className = "empty";
+        empty.innerHTML = "<p>Galerie w tym dziale są w przygotowaniu.</p>";
+        vault.parentNode.insertBefore(empty, vault);
+        return;
+      }
+      section.items.forEach(function (c) {
+        var a = document.createElement("a");
+        a.className = "frame";
+        a.href = c.slug + "/";
+        var view = document.createElement("span");
+        view.className = "frame__view";
+        var h = document.createElement("h2");
+        h.className = "frame__title";
+        h.textContent = c.title;
+        var meta = document.createElement("span");
+        meta.className = "frame__meta";
+        a.appendChild(view); a.appendChild(h); a.appendChild(meta);
+        list.appendChild(a);
+        var from = base + c.slug + "/";
+        openChild(from, section.key).then(function (g) {
+          meta.textContent = polish(g.items.length, "zdjęcie", "zdjęcia", "zdjęć");
+          var p = g.items[0];
+          if (!p) { a.classList.add("frame--empty"); return; }
+          return fetch(from + p.mini, { cache: "no-cache" })
+            .then(function (r) { return r.arrayBuffer(); })
+            .then(function (buf) { return unseal(g.key, new Uint8Array(buf)); })
+            .then(function (plain) {
+              var img = document.createElement("img");
+              img.alt = "";
+              img.src = URL.createObjectURL(new Blob([plain], { type: p.mtype || "image/webp" }));
+              view.appendChild(img);
+            });
+        }).catch(function () { a.classList.add("frame--empty"); });
+      });
+      list.hidden = false;
+    }
+
+    // Galeria w sejfie otwarta kluczem działu: tytuł z listy działu, potem zdjęcia.
+    function showChild(section) {
+      var slug = vault.dataset.slug;
+      var me = section.items.filter(function (c) { return c.slug === slug; })[0];
+      if (me) {
+        title = me.title;
+        var h1 = document.querySelector(".page__title");
+        if (h1) h1.textContent = me.title;
+        document.title = me.title + " – " + document.title.split(" – ").slice(-1)[0];
+      }
+      return openChild(base, section.key).then(function (g) { build(g.key, g.items); });
     }
 
     function build(key, items) {
@@ -579,14 +683,35 @@
       anchors[0].focus({ preventScroll: true });
     }
 
+    // Sejf już otwarty w tej karcie: bez pytania o hasło.
+    if (mode !== "gallery") {
+      var saved = recall();
+      if (saved) {
+        vault.classList.add("vault--opening");
+        openWithRaw(sectionBase, saved)
+          .then(function (section) { return mode === "section" ? showSection(section) : showChild(section); })
+          .catch(function () { forget(); vault.classList.remove("vault--opening"); });
+      }
+    }
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var password = input.value.normalize("NFC").trim();
       if (!password) return;
       say("");
       busy(true);
-      unlock(password).then(
-        function (opened) { input.value = ""; build(opened.key, opened.items); },
+      var opening;
+      if (mode === "gallery") {
+        opening = unlock(password).then(function (opened) { input.value = ""; build(opened.key, opened.items); });
+      } else {
+        opening = openWithPassword(sectionBase, password).then(function (section) {
+          input.value = "";
+          remember(section.raw);
+          return mode === "section" ? showSection(section) : showChild(section);
+        });
+      }
+      opening.then(
+        function () {},
         function (err) {
           busy(false);
           if (err.stage === "password") {

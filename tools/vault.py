@@ -115,3 +115,48 @@ def _write(gallery_dir: Path, lock: dict, data_key: bytes, manifest: list[dict])
     plain = json.dumps(manifest, ensure_ascii=False).encode("utf-8")
     lock["manifest"] = _b64(seal(data_key, plain))
     (gallery_dir / LOCK_FILE).write_text(json.dumps(lock, indent=2) + "\n", encoding="utf-8")
+
+
+# ------------------------------------------------------------------ sejf
+# „Sejf” to dział na hasło, w którym są zwykłe (dla odwiedzającego) galerie.
+# Hasło wpisuje się raz, przy wejściu do działu; galerie w środku już o nie nie pytają.
+#
+#   <dział>/lock.json          jak w galerii na hasło, plus "section": true; zaszyfrowany
+#                              manifest to lista galerii: [{"slug": ..., "title": ...}]
+#   <dział>/<slug>/lock.json   "parent": true; klucz danych galerii zaszyfrowany kluczem
+#                              działu (nie hasłem), manifest zdjęć jak w zwykłej galerii
+#
+# Tytuły galerii w sejfie są zaszyfrowane, a ich adresy neutralne (galeria-1, galeria-2…),
+# więc bez hasła nie widać nawet, jakie galerie są w środku.
+
+def is_section(gallery_dir: Path) -> bool:
+    f = gallery_dir / LOCK_FILE
+    return f.exists() and bool(json.loads(f.read_text(encoding="utf-8")).get("section"))
+
+
+def create_section(section_dir: Path, password: str) -> tuple[bytes, list[dict]]:
+    key, children = create(section_dir, password)
+    lock = json.loads((section_dir / LOCK_FILE).read_text(encoding="utf-8"))
+    lock["section"] = True
+    _write(section_dir, lock, key, children)
+    return key, children
+
+
+def unlock_child(child_dir: Path, section_key: bytes) -> tuple[bytes, list[dict]]:
+    lock = json.loads((child_dir / LOCK_FILE).read_text(encoding="utf-8"))
+    data_key = unseal(section_key, base64.b64decode(lock["key"]))
+    manifest = json.loads(unseal(data_key, base64.b64decode(lock["manifest"])))
+    return data_key, manifest
+
+
+def write_child(child_dir: Path, section_key: bytes, data_key: bytes, manifest: list[dict]) -> None:
+    """Zapisuje lock.json galerii w sejfie (nowej albo przeniesionej z osobnej galerii na hasło)."""
+    child_dir.mkdir(parents=True, exist_ok=True)
+    lock = {"v": 1, "parent": True, "key": _b64(seal(section_key, data_key))}
+    _write(child_dir, lock, data_key, manifest)
+
+
+def create_child(child_dir: Path, section_key: bytes) -> tuple[bytes, list[dict]]:
+    data_key = AESGCM.generate_key(bit_length=256)
+    write_child(child_dir, section_key, data_key, [])
+    return data_key, []

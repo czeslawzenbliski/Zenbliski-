@@ -148,7 +148,13 @@ def add_protected(gallery: str, target: Path, sources: list[Path], full_edge: in
 
     password = os.environ.get("HASLO_GALERII") or getpass.getpass("Hasło do galerii: ")
     try:
-        if vault.is_locked(target):
+        if vault.is_section(target.parent):
+            # Galeria w sejfie: hasło otwiera dział, a klucz działu – galerię (tools/sejf.py).
+            section_key, _ = vault.unlock(target.parent, password)
+            if not vault.is_locked(target):
+                sys.exit("Takiej galerii nie ma w sejfie. Załóż ją: python3 tools/sejf.py nowa …")
+            key, manifest = vault.unlock_child(target, section_key)
+        elif vault.is_locked(target):
             key, manifest = vault.unlock(target, password)
         elif create:
             key, manifest = vault.create(target, password)
@@ -196,7 +202,7 @@ def main() -> None:
     target = PHOTOS / gallery
     sources = collect(args[1:])
 
-    locked = (target / "lock.json").exists()
+    locked = (target / "lock.json").exists() or (target.parent / "lock.json").exists()
     if protect and not locked and (target / "index.json").exists():
         sys.exit("Ta galeria ma już zwykłe, niezaszyfrowane zdjęcia. "
                  "Załóż dla zdjęć na hasło osobną galerię albo najpierw przenieś stare zdjęcia.")

@@ -83,6 +83,21 @@ class Node:
         return (PHOTOS / self.path / "lock.json").exists()
 
     @property
+    def is_section(self) -> bool:
+        """Sejf: dział na hasło z galeriami w środku (tools/sejf.py). Lista galerii jest zaszyfrowana."""
+        lock = PHOTOS / self.path / "lock.json"
+        return lock.exists() and bool(json.loads(lock.read_text(encoding="utf-8")).get("section"))
+
+    @property
+    def vault_children(self) -> list[str]:
+        """Adresy galerii w sejfie (neutralne: galeria-1, galeria-2…); tytuły zna tylko przeglądarka po haśle."""
+        if not self.is_section:
+            return []
+        return sorted((p.name for p in (PHOTOS / self.path).iterdir()
+                       if p.is_dir() and (p / "lock.json").exists()),
+                      key=lambda s: (len(s), s))
+
+    @property
     def manifest(self) -> list[dict]:
         manifest = PHOTOS / self.path / "index.json"
         if not manifest.exists():
@@ -251,12 +266,20 @@ def photo_grid(node: Node, prefix: str) -> str:
     return "\n".join(out)
 
 
-def vault_form(node: Node, prefix: str) -> str:
-    """Formularz hasła i pusta siatka, którą site.js wypełnia po odszyfrowaniu."""
+def vault_form(node: Node, prefix: str, mode: str = "gallery") -> str:
+    """Formularz hasła i pusta siatka, którą site.js wypełnia po odszyfrowaniu.
+    mode: "gallery" – zwykła galeria na hasło, "section" – sejf (lista galerii),
+    "child" – galeria w sejfie (klucz z sejfu, hasło tylko gdy wchodzi się tu bezpośrednio)."""
     base = f"{prefix}zdjecia/{node.path}/"
-    return f"""<div class="vault" data-vault="{base}" data-title="{escape(node.title, quote=True)}">
+    extra = ""
+    if mode == "child":
+        extra = f' data-parent="{prefix}zdjecia/{node.parent.path}/" data-slug="{escape(node.slug, quote=True)}"'
+    lead = ("Ten dział jest dostępny na hasło. Po jego wpisaniu galerie w środku otwierają się już bez pytania."
+            if mode == "section" else "Ta galeria jest dostępna na hasło.")
+    shelf = '\n<section class="shelf" aria-label="Galerie" data-vault-list hidden></section>' if mode == "section" else ""
+    return f"""<div class="vault" data-vault="{base}" data-mode="{mode}"{extra} data-title="{escape(node.title, quote=True)}">
   <form class="vault__form" autocomplete="off">
-    <p class="vault__lead">Ta galeria jest dostępna na hasło.</p>
+    <p class="vault__lead">{lead}</p>
     <label for="haslo">Hasło</label>
     <input id="haslo" name="haslo" type="password" required autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="off">
     <label class="vault__show"><input id="pokaz-haslo" type="checkbox"> Pokaż hasło</label>
@@ -264,7 +287,7 @@ def vault_form(node: Node, prefix: str) -> str:
     <p class="vault__msg" role="alert" hidden></p>
   </form>
   <noscript><p class="vault__msg">Do otwarcia tej galerii potrzebna jest przeglądarka z włączoną obsługą JavaScript.</p></noscript>
-</div>
+</div>{shelf}
 <div class="photos" data-lightbox hidden></div>"""
 
 
@@ -505,12 +528,14 @@ def render_node(site: dict, sections: list[Node], node: Node, index_url: str = "
             parts.append(shelf_filter(node.data["filter"], photos=True))
         parts.append(photo_grid(node, prefix))
     if node.locked:
-        parts.append(vault_form(node, prefix))
+        mode = "section" if node.is_section else ("child" if node.data.get("vault_child") else "gallery")
+        parts.append(vault_form(node, prefix, mode))
     if not (body or node.children or photos or node.locked):
         default = ("Zdjęcia do tej galerii są w przygotowaniu."
                    if node.kind == "gallery" else "Ta strona jest w przygotowaniu.")
         parts.append(empty_state(node.data.get("empty", default)))
-    parts.append(siblings_nav(node, prefix))
+    if not node.data.get("vault_child"):
+        parts.append(siblings_nav(node, prefix))
 
     title = f"{node.title} – {site['title']}"
     description = node.lead or f"{node.title}. {site['description']}"
@@ -639,6 +664,12 @@ def main() -> None:
         target.mkdir(parents=True, exist_ok=True)
         (target / "index.html").write_text(render_node(site, sections, node, index_url), encoding="utf-8")
         pages += 1
+        # Galerie w sejfie: strony bez tytułu (podstawia go skrypt po odszyfrowaniu).
+        for slug in node.vault_children:
+            child = Node({"slug": slug, "title": node.title, "vault_child": True}, node)
+            (target / slug).mkdir(parents=True, exist_ok=True)
+            (target / slug / "index.html").write_text(render_node(site, sections, child, index_url), encoding="utf-8")
+            pages += 1
 
     photos = sum(len(n.photos) for n in walk(sections))
     print(f"Gotowe: stron: {pages}, zdjęć w galeriach: {photos}.")

@@ -79,6 +79,21 @@ Dla zdjęć, których nie mają oglądać postronni (u właściciela: rodzinne z
 - Zmiana hasła nie zabezpieczy zdjęć dodanych wcześniej: stare zaszyfrowane pliki zostają w historii repozytorium i otwiera je stare hasło. Powiedz to właścicielowi, jeśli hasło wycieknie.
 - Po zmianach w `tools/vault.py`, w trybie `--protect` albo w części „galeria na hasło” pliku `site.js` uruchom `python3 tools/check_protected.py` oraz `python3 tools/check_viewer.py`.
 
+### Sejf: dział na hasło z galeriami w środku
+
+„Gucin, zdjęcia rodzinne” (`archiwalne/gucin-zdjecia-rodzinne`) to sejf: hasło wpisuje się raz przy wejściu, galerie w środku otwierają się już bez pytania – klucz działu zostaje w `sessionStorage` karty do jej zamknięcia; samo hasło nigdzie. Wszystko dalej leży zaszyfrowane (`tools/vault.py`, część „sejf”).
+
+- Tytuły galerii w sejfie są zaszyfrowane (bywają w nich nazwiska – nie wpisuj ich nigdzie jawnie: ani tu, ani w commitach), adresy neutralne (`galeria-1`, `galeria-2`…). Nie ma ich w `site.json` ani w wyszukiwarce; `build.py` robi dla nich strony bez tytułu (podstawia go `site.js`). W `site.json` jest tylko sam dział.
+- Obsługa (hasło w `HASLO_GALERII`, jak wyżej):
+
+      python3 tools/sejf.py lista archiwalne/gucin-zdjecia-rodzinne
+      python3 tools/sejf.py nowa  archiwalne/gucin-zdjecia-rodzinne "Tytuł galerii"   # wypisuje np. galeria-3
+      python3 tools/add_photos.py archiwalne/gucin-zdjecia-rodzinne/galeria-3 /ścieżka/do/zdjęć
+      python3 tools/sejf.py tytul archiwalne/gucin-zdjecia-rodzinne galeria-3 "Nowy tytuł"
+
+- Podpisy z nazw plików: właściciel przysyła ZIP (zdjęcia wklejone w rozmowę tracą nazwy). Nazwy z Maca bywają w NFD – porównuj po `unicodedata.normalize("NFC", …)`. Listę podpisów pokaż właścicielowi przed publikacją.
+- Po zmianach w sejfie uruchom też ręczny test w przeglądarce: hasło na wejściu, przejście do galerii bez hasła, wejście bezpośrednio na adres galerii (pyta o hasło).
+
 ## Zasady
 
 - Format zdjęć: duże w AVIF (jakość 68), miniatury w WebP (jakość 80). Ustawienia dobrane pomiarem tak, żeby wierność nie była niższa niż JPEG 85/78, przy ok. 40% mniejszej wadze. Nie obniżaj jakości „na oko”; właścicielowi zależy na braku widocznej straty. Miniatury zostają w WebP, bo starsze urządzenia nie otwierają AVIF i pokazują wtedy w podglądzie miniaturę.

@@ -804,3 +804,5 @@ a:hover { color: var(--papier); }
   .hero--with-photo .search { margin-top: 1.1rem; }
   .hero--with-photo .feature { margin-top: 1.5rem; }
 }
+/* Sejf otwarty w tej karcie: formularz hasła nie mignie przed odszyfrowaniem. */
+.vault--opening { visibility: hidden; }

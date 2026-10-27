@@ -100,6 +100,11 @@ def check_index(failures: list[str]) -> None:
     for lock in (DOCS / "zdjecia").rglob("lock.json"):
         url = lock.parent.relative_to(DOCS / "zdjecia").as_posix() + "/"
         entry = by_url.get(url)
+        if json.loads(lock.read_text(encoding="utf-8")).get("parent"):
+            # Galeria w sejfie: jej tytuł jest zaszyfrowany, więc w spisie nie może jej być wcale.
+            if entry is not None:
+                failures.append(f"spis: galeria z sejfu „{url}” jest w spisie, a nie powinna")
+            continue
         if entry is None:
             failures.append(f"spis: brak galerii na hasło „{url}” (tytuł jest jawny i powinien dać się wyszukać)")
             continue
