@@ -10,6 +10,8 @@
       var open = menu.classList.toggle("is-open");
       toggle.setAttribute("aria-expanded", String(open));
       toggle.textContent = open ? "Zamknij" : "Menu";
+      // Strona główna na telefonie: logo wchodzi na wysokość przycisku, przy otwartym menu schodzi niżej.
+      document.documentElement.classList.toggle("menu-open", open);
     });
   }
 
