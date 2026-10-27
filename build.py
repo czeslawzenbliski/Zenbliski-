@@ -372,12 +372,12 @@ def home_photo(site: dict, sections: list[Node]) -> str:
         return ""
     first = items[0]
     data = escape(json.dumps(items, ensure_ascii=False), quote=True)
-    return f"""  <section class="feature" aria-label="Zdjęcie z galerii" data-feature="{data}">
+    return f"""  <figure class="feature" aria-label="Zdjęcie z galerii" data-feature="{data}">
     <a class="feature__link" href="{first['href']}">
       <picture><source srcset="{first['src']}" type="image/avif"><img src="{first['mini']}" width="{first['w']}" height="{first['h']}" alt="{escape(first['caption'] or first['title'], quote=True)}" decoding="async"></picture>
     </a>
-    <p class="feature__cap"><span class="feature__what">{escape(first['caption'] + ' – z galerii') if first['caption'] else 'Z galerii'}</span> <a href="{first['href']}">{escape(first['title'])}</a></p>
-  </section>
+    <figcaption class="feature__cap"><span class="feature__what">{escape(first['caption'] + ' – z galerii') if first['caption'] else 'Z galerii'}</span> <a href="{first['href']}">{escape(first['title'])}</a></figcaption>
+  </figure>
 """
 
 
@@ -449,20 +449,23 @@ def home_blog(site: dict, sections: list[Node]) -> str:
 
 def render_home(site: dict, sections: list[Node], index_url: str) -> str:
     frames = "\n".join(frame(s, "") for s in sections)
-    extra = home_photo(site, sections) + home_recent(site, sections) + home_blog(site, sections)
-    sections_title = '  <h2 class="home-block__title home-block__title--index" id="dzialy">Działy</h2>\n' if extra else ""
+    photo = home_photo(site, sections)
+    extra = home_recent(site, sections) + home_blog(site, sections)
+    sections_title = '  <h2 class="home-block__title home-block__title--index" id="dzialy">Działy</h2>\n' if (extra or photo) else ""
     return (
         head(site, f"{site['title']} – fotografia", site["description"], "")
         + header(site, sections, "", None, home=True)
         + f"""<main id="tresc">
-  <section class="hero">
+  <section class="hero{' hero--with-photo' if photo else ''}">
+    <div class="hero__text">
     <div class="hero__head">
       <div class="hero__badge"><img class="hero__logo" src="assets/fotohobby-logo.webp" width="934" height="663" alt="FotoHobby"></div>
       <h1 class="hero__name">{escape(site['title'])}</h1>
     </div>
     <p class="hero__intro">{escape(site['intro'])}</p>
     {search_form(index_url)}
-  </section>
+    </div>
+{photo}  </section>
 {extra}{sections_title}  <section class="index" aria-label="Działy">
 {frames}
   </section>
