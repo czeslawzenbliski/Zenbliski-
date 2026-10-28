@@ -806,3 +806,5 @@ a:hover { color: var(--papier); }
 }
 /* Sejf otwarty w tej karcie: formularz hasła nie mignie przed odszyfrowaniem. */
 .vault--opening { visibility: hidden; }
+/* Oznaczenia modeli z łącznikiem nie łamią się w połowie (FF-1S, AD-1). */
+.nobr { white-space: nowrap; }

@@ -42,6 +42,11 @@ def asset(name: str) -> str:
     return f"assets/{name}?v={digest}"
 
 
+def title_html(text: str) -> str:
+    """Tytuł do HTML: oznaczenia z łącznikiem (FF-1S, AD-1, MG-1) nie łamią się w połowie."""
+    return re.sub(r"(\S+-\S+)", r'<span class="nobr">\1</span>', escape(text))
+
+
 def plural(n: int, one: str, few: str, many: str) -> str:
     """Polska odmiana: 1 galeria, 2 galerie, 5 galerii, 22 galerie."""
     if n == 1:
@@ -240,7 +245,7 @@ def frame(node: Node, prefix: str, heading: str = "h2") -> str:
     meta_html = f'\n  <span class="frame__meta">{escape(meta)}</span>' if meta else ""
     return f"""<a class="{cls}" href="{prefix}{node.path}/">
   <span class="frame__view">{view}</span>
-  <{heading} class="frame__title">{escape(node.title)}</{heading}>{meta_html}
+  <{heading} class="frame__title">{title_html(node.title)}</{heading}>{meta_html}
 </a>"""
 
 
@@ -501,7 +506,7 @@ def render_home(site: dict, sections: list[Node], index_url: str) -> str:
 def render_node(site: dict, sections: list[Node], node: Node, index_url: str = "") -> str:
     prefix = "../" * node.depth
     parts = [breadcrumb(node, prefix)]
-    parts.append(f'<h1 class="page__title">{escape(node.title)}</h1>')
+    parts.append(f'<h1 class="page__title">{title_html(node.title)}</h1>')
     if node.lead:
         parts.append(f'<p class="page__lead">{escape(node.lead)}</p>')
     if node.plate:
