@@ -325,10 +325,10 @@ def siblings_nav(node: Node, prefix: str) -> str:
     parts = ['<nav class="pager" aria-label="Sąsiednie pozycje">']
     if prev_:
         parts.append(f'  <a class="pager__prev" href="{prefix}{prev_.path}/">'
-                     f'<span>Poprzednia</span>{escape(prev_.title)}</a>')
+                     f'<span>Poprzednia</span>{title_html(prev_.title)}</a>')
     if next_:
         parts.append(f'  <a class="pager__next" href="{prefix}{next_.path}/">'
-                     f'<span>Następna</span>{escape(next_.title)}</a>')
+                     f'<span>Następna</span>{title_html(next_.title)}</a>')
     parts.append("</nav>")
     return "\n".join(parts)
 
