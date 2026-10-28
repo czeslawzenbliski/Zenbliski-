@@ -1059,6 +1059,22 @@
               "slug": "yashica-catalogue-general-1973",
               "title": "Yashica catalogue général 1973, francuski",
               "unit": "strona"
+            },
+            {
+              "slug": "yashica-slrs-fx-d-quartz-fx-3",
+              "title": "Yashica SLRs – FX-D Quartz, FX-3, ok. 1980 r., szwedzki",
+              "unit": "strona",
+              "keywords": [
+                "FX-D",
+                "FX-3",
+                "Contax",
+                "Carl Zeiss",
+                "ML",
+                "139 Winder",
+                "CS-201",
+                "Contax/Yashica",
+                "Yashica Svenska"
+              ]
             }
           ],
           "filter": true
