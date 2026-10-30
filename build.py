@@ -381,30 +381,49 @@ def find_node(sections: list[Node], path: str) -> "Node | None":
 
 
 def home_photo(site: dict, sections: list[Node]) -> str:
-    """Duże zdjęcie na stronie głównej. Lista w site.json → home.photos (ścieżka galerii/plik);
-    bez skryptu widać pierwsze, skrypt losuje jedno z listy przy każdym wejściu."""
-    items = []
-    for ref in site.get("home", {}).get("photos", []):
+    """Duże zdjęcie na stronie głównej, losowane przy każdym wejściu.
+    Pula: zdjęcia z home.photos (ścieżka galerii/plik) oraz wszystkie poziome zdjęcia
+    z działów wymienionych w home.pool (bez galerii na hasło, skanów i okładek).
+    Bez skryptu widać pierwsze zdjęcie z puli."""
+    home = site.get("home", {})
+    galleries, photos, seen = [], [], set()
+
+    def add(node: Node, p: dict) -> None:
+        key = (node.path, p["file"])
+        if key in seen:
+            return
+        seen.add(key)
+        if not galleries or galleries[-1][0] != f"{node.path}/":
+            galleries.append([f"{node.path}/", node.title])
+        photos.append([len(galleries) - 1, p["file"], p.get("mini", p["file"]), p["w"], p["h"],
+                       p.get("caption", "").strip()])
+
+    for ref in home.get("photos", []):
         gpath, fname = ref.rsplit("/", 1)
         node = find_node(sections, gpath)
-        if not node:
-            continue
-        p = next((x for x in node.photos if x["file"] == fname), None)
-        if not p:
-            continue
-        base = f"zdjecia/{gpath}/"
-        items.append({"src": base + p["file"], "mini": base + "mini/" + p.get("mini", p["file"]),
-                      "w": p["w"], "h": p["h"], "href": f"{gpath}/", "title": node.title,
-                      "caption": p.get("caption", "").strip()})
-    if not items:
+        p = next((x for x in node.photos if x["file"] == fname), None) if node else None
+        if p:
+            add(node, p)
+    for root in home.get("pool", []):
+        top = find_node(sections, root)
+        for node in walk([top] if top else []):
+            if node.locked or node.data.get("cover_only") or node.data.get("unit"):
+                continue
+            for p in node.photos:
+                if p["w"] / p["h"] >= home.get("min_ratio", 1.3):
+                    add(node, p)
+    if not photos:
         return ""
-    first = items[0]
-    data = escape(json.dumps(items, ensure_ascii=False), quote=True)
+    gi, file, mini, w, h, cap = photos[0]
+    href, title = galleries[gi]
+    base = f"zdjecia/{href}"
+    # Zwięzły zapis: g = [adres galerii, tytuł], p = [nr galerii, plik, miniatura, szer., wys., podpis].
+    data = escape(json.dumps({"g": galleries, "p": photos}, ensure_ascii=False, separators=(",", ":")), quote=True)
     return f"""  <figure class="feature" aria-label="Zdjęcie z galerii" data-feature="{data}">
-    <a class="feature__link" href="{first['href']}">
-      <picture><source srcset="{first['src']}" type="image/avif"><img src="{first['mini']}" width="{first['w']}" height="{first['h']}" alt="{escape(first['caption'] or first['title'], quote=True)}" decoding="async"></picture>
+    <a class="feature__link" href="{href}">
+      <picture><source srcset="{base}{file}" type="image/avif"><img src="{base}mini/{mini}" width="{w}" height="{h}" alt="{escape(cap or title, quote=True)}" decoding="async"></picture>
     </a>
-    <figcaption class="feature__cap"><span class="feature__what">{escape(first['caption'] + ' – z galerii') if first['caption'] else 'Z galerii'}</span> <a href="{first['href']}">{escape(first['title'])}</a></figcaption>
+    <figcaption class="feature__cap"><span class="feature__what">{escape(cap + ' – z galerii') if cap else 'Z galerii'}</span> <a href="{href}">{escape(title)}</a></figcaption>
   </figure>
 """
 

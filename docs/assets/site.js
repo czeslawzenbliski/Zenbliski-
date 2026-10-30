@@ -912,15 +912,23 @@
   var feature = document.querySelector("[data-feature]");
   if (feature) {
     try {
-      var list = JSON.parse(feature.getAttribute("data-feature"));
-      var pick = list[Math.floor(Math.random() * list.length)];
-      if (pick && list.length > 1) {
+      var data = JSON.parse(feature.getAttribute("data-feature"));
+      var n = data.p.length;
+      // Nie powtarzaj zdjęcia z poprzedniej wizyty w tej karcie.
+      var last = -1;
+      try { last = Number(sessionStorage.getItem("zdjecie-glowne")); } catch (e) {}
+      var k = Math.floor(Math.random() * n);
+      if (n > 1 && k === last) k = (k + 1) % n;
+      try { sessionStorage.setItem("zdjecie-glowne", String(k)); } catch (e) {}
+      var r = data.p[k], g = data.g[r[0]];
+      if (k > 0) {
+        var base = "zdjecia/" + g[0];
         var fimg = feature.querySelector("img"), fsrc = feature.querySelector("source");
-        fsrc.srcset = pick.src; fimg.src = pick.mini;
-        fimg.width = pick.w; fimg.height = pick.h; fimg.alt = pick.caption || pick.title;
-        feature.querySelector(".feature__what").textContent = pick.caption ? pick.caption + " – z galerii" : "Z galerii";
-        Array.prototype.forEach.call(feature.querySelectorAll("a"), function (a) { a.href = pick.href; });
-        feature.querySelector(".feature__cap a").textContent = pick.title;
+        fsrc.srcset = base + r[1]; fimg.src = base + "mini/" + r[2];
+        fimg.width = r[3]; fimg.height = r[4]; fimg.alt = r[5] || g[1];
+        feature.querySelector(".feature__what").textContent = r[5] ? r[5] + " – z galerii" : "Z galerii";
+        Array.prototype.forEach.call(feature.querySelectorAll("a"), function (a) { a.href = g[0]; });
+        feature.querySelector(".feature__cap a").textContent = g[1];
       }
     } catch (e) {}
   }
