@@ -1,0 +1,38 @@
+[
+  {
+    "file": "nikon-f-301-01.avif",
+    "mini": "nikon-f-301-01.webp",
+    "w": 1393,
+    "h": 2000,
+    "mw": 627,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "nikon-f-301-02.avif",
+    "mini": "nikon-f-301-02.webp",
+    "w": 2000,
+    "h": 900,
+    "mw": 900,
+    "mh": 405,
+    "caption": ""
+  },
+  {
+    "file": "nikon-f-301-03.avif",
+    "mini": "nikon-f-301-03.webp",
+    "w": 2000,
+    "h": 1333,
+    "mw": 900,
+    "mh": 600,
+    "caption": ""
+  },
+  {
+    "file": "nikon-f-301-04.avif",
+    "mini": "nikon-f-301-04.webp",
+    "w": 2000,
+    "h": 1738,
+    "mw": 900,
+    "mh": 782,
+    "caption": ""
+  }
+]
