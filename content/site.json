@@ -1902,7 +1902,45 @@
         {
           "slug": "zdjecia-z-aparatow-cyfrowych",
           "title": "Zdjęcia z aparatów cyfrowych",
-          "empty": "Zdjęcia do tej galerii są w przygotowaniu."
+          "children": [
+            {
+              "slug": "nikon-d750-nikkor-24-120-gdansk-2025",
+              "title": "Nikon D750, AF-S Nikkor 24-120 mm 1:4G ED – Gdańsk 2025 r.",
+              "plate": [
+                [
+                  "Aparat",
+                  "Nikon D750"
+                ],
+                [
+                  "Obiektyw",
+                  "AF-S Nikkor 24-120 mm 1:4G ED"
+                ],
+                [
+                  "Miejsce",
+                  "Gdańsk, 2025 r."
+                ]
+              ],
+              "keywords": [
+                "Gdańsk",
+                "Gdynia",
+                "Westerplatte",
+                "Sopot",
+                "latarnia",
+                "port",
+                "stocznia",
+                "Żuraw",
+                "Motława",
+                "Amber Sky",
+                "diabelski młyn",
+                "Sołdek",
+                "Narodowe Muzeum Morskie",
+                "Długa",
+                "Złota Brama",
+                "galeon",
+                "nocne"
+              ]
+            }
+          ]
         }
       ]
     }
