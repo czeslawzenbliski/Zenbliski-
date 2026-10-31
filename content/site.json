@@ -687,6 +687,34 @@
           "lead": "Zdjęcia witryny z kolekcją, od najstarszych do najnowszych.",
           "children": [
             {
+              "slug": "2023-wrzesien",
+              "title": "Wrzesień 2023",
+              "plate": [
+                [
+                  "Aparat",
+                  "Nikon F90X"
+                ],
+                [
+                  "Obiektyw",
+                  "Nikkor 50 mm 1:1,4"
+                ],
+                [
+                  "Film",
+                  "Kentmere Pan 100"
+                ]
+              ],
+              "keywords": [
+                "Yashica-Mat",
+                "Yashica LM",
+                "Yashica-44",
+                "Yashica-A",
+                "Yashica Mat-124 G",
+                "Rolleiflex",
+                "Mamiya C330",
+                "dwuobiektywowe"
+              ]
+            },
+            {
               "slug": "2023-listopad",
               "title": "Listopad 2023",
               "keywords": [
