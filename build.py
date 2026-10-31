@@ -201,10 +201,13 @@ def header(site: dict, sections: list[Node], prefix: str, current: Node | None, 
         items.append(f'<li><a href="{prefix}{s.path}/"{attrs}>{escape(s.title)}</a></li>')
     brand_cls = "brand brand--hidden" if home else "brand"
     brand_cur = ' aria-current="page"' if home else ""
+    # Małe logo FotoHobby w kole nad nazwą strony; na stronie głównej jest duże logo, więc tu go nie ma.
+    brand_logo = "" if home else (f'<img class="brand__logo" src="{prefix}{asset("fotohobby-kolo.webp")}" '
+                                  'width="192" height="192" alt="">')
     return f"""<body>
 <a class="skip" href="#tresc">Przejdź do treści</a>
 <header class="top">
-  <a class="{brand_cls}" href="{prefix or './'}"{brand_cur}>{escape(site['title'])}</a>
+  <a class="{brand_cls}" href="{prefix or './'}"{brand_cur}>{brand_logo}<span class="brand__name">{escape(site['title'])}</span></a>
   <nav class="nav" aria-label="Działy">
     <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
     <ul id="menu">
