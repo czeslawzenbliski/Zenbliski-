@@ -1,0 +1,29 @@
+[
+  {
+    "file": "fed-3-01.avif",
+    "mini": "fed-3-01.webp",
+    "w": 1764,
+    "h": 2000,
+    "mw": 794,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "fed-3-02.avif",
+    "mini": "fed-3-02.webp",
+    "w": 1613,
+    "h": 2000,
+    "mw": 726,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "fed-3-03.avif",
+    "mini": "fed-3-03.webp",
+    "w": 2000,
+    "h": 1511,
+    "mw": 900,
+    "mh": 680,
+    "caption": ""
+  }
+]
