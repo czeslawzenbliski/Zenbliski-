@@ -687,6 +687,19 @@
           "lead": "Zdjęcia witryny z kolekcją, od najstarszych do najnowszych.",
           "children": [
             {
+              "slug": "2023-listopad",
+              "title": "Listopad 2023",
+              "keywords": [
+                "Nikon F-301",
+                "Nikon F-501",
+                "Nikon F-601M",
+                "Nikon F-801",
+                "Nikon F90X",
+                "Nikon F80D",
+                "pudełka"
+              ]
+            },
+            {
               "slug": "2026-styczen",
               "title": "Styczeń 2026"
             }
