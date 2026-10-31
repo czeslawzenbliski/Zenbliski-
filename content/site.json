@@ -687,6 +687,30 @@
           "lead": "Zdjęcia witryny z kolekcją, od najstarszych do najnowszych.",
           "children": [
             {
+              "slug": "2021-grudzien",
+              "title": "Grudzień 2021",
+              "keywords": [
+                "Praktica",
+                "Pentacon Six TL",
+                "Mamiya C330",
+                "Yashica-Mat",
+                "Nikon",
+                "Nikkormat",
+                "Minolta X-500",
+                "Minolta X-300",
+                "Olympus",
+                "Ricoh 800 EES",
+                "Werra",
+                "Leica",
+                "Smena",
+                "Praktiflex",
+                "Praktina",
+                "Sony",
+                "Casio Exilim",
+                "witryna"
+              ]
+            },
+            {
               "slug": "2023-wrzesien",
               "title": "Wrzesień 2023",
               "plate": [
