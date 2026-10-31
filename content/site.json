@@ -1790,7 +1790,34 @@
     {
       "slug": "cyfrowe",
       "title": "Cyfrowe",
-      "lead": "Zdjęcia z aparatów cyfrowych."
+      "lead": "Aparaty cyfrowe z kolekcji i zdjęcia z aparatów cyfrowych.",
+      "children": [
+        {
+          "slug": "aparaty-cyfrowe",
+          "title": "Aparaty cyfrowe",
+          "children": [
+            {
+              "slug": "casio-exilim-ex-s1",
+              "title": "Casio Exilim EX-S1",
+              "keywords": [
+                "Casio",
+                "Exilim",
+                "EX-S1",
+                "EX-M1",
+                "wearable card camera",
+                "karta kredytowa",
+                "2002",
+                "cyfrowy"
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "zdjecia-z-aparatow-cyfrowych",
+          "title": "Zdjęcia z aparatów cyfrowych",
+          "empty": "Zdjęcia do tej galerii są w przygotowaniu."
+        }
+      ]
     }
   ]
 }
