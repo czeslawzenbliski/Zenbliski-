@@ -1739,7 +1739,14 @@
           "slug": "gadzety-reklamowe",
           "title": "Gadżety reklamowe",
           "lead": "Długopisy, breloki, podstawki, pudełka z logo firm i inne przedmioty reklamowe.",
-          "empty": "Ten dział jest w przygotowaniu."
+          "empty": "Ten dział jest w przygotowaniu.",
+          "children": [
+            {
+              "slug": "brelok-orwo-film",
+              "title": "Brelok - ORWO Film",
+              "cover_pos": "50% 82%"
+            }
+          ]
         }
       ]
     },
