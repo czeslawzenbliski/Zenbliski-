@@ -219,11 +219,15 @@ def header(site: dict, sections: list[Node], prefix: str, current: Node | None, 
 
 
 def footer(site: dict, prefix: str) -> str:
+    # Licznik odwiedzin GoatCounter (bez ciasteczek, statystyki widzi tylko właściciel). Jedyny zewnętrzny skrypt.
+    gc = site.get("goatcounter")
+    counter = (f'\n<script data-goatcounter="{escape(gc, quote=True)}" async src="https://gc.zgo.at/count.js"></script>'
+               if gc else "")
     contact = f' <span aria-hidden="true">·</span> <a href="{prefix}kontakt/">Kontakt</a>' if site.get("contact") else ""
     return f"""<footer class="foot">
   <p>{escape(site['footer'])}{contact}</p>
 </footer>
-<script src="{prefix}{asset('site.js')}" defer></script>
+<script src="{prefix}{asset('site.js')}" defer></script>{counter}
 </body>
 </html>
 """

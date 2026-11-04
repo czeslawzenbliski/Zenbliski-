@@ -102,7 +102,7 @@ Dla zdjęć, których nie mają oglądać postronni (u właściciela: rodzinne z
 - Do repozytorium trafiają tylko zdjęcia po `add_photos.py`, nigdy oryginały ani skany w pełnej rozdzielczości. Limit GitHub Pages to 1 GB na całą stronę; skrypt wypisuje bieżące zużycie.
 - Nie wymyślaj treści w imieniu właściciela: opisów zdjęć, dat, historii sprzętu. Jeśli czegoś brakuje, zostaw stan „w przygotowaniu” i zapytaj.
 - Wszystkie linki wewnętrzne są względne, więc strona działa i pod adresem tymczasowym, i pod własną domeną. Wyjątkiem jest `404.html`, który korzysta z `root_path`.
-- Wygląd: ciemne tło, mosiężne akcenty, nagłówki Playfair Display, tekst Jost. Fonty są hostowane lokalnie, strona nie łączy się z żadnym zewnętrznym serwerem i nie używa ciasteczek. Tak ma zostać.
+- Wygląd: ciemne tło, mosiężne akcenty, nagłówki Playfair Display, tekst Jost. Fonty są hostowane lokalnie, strona nie używa ciasteczek i nie łączy się z zewnętrznymi serwerami. Jedyny wyjątek, zgoda właściciela 4.11.2026: licznik odwiedzin GoatCounter (`site.json` → `goatcounter`, skrypt `gc.zgo.at/count.js` dodawany w `footer()`; bez ciasteczek, statystyki tylko na koncie właściciela zenbliski.goatcounter.com). Innych zewnętrznych usług nie dokładaj.
 - Narożniki ramki celownika (na pustych kadrach i po najechaniu na zdjęcie) to jedyny ozdobnik. Nie dokładaj kolejnych.
 
 ## Własna domena (uruchomiona 4.11.2026)
