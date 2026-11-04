@@ -97,5 +97,15 @@
     "mw": 900,
     "mh": 597,
     "caption": ""
+  },
+  {
+    "file": "nikon-f2a-aparat.avif",
+    "mini": "nikon-f2a-aparat.webp",
+    "w": 2000,
+    "h": 1125,
+    "mw": 900,
+    "mh": 506,
+    "caption": "",
+    "aparat": true
   }
 ]
