@@ -106,5 +106,15 @@
     "mw": 587,
     "mh": 900,
     "caption": ""
+  },
+  {
+    "file": "nikon-fe-aparat.avif",
+    "mini": "nikon-fe-aparat.webp",
+    "w": 2000,
+    "h": 1890,
+    "mw": 900,
+    "mh": 850,
+    "caption": "",
+    "aparat": true
   }
 ]
