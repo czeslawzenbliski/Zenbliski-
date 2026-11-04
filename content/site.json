@@ -1744,7 +1744,8 @@
             {
               "slug": "brelok-orwo-film",
               "title": "Brelok - ORWO Film",
-              "cover_pos": "50% 82%"
+              "cover_pos": "50% 82%",
+              "keywords": ["Filmfabrik Wolfen", "VEB Filmfabrik Wolfen"]
             }
           ]
         }
