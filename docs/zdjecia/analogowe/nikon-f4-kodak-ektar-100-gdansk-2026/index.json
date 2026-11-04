@@ -241,5 +241,15 @@
     "mw": 900,
     "mh": 601,
     "caption": ""
+  },
+  {
+    "file": "nikon-f4-aparat.avif",
+    "mini": "nikon-f4-aparat.webp",
+    "w": 2000,
+    "h": 1335,
+    "mw": 900,
+    "mh": 601,
+    "caption": "",
+    "aparat": true
   }
 ]
