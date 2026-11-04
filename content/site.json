@@ -1745,7 +1745,14 @@
               "slug": "brelok-orwo-film",
               "title": "Brelok - ORWO Film",
               "cover_pos": "50% 82%",
-              "keywords": ["Filmfabrik Wolfen", "VEB Filmfabrik Wolfen"]
+              "keywords": [
+                "Filmfabrik Wolfen",
+                "VEB Filmfabrik Wolfen"
+              ]
+            },
+            {
+              "slug": "zapalki-praktica-bx20s",
+              "title": "Zapałki Praktica BX20S"
             }
           ]
         }
