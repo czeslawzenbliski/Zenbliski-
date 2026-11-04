@@ -3,8 +3,8 @@
   "description": "Fotografia analogowa i cyfrowa, zdjęcia archiwalne i kolekcja aparatów.",
   "intro": "Fotografia analogowa i cyfrowa, zdjęcia archiwalne, kolekcja aparatów i materiały z epoki.",
   "lang": "pl",
-  "root_path": "/Zenbliski-/",
-  "noindex": true,
+  "root_path": "/",
+  "noindex": false,
   "footer": "© 2026 Zenbliski",
   "contact": {
     "email": "fotohobbypl@gmail.com",

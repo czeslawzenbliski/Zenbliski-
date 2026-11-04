@@ -105,10 +105,10 @@ Dla zdjęć, których nie mają oglądać postronni (u właściciela: rodzinne z
 - Wygląd: ciemne tło, mosiężne akcenty, nagłówki Playfair Display, tekst Jost. Fonty są hostowane lokalnie, strona nie łączy się z żadnym zewnętrznym serwerem i nie używa ciasteczek. Tak ma zostać.
 - Narożniki ramki celownika (na pustych kadrach i po najechaniu na zdjęcie) to jedyny ozdobnik. Nie dokładaj kolejnych.
 
-## Uruchomienie pod własną domeną (jeszcze niewykonane)
+## Własna domena (uruchomiona 4.11.2026)
 
-Do czasu przepięcia domeny strona działa pod adresem tymczasowym `https://czeslawzenbliski.github.io/Zenbliski-/` i ma wyłączone indeksowanie.
-Przy przepięciu na zenbliski.pl:
+Strona działa pod https://zenbliski.pl/ (`root_path: "/"`, `noindex: false`, plik `docs/CNAME`). DNS w OVH: 4 wpisy A @ → 185.199.108–111.153, CNAME www → czeslawzenbliski.github.io., serwery DNS OVH. Stary fotohobbypl.com przekierowuje osobne repozytorium `czeslawzenbliski/fotohobbypl` (Pages, CNAME fotohobbypl.com, mapa starych adresów WebWave w index.html/404.html). Linki podawane właścicielowi: `https://zenbliski.pl/...`.
+Kroki, które wykonano przy przepięciu:
 
 1. W `content/site.json` ustaw `"root_path": "/"` i `"noindex": false`.
 2. Dodaj plik `docs/CNAME` z treścią `zenbliski.pl`.
