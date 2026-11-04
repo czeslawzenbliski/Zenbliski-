@@ -88,5 +88,15 @@
     "mw": 589,
     "mh": 900,
     "caption": ""
+  },
+  {
+    "file": "nikon-f90x-aparat.avif",
+    "mini": "nikon-f90x-aparat.webp",
+    "w": 1600,
+    "h": 2000,
+    "mw": 720,
+    "mh": 900,
+    "caption": "",
+    "aparat": true
   }
 ]

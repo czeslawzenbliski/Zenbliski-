@@ -417,6 +417,9 @@ def home_photo(site: dict, sections: list[Node]) -> str:
             if node.locked or node.data.get("cover_only") or node.data.get("unit"):
                 continue
             for p in node.photos:
+                # "aparat": true w manifeście – zdjęcie samego aparatu na końcu galerii, nie do losowania.
+                if p.get("aparat"):
+                    continue
                 if p["w"] / p["h"] >= home.get("min_ratio", 1.3):
                     add(node, p)
     if not photos:
