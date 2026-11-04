@@ -88,5 +88,15 @@
     "mw": 900,
     "mh": 883,
     "caption": ""
+  },
+  {
+    "file": "rolleiflex-3-5f-aparat.avif",
+    "mini": "rolleiflex-3-5f-aparat.webp",
+    "w": 2000,
+    "h": 1125,
+    "mw": 900,
+    "mh": 506,
+    "caption": "",
+    "aparat": true
   }
 ]
