@@ -776,6 +776,10 @@
           "lead": "Zdjęcia witryny z kolekcją, od najstarszych do najnowszych.",
           "children": [
             {
+              "slug": "2016-listopad-praktica",
+              "title": "Listopad 2016 – Praktica"
+            },
+            {
               "slug": "2019-styczen",
               "title": "Styczeń 2019 – porządki w witrynie Praktica",
               "keywords": [
