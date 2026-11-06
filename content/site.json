@@ -989,7 +989,45 @@
         {
           "slug": "ksiazki",
           "title": "Książki",
-          "empty": "Ten dział jest w przygotowaniu."
+          "empty": "Ten dział jest w przygotowaniu.",
+          "children": [
+            {
+              "slug": "pritchard-50-najslynniejszych-aparatow",
+              "title": "50 najsłynniejszych aparatów fotograficznych w historii",
+              "plate": [
+                [
+                  "Autor",
+                  "Michael Pritchard"
+                ],
+                [
+                  "Tłumaczenie",
+                  "Jerzy J. Malinowski"
+                ],
+                [
+                  "Wydawnictwo",
+                  "Oficyna Wydawnicza Alma-Press, Warszawa"
+                ],
+                [
+                  "Rok",
+                  "2017 (wydanie I)"
+                ],
+                [
+                  "ISBN",
+                  "978-83-7020-665-9"
+                ],
+                [
+                  "Język",
+                  "polski"
+                ]
+              ],
+              "keywords": [
+                "Pritchard",
+                "Almapress",
+                "A History of Photography in 50 Cameras",
+                "historia fotografii"
+              ]
+            }
+          ]
         },
         {
           "slug": "albumy",

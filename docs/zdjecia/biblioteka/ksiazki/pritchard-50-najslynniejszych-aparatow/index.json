@@ -1,0 +1,38 @@
+[
+  {
+    "file": "pritchard-01-okladka.avif",
+    "mini": "pritchard-01-okladka.webp",
+    "w": 1680,
+    "h": 2210,
+    "mw": 684,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "pritchard-02-tyl.avif",
+    "mini": "pritchard-02-tyl.webp",
+    "w": 1635,
+    "h": 2268,
+    "mw": 649,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "pritchard-03-s104-105.avif",
+    "mini": "pritchard-03-s104-105.webp",
+    "w": 2334,
+    "h": 1568,
+    "mw": 900,
+    "mh": 605,
+    "caption": ""
+  },
+  {
+    "file": "pritchard-04-s156-157.avif",
+    "mini": "pritchard-04-s156-157.webp",
+    "w": 2302,
+    "h": 1596,
+    "mw": 900,
+    "mh": 624,
+    "caption": ""
+  }
+]
