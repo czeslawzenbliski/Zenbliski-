@@ -910,6 +910,29 @@
       ]
     },
     {
+      "slug": "biblioteka",
+      "title": "Biblioteka",
+      "lead": "Książki, albumy, katalogi i leksykony o aparatach fotograficznych i fotografii z mojej półki.",
+      "empty": "Ten dział jest w przygotowaniu.",
+      "children": [
+        {
+          "slug": "ksiazki",
+          "title": "Książki",
+          "empty": "Ten dział jest w przygotowaniu."
+        },
+        {
+          "slug": "albumy",
+          "title": "Albumy",
+          "empty": "Ten dział jest w przygotowaniu."
+        },
+        {
+          "slug": "katalogi-i-leksykony",
+          "title": "Katalogi i leksykony",
+          "empty": "Ten dział jest w przygotowaniu."
+        }
+      ]
+    },
+    {
       "slug": "akcesoria",
       "title": "Akcesoria foto",
       "lead": "Akcesoria fotograficzne z kolekcji.",
