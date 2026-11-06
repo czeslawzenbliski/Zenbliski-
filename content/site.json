@@ -780,6 +780,10 @@
           "lead": "Zdjęcia witryny z kolekcją, od najstarszych do najnowszych.",
           "children": [
             {
+              "slug": "2015-czerwiec",
+              "title": "Czerwiec 2015"
+            },
+            {
               "slug": "2016-listopad-praktica",
               "title": "Listopad 2016 – Praktica",
               "keywords": [
