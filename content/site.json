@@ -1032,7 +1032,46 @@
         {
           "slug": "albumy",
           "title": "Albumy",
-          "empty": "Ten dział jest w przygotowaniu."
+          "empty": "Ten dział jest w przygotowaniu.",
+          "children": [
+            {
+              "slug": "erwitt-personal-best",
+              "title": "Elliott Erwitt – Personal Best",
+              "plate": [
+                [
+                  "Autor",
+                  "Elliott Erwitt"
+                ],
+                [
+                  "Wstęp",
+                  "Sean Callahan"
+                ],
+                [
+                  "Wydawnictwo",
+                  "teNeues (Die Gestalten Verlag), Berlin"
+                ],
+                [
+                  "Rok",
+                  "2026 (wydanie III)"
+                ],
+                [
+                  "ISBN",
+                  "978-3-96171-632-6"
+                ],
+                [
+                  "Język",
+                  "angielski, niemiecki, francuski, włoski, hiszpański"
+                ]
+              ],
+              "keywords": [
+                "Erwitt",
+                "Magnum",
+                "teNeues",
+                "fotografia uliczna",
+                "album fotograficzny"
+              ]
+            }
+          ]
         },
         {
           "slug": "katalogi-i-leksykony",

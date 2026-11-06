@@ -1,0 +1,29 @@
+[
+  {
+    "file": "erwitt-01-okladka.avif",
+    "mini": "erwitt-01-okladka.webp",
+    "w": 1538,
+    "h": 2000,
+    "mw": 692,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "erwitt-02-tyl.avif",
+    "mini": "erwitt-02-tyl.webp",
+    "w": 1445,
+    "h": 2000,
+    "mw": 650,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "erwitt-03-rozkladowka.avif",
+    "mini": "erwitt-03-rozkladowka.webp",
+    "w": 2000,
+    "h": 1472,
+    "mw": 900,
+    "mh": 663,
+    "caption": ""
+  }
+]
