@@ -546,7 +546,7 @@ a:hover { color: var(--papier); }
   text-decoration: none;
 }
 .pager a:hover { color: var(--mosiadz-jasny); }
-.pager span { display: block; margin-bottom: 0.2rem; font: 400 0.9375rem/1.4 var(--sans); color: var(--szary); }
+.pager > a > span:first-child { display: block; margin-bottom: 0.2rem; font: 400 0.9375rem/1.4 var(--sans); color: var(--szary); }
 .pager__next { margin-left: auto; text-align: right; }
 
 /* --------------------------------------------------------------- stopka */
