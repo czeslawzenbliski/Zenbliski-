@@ -613,6 +613,8 @@ def render_contact(site: dict, sections: list[Node]) -> str:
         rows.append(
             f'<p><span class="contact__label">Facebook</span> '
             f'<a href="{escape(c["facebook"], quote=True)}" rel="noopener noreferrer">profil FotoHobby</a></p>')
+    if c.get("note"):
+        rows.append(f'<h2>Prawa autorskie</h2>\n<p>{escape(c["note"])}</p>')
     return (
         head(site, f"Kontakt – {site['title']}", f"Kontakt. {site['description']}", prefix)
         + header(site, sections, prefix, None, home=False)

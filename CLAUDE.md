@@ -50,7 +50,7 @@ Strona główna: na komputerze logo, opis i wyszukiwarka po lewej, obok duże zd
 
 Nagłówek każdej podstrony: w lewym górnym rogu małe logo FotoHobby w kole (`docs/assets/fotohobby-kolo.webp`, 3,25 rem, na telefonie 2,75 rem), pod nim napis Zenbliski; dodaje je `header()` w `build.py`, więc nowe strony mają je same. Na stronie głównej go nie ma (tam jest duże logo).
 
-Strona Kontakt (`/kontakt/`) jest poza menu, prowadzi do niej odnośnik w stopce. Dane w `content/site.json` → `contact` (`email`, `facebook`); tworzy ją `render_contact` w `build.py`. Adres e-mail jest w HTML rozbity, klikalny odnośnik składa `site.js` (ochrona przed zbieraczami adresów). Formularza kontaktowego nie robimy: wymagałby zewnętrznej usługi.
+Strona Kontakt (`/kontakt/`) jest poza menu, prowadzi do niej odnośnik w stopce. Dane w `content/site.json` → `contact` (`email`, `facebook`, `note` – notka „Prawa autorskie” o materiałach reklamowych, dodana na życzenie właściciela 6.11.2026); tworzy ją `render_contact` w `build.py`. Adres e-mail jest w HTML rozbity, klikalny odnośnik składa `site.js` (ochrona przed zbieraczami adresów). Formularza kontaktowego nie robimy: wymagałby zewnętrznej usługi.
 
 Po każdej publikacji podaj właścicielowi pełny link do dodanej lub zmienionej podstrony (adres strony + ścieżka z `site.json` + `/`, np. `https://czeslawzenbliski.github.io/Zenbliski-/materialy-reklamowe/foldery-i-prospekty/canon-compact-1977/`; po przepięciu domeny `https://zenbliski.pl/...`).
 
