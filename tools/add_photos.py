@@ -104,17 +104,41 @@ def save(im: Image.Image, target, edge: int, fmt: str, quality: int, icc: bytes 
     return copy.size
 
 
+def external(gallery: str) -> dict | None:
+    """Wpis z "external_photos" w site.json, jeśli zdjęcia tej galerii leżą w osobnym repozytorium."""
+    site = json.loads((ROOT / "content" / "site.json").read_text(encoding="utf-8"))
+    for ext in site.get("external_photos", []):
+        if gallery == ext["path"] or gallery.startswith(ext["path"] + "/"):
+            return ext
+    return None
+
+
+def mb(folder: Path) -> float:
+    return sum(f.stat().st_size for f in folder.rglob("*")
+               if f.is_file() and f.suffix != ".json" and ".git" not in f.parts) / 1e6
+
+
 def report(gallery: str, added: int) -> None:
-    size = sum(f.stat().st_size for f in PHOTOS.rglob("*") if f.is_file() and f.suffix != ".json") / 1e6
-    print(f"Dodano do „{gallery}”: {added}. Wszystkie zdjęcia na stronie zajmują {size:.0f} MB (limit GitHub Pages: 1000 MB).")
+    print(f"Dodano do „{gallery}”: {added}. Zdjęcia na stronie zajmują {mb(PHOTOS):.0f} MB (limit GitHub Pages: 1000 MB).")
+    ext = external(gallery)
+    if ext:
+        repo = (ROOT / ext["dir"]).resolve()
+        print(f"Pliki zdjęć tej galerii są w osobnym repozytorium {repo} ({mb(repo):.0f} MB z 1000 MB). "
+              "Zrób tam commit i push, a tu tylko manifest index.json.")
     print("Teraz uruchom: python3 build.py")
 
 
 def add_plain(gallery: str, target: Path, sources: list[Path], full_edge: int) -> None:
+    manifest_path = target / "index.json"
+    # Manifest zawsze tutaj (czyta go build.py); same pliki zdjęć, dla działów z "external_photos",
+    # w osobnym repozytorium serwowanym pod własną subdomeną.
+    ext = external(gallery)
+    if ext:
+        target.mkdir(parents=True, exist_ok=True)
+        target = (ROOT / ext["dir"] / gallery).resolve()
     mini = target / "mini"
     mini.mkdir(parents=True, exist_ok=True)
 
-    manifest_path = target / "index.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else []
     taken = {Path(p["file"]).stem for p in manifest}
 

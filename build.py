@@ -233,12 +233,25 @@ def footer(site: dict, prefix: str) -> str:
 """
 
 
+SITE: dict = {}  # site.json, ustawiane w main(); potrzebne w photo_base
+
+
+def photo_base(path: str, prefix: str) -> str:
+    """Adres katalogu ze zdjęciami galerii. Działy z "external_photos" w site.json
+    (obecnie Materiały reklamowe) mają pliki zdjęć w osobnym repozytorium pod własną
+    subdomeną; manifest index.json zostaje tutaj, w docs/zdjecia."""
+    for ext in SITE.get("external_photos", []):
+        if path == ext["path"] or path.startswith(ext["path"] + "/"):
+            return f'{ext["url"]}{path}/'
+    return f"{prefix}zdjecia/{path}/"
+
+
 def frame(node: Node, prefix: str, heading: str = "h2") -> str:
     """Kadr prowadzący do działu lub galerii: okładka, tytuł, liczba pozycji."""
     cover = node.cover()
     if cover:
         owner, p = cover
-        src = f"{prefix}zdjecia/{owner.path}/mini/{p.get('mini', p['file'])}"
+        src = f"{photo_base(owner.path, prefix)}mini/{p.get('mini', p['file'])}"
         # "cover_pos" przesuwa kadr okładki (CSS object-position), np. "50% 20%".
         pos = owner.data.get("cover_pos")
         pos_attr = f' style="object-position:{escape(pos, quote=True)}"' if pos else ""
@@ -264,7 +277,7 @@ def photo_grid(node: Node, prefix: str) -> str:
     cls = "photos photos--few" if len(photos) <= 3 else "photos"
     out = [f'<div class="{cls}" data-lightbox>']
     for p in photos:
-        base = f"{prefix}zdjecia/{node.path}/"
+        base = photo_base(node.path, prefix)
         ratio = round(p["w"] / p["h"], 4)
         caption = p.get("caption", "")
         alt = caption or node.title
@@ -672,6 +685,7 @@ def search_index(sections: list[Node]) -> list[dict]:
 
 def main() -> None:
     site = json.loads((CONTENT / "site.json").read_text(encoding="utf-8"))
+    SITE.update(site)
     sections = [Node(s) for s in site["sections"]]
 
     # Usuń poprzednio wygenerowane strony, zostaw zasoby i zdjęcia.

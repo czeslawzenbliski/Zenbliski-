@@ -2203,5 +2203,13 @@
         }
       ]
     }
+  ],
+  "external_photos": [
+    {
+      "path": "materialy-reklamowe",
+      "url": "https://zdjecia.zenbliski.pl/",
+      "dir": "../zenbliski-zdjecia",
+      "repo": "czeslawzenbliski/Zenbliski-zdjecia"
+    }
   ]
 }
