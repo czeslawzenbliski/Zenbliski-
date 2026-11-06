@@ -1,0 +1,29 @@
+[
+  {
+    "file": "photographica-01-okladka.avif",
+    "mini": "photographica-01-okladka.webp",
+    "w": 1593,
+    "h": 2324,
+    "mw": 617,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "photographica-02-tyl.avif",
+    "mini": "photographica-02-tyl.webp",
+    "w": 1568,
+    "h": 2354,
+    "mw": 599,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "photographica-03-strona-tytulowa.avif",
+    "mini": "photographica-03-strona-tytulowa.webp",
+    "w": 2197,
+    "h": 1680,
+    "mw": 900,
+    "mh": 688,
+    "caption": ""
+  }
+]

@@ -999,7 +999,44 @@
         {
           "slug": "katalogi-i-leksykony",
           "title": "Katalogi i leksykony",
-          "empty": "Ten dział jest w przygotowaniu."
+          "empty": "Ten dział jest w przygotowaniu.",
+          "children": [
+            {
+              "slug": "hillebrand-kadlubek-photographica",
+              "title": "Photographica – The Fascination with Classic Cameras",
+              "plate": [
+                [
+                  "Autorzy",
+                  "Rudolf Hillebrand, Günther Kadlubek"
+                ],
+                [
+                  "Wydawnictwo",
+                  "Schiffer Publishing, Atglen (USA)"
+                ],
+                [
+                  "Rok",
+                  "2000"
+                ],
+                [
+                  "ISBN",
+                  "978-0-7643-1174-1"
+                ],
+                [
+                  "Język",
+                  "angielski"
+                ]
+              ],
+              "keywords": [
+                "Hillebrand",
+                "Kadlubek",
+                "Schiffer",
+                "przewodnik kolekcjonera",
+                "ceny aparatów",
+                "Stereo-Mikroma",
+                "Battenberg"
+              ]
+            }
+          ]
         }
       ]
     },
