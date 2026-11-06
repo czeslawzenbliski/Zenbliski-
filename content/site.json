@@ -1753,7 +1753,9 @@
             {
               "slug": "zapalki-praktica-bx20s",
               "title": "Zapałki - Praktica BX20S",
-              "keywords": ["Pentacon"]
+              "keywords": [
+                "Pentacon"
+              ]
             }
           ]
         }
@@ -1761,12 +1763,12 @@
     },
     {
       "slug": "artykuly-blog",
-      "title": "Artykuły – blog",
-      "lead": "Polecane artykuły z innych stron i moje własne wpisy.",
+      "title": "Artykuły – linki – blog",
+      "lead": "Polecane artykuły z innych stron, linki do ciekawych stron i moje własne wpisy.",
       "kind": "text",
       "cover_only": true,
       "cover_pos": "50% 50%",
-      "meta": "artykuły i własne wpisy",
+      "meta": "artykuły, linki i własne wpisy",
       "children": [
         {
           "slug": "artykuly",
@@ -1774,6 +1776,14 @@
           "kind": "text",
           "lead": "Linki do artykułów z gazet, portali i innych stron.",
           "empty": "Artykuły są w przygotowaniu.",
+          "cover_only": true
+        },
+        {
+          "slug": "linki",
+          "title": "Linki do stron",
+          "kind": "text",
+          "lead": "Ciekawe strony internetowe zebrane w jednym miejscu.",
+          "empty": "Linki są w przygotowaniu.",
           "cover_only": true
         },
         {
