@@ -1,0 +1,38 @@
+[
+  {
+    "file": "auer-01-okladka.avif",
+    "mini": "auer-01-okladka.webp",
+    "w": 1904,
+    "h": 1955,
+    "mw": 877,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "auer-02-strona-tytulowa.avif",
+    "mini": "auer-02-strona-tytulowa.webp",
+    "w": 1848,
+    "h": 2001,
+    "mw": 831,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "auer-03-rozkladowka.avif",
+    "mini": "auer-03-rozkladowka.webp",
+    "w": 2400,
+    "h": 1408,
+    "mw": 900,
+    "mh": 528,
+    "caption": ""
+  },
+  {
+    "file": "auer-04-rozkladowka.avif",
+    "mini": "auer-04-rozkladowka.webp",
+    "w": 2400,
+    "h": 1310,
+    "mw": 900,
+    "mh": 491,
+    "caption": ""
+  }
+]
