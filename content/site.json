@@ -802,6 +802,15 @@
             {
               "slug": "yashica-electro-35-gsn",
               "title": "Yashica Electro 35 GSN"
+            },
+            {
+              "slug": "voigtlander-vito-c",
+              "title": "Voigtländer Vito C",
+              "keywords": [
+                "Voigtlander",
+                "Vitolux 18",
+                "Skopar"
+              ]
             }
           ]
         },
