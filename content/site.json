@@ -570,6 +570,33 @@
             "średni format",
             "6x6"
           ]
+        },
+        {
+          "slug": "ricoh-a-2-ilford-pan-100-mazowsze-2023",
+          "title": "Ricoh A-2, Ilford Pan 100, wywołany w urządzeniu Rondinax 35U, Mazowsze 2023 r.",
+          "plate": [
+            [
+              "Aparat",
+              "Ricoh A-2"
+            ],
+            [
+              "Film",
+              "Ilford Pan 100"
+            ],
+            [
+              "Wywołanie",
+              "Rondinax 35U"
+            ],
+            [
+              "Miejsce",
+              "Mazowsze, 2023 r."
+            ]
+          ],
+          "keywords": [
+            "Rondinax",
+            "Agfa Rondinax 35U",
+            "koreks"
+          ]
         }
       ]
     },
