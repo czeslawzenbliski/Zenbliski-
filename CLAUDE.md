@@ -17,7 +17,7 @@ Zmiany na stronie wprowadzasz i publikujesz sam; jego rolą jest dostarczyć zdj
 - `tools/check_search.py` – test wyszukiwarki (komputer i telefon). Wymaga Playwrighta.
 - `docs/` – to, co widzi świat. HTML jest generowany, nie edytuj go ręcznie.
   - `docs/assets/` – `style.css`, `site.js`, fonty (edytowane ręcznie).
-  - `docs/zdjecia/<ścieżka>/` – zdjęcia galerii, miniatury w `mini/`, manifest `index.json` (tu wpisuje się podpisy: pole `caption`).
+  - `docs/zdjecia/<ścieżka>/` – zdjęcia galerii, miniatury w `mini/`, manifest `index.json` (tu wpisuje się podpisy: pole `caption`). Wyjątek: Materiały reklamowe – tu tylko manifesty, pliki zdjęć w repozytorium `Zenbliski-zdjecia` (patrz niżej).
 
 ## Typowe zadania
 
@@ -101,6 +101,10 @@ Dla zdjęć, których nie mają oglądać postronni (u właściciela: rodzinne z
 
 - Podpisy z nazw plików: właściciel przysyła ZIP (zdjęcia wklejone w rozmowę tracą nazwy). Nazwy z Maca bywają w NFD – porównuj po `unicodedata.normalize("NFC", …)`. Listę podpisów pokaż właścicielowi przed publikacją.
 - Po zmianach w sejfie uruchom też ręczny test w przeglądarce: hasło na wejściu, przejście do galerii bez hasła, wejście bezpośrednio na adres galerii (pyta o hasło).
+
+## Zdjęcia w osobnym repozytorium (od 6.11.2026)
+
+Pliki zdjęć działu Materiały reklamowe (AVIF i miniatury WebP) leżą w osobnym repozytorium `czeslawzenbliski/Zenbliski-zdjecia` (lokalnie `../zenbliski-zdjecia`), publikowanym przez GitHub Pages pod https://zdjecia.zenbliski.pl/ (CNAME w OVH: zdjecia → czeslawzenbliski.github.io.). Powód: strona zbliżała się do limitu 1 GB, a publikacje GitHub Pages przekraczały czas. Ustawienie: `site.json` → `external_photos` (ścieżka działu, adres, katalog). W tym repozytorium zostają manifesty `docs/zdjecia/materialy-reklamowe/**/index.json` (czyta je `build.py`); `photo_base()` w `build.py` buduje adresy zdjęć, a `tools/add_photos.py` sam zapisuje pliki zdjęć do `../zenbliski-zdjecia/<ścieżka>/` i manifest tutaj. Przy dodawaniu prospektu: commit i push w OBU repozytoriach (najpierw zdjęcia, potem strona) i sprawdzenie, że zdjęcia otwierają się pod zdjecia.zenbliski.pl. Repo zdjęć trzeba sklonować na początku sesji (`git clone --depth 1 https://github.com/czeslawzenbliski/Zenbliski-zdjecia ../zenbliski-zdjecia`). Publikacje GitHub Pages bywają wolne lub przerywane („Timeout reached”); wtedy ponów pustym commitem.
 
 ## Zasady
 
