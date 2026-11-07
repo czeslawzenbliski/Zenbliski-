@@ -822,6 +822,16 @@
                 "Compur-Rapid",
                 "wymienna kaseta"
               ]
+            },
+            {
+              "slug": "leica-iiif",
+              "title": "Leica IIIf",
+              "keywords": [
+                "Leica IIIF",
+                "Leica 3f",
+                "Ernst Leitz Wetzlar",
+                "Summitar"
+              ]
             }
           ]
         },
