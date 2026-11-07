@@ -597,6 +597,29 @@
             "Agfa Rondinax 35U",
             "koreks"
           ]
+        },
+        {
+          "slug": "olympus-mju-ii-zoom-115-ilford-delta-100-2025",
+          "title": "Olympus Mju II ZOOM 115, Ilford Delta 100 pro, 2025 r.",
+          "plate": [
+            [
+              "Aparat",
+              "Olympus Mju II ZOOM 115"
+            ],
+            [
+              "Film",
+              "Ilford Delta 100 pro"
+            ],
+            [
+              "Rok",
+              "2025"
+            ]
+          ],
+          "keywords": [
+            "µ-II",
+            "Mju-II",
+            "Olympus µ"
+          ]
         }
       ]
     },
