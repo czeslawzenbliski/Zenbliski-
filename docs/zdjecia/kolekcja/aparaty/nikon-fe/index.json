@@ -1,0 +1,47 @@
+[
+  {
+    "file": "nikon-fe-01.avif",
+    "mini": "nikon-fe-01.webp",
+    "w": 2000,
+    "h": 1334,
+    "mw": 900,
+    "mh": 600,
+    "caption": ""
+  },
+  {
+    "file": "nikon-fe-02.avif",
+    "mini": "nikon-fe-02.webp",
+    "w": 2000,
+    "h": 1334,
+    "mw": 900,
+    "mh": 600,
+    "caption": ""
+  },
+  {
+    "file": "nikon-fe-03.avif",
+    "mini": "nikon-fe-03.webp",
+    "w": 2000,
+    "h": 1363,
+    "mw": 900,
+    "mh": 614,
+    "caption": ""
+  },
+  {
+    "file": "nikon-fe-04.avif",
+    "mini": "nikon-fe-04.webp",
+    "w": 2000,
+    "h": 1343,
+    "mw": 900,
+    "mh": 604,
+    "caption": ""
+  },
+  {
+    "file": "nikon-fe-05.avif",
+    "mini": "nikon-fe-05.webp",
+    "w": 2000,
+    "h": 1356,
+    "mw": 900,
+    "mh": 610,
+    "caption": ""
+  }
+]
