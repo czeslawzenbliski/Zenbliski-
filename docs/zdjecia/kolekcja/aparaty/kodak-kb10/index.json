@@ -1,0 +1,38 @@
+[
+  {
+    "file": "kodak-kb10-01.avif",
+    "mini": "kodak-kb10-01.webp",
+    "w": 2000,
+    "h": 1421,
+    "mw": 900,
+    "mh": 639,
+    "caption": ""
+  },
+  {
+    "file": "kodak-kb10-02.avif",
+    "mini": "kodak-kb10-02.webp",
+    "w": 2000,
+    "h": 1359,
+    "mw": 900,
+    "mh": 611,
+    "caption": ""
+  },
+  {
+    "file": "kodak-kb10-03.avif",
+    "mini": "kodak-kb10-03.webp",
+    "w": 2000,
+    "h": 1359,
+    "mw": 900,
+    "mh": 611,
+    "caption": ""
+  },
+  {
+    "file": "kodak-kb10-04.avif",
+    "mini": "kodak-kb10-04.webp",
+    "w": 2000,
+    "h": 1327,
+    "mw": 900,
+    "mh": 597,
+    "caption": ""
+  }
+]
