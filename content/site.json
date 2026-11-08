@@ -821,7 +821,18 @@
             },
             {
               "slug": "rolleiflex-3-5-f-planar",
-              "title": "Rolleiflex 3,5 F Planar"
+              "title": "Rolleiflex 3,5 F Planar",
+              "related": [
+                {
+                  "title": "Zdjęcia wykonane tym aparatem",
+                  "items": [
+                    "analogowe/rolleiflex-3-5f-fomapan-100-szwecja-2022",
+                    "analogowe/rolleiflex-3-5f-rollei-rpx-100-warszawa-2022",
+                    "analogowe/rolleiflex-3-5f-kodak-ektar-100-krakow-2022",
+                    "analogowe/rolleiflex-3-5f-ilford-delta-100-sopot-2025"
+                  ]
+                }
+              ]
             },
             {
               "slug": "mamiya-c330s",
@@ -852,7 +863,22 @@
             },
             {
               "slug": "nikon-fe2",
-              "title": "Nikon FE2"
+              "title": "Nikon FE2",
+              "related": [
+                {
+                  "title": "Zdjęcia wykonane tym aparatem",
+                  "items": [
+                    "analogowe/nikon-fe2-kodak-ektar-100-gdansk-2025",
+                    "analogowe/nikon-fe2-kentmere-pan-200-wolomin-warszawa-2026"
+                  ]
+                },
+                {
+                  "title": "Prospekty",
+                  "items": [
+                    "materialy-reklamowe/foldery-i-prospekty/nikon-fe2-1983"
+                  ]
+                }
+              ]
             },
             {
               "slug": "nikon-fg-20",
@@ -1021,7 +1047,21 @@
             },
             {
               "slug": "yashica-electro-35-gsn",
-              "title": "Yashica Electro 35 GSN"
+              "title": "Yashica Electro 35 GSN",
+              "related": [
+                {
+                  "title": "Zdjęcia wykonane tym aparatem",
+                  "items": [
+                    "analogowe/yashica-electro-35-gsn-kentmere-pan-100-brodno-2025"
+                  ]
+                },
+                {
+                  "title": "Prospekty",
+                  "items": [
+                    "materialy-reklamowe/foldery-i-prospekty/yashica-electro-35-gsn-mg-1-me-1-35-mf-diary"
+                  ]
+                }
+              ]
             },
             {
               "slug": "voigtlander-vito-c",
@@ -1041,6 +1081,20 @@
                 "Steinheil Cassar",
                 "Compur-Rapid",
                 "wymienna kaseta"
+              ],
+              "related": [
+                {
+                  "title": "Zdjęcia wykonane tym aparatem",
+                  "items": [
+                    "analogowe/adox-300-fomapan-100-mazowsze-2026"
+                  ]
+                },
+                {
+                  "title": "W Bibliotece",
+                  "items": [
+                    "biblioteka/katalogi-i-leksykony/wade-retro-cameras"
+                  ]
+                }
               ]
             },
             {
@@ -1060,6 +1114,20 @@
                 "F3HP",
                 "DE-3",
                 "Nikkor 50 mm 1:1,4"
+              ],
+              "related": [
+                {
+                  "title": "Zdjęcia wykonane tym aparatem",
+                  "items": [
+                    "analogowe/nikon-f3-kentmere-pan-100-warszawa-2025"
+                  ]
+                },
+                {
+                  "title": "Prospekty",
+                  "items": [
+                    "materialy-reklamowe/foldery-i-prospekty/nikon-em-fe-fm-f3"
+                  ]
+                }
               ]
             },
             {
@@ -1067,6 +1135,26 @@
               "title": "Nikon FE",
               "keywords": [
                 "Nikkor 50 mm 1:1,4"
+              ],
+              "related": [
+                {
+                  "title": "Zdjęcia wykonane tym aparatem",
+                  "items": [
+                    "analogowe/nikon-fe-fomapan-100-szwecja-2022"
+                  ]
+                },
+                {
+                  "title": "Prospekty",
+                  "items": [
+                    "materialy-reklamowe/foldery-i-prospekty/nikon-em-fe-fm-f3"
+                  ]
+                },
+                {
+                  "title": "Na blogu",
+                  "items": [
+                    "artykuly-blog/blog"
+                  ]
+                }
               ]
             },
             {
