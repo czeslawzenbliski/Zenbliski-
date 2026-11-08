@@ -1,0 +1,29 @@
+[
+  {
+    "file": "evans-rollei-01.avif",
+    "mini": "evans-rollei-01.webp",
+    "w": 1548,
+    "h": 2400,
+    "mw": 581,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "evans-rollei-02.avif",
+    "mini": "evans-rollei-02.webp",
+    "w": 2400,
+    "h": 1801,
+    "mw": 900,
+    "mh": 675,
+    "caption": ""
+  },
+  {
+    "file": "evans-rollei-03.avif",
+    "mini": "evans-rollei-03.webp",
+    "w": 2400,
+    "h": 1792,
+    "mw": 900,
+    "mh": 672,
+    "caption": ""
+  }
+]
