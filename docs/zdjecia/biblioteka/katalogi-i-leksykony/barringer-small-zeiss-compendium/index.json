@@ -1,0 +1,47 @@
+[
+  {
+    "file": "zeiss-compendium-01.avif",
+    "mini": "zeiss-compendium-01.webp",
+    "w": 1822,
+    "h": 2400,
+    "mw": 683,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "zeiss-compendium-02.avif",
+    "mini": "zeiss-compendium-02.webp",
+    "w": 1789,
+    "h": 2400,
+    "mw": 671,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "zeiss-compendium-03.avif",
+    "mini": "zeiss-compendium-03.webp",
+    "w": 1745,
+    "h": 2400,
+    "mw": 654,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "zeiss-compendium-04.avif",
+    "mini": "zeiss-compendium-04.webp",
+    "w": 1755,
+    "h": 2400,
+    "mw": 658,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "zeiss-compendium-05.avif",
+    "mini": "zeiss-compendium-05.webp",
+    "w": 1841,
+    "h": 2400,
+    "mw": 690,
+    "mh": 900,
+    "caption": ""
+  }
+]
