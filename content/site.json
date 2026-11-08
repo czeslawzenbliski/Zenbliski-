@@ -874,7 +874,22 @@
             },
             {
               "slug": "nikon-f4",
-              "title": "Nikon F4"
+              "title": "Nikon F4",
+              "related": [
+                {
+                  "title": "Zdjęcia wykonane tym aparatem",
+                  "items": [
+                    "analogowe/nikon-f4-kodak-color-200-warszawa-2026",
+                    "analogowe/nikon-f4-kodak-ektar-100-gdansk-2026"
+                  ]
+                },
+                {
+                  "title": "Prospekty",
+                  "items": [
+                    "materialy-reklamowe/foldery-i-prospekty/nikon-f4"
+                  ]
+                }
+              ]
             },
             {
               "slug": "certo-super-dollina-ii",

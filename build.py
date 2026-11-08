@@ -545,6 +545,23 @@ def render_home(site: dict, sections: list[Node], index_url: str) -> str:
     )
 
 
+def related_block(sections: list[Node], node: Node, prefix: str) -> str:
+    """Karta aparatu: "related" w site.json – grupy odnośników do innych galerii
+    (zdjęcia wykonane aparatem, prospekty, książki), pokazane jako małe kadry."""
+    groups = []
+    for g in node.data["related"]:
+        found = [find_node(sections, p) for p in g.get("items", [])]
+        missing = [p for p, n in zip(g.get("items", []), found) if n is None]
+        if missing:
+            raise SystemExit(f"{node.path}: w polu related nie ma takich stron: {', '.join(missing)}")
+        frames = "\n".join(frame(n, prefix, heading="h4") for n in found)
+        groups.append(f'<h3 class="related__title">{escape(g["title"])}</h3>\n'
+                      f'<div class="shelf shelf--related">\n{frames}\n</div>')
+    heading = escape(node.data.get("related_title", "Ten aparat na stronie"))
+    return (f'<section class="related" aria-label="{heading}">\n'
+            f'<h2 class="related__head">{heading}</h2>\n' + "\n".join(groups) + "\n</section>")
+
+
 def render_node(site: dict, sections: list[Node], node: Node, index_url: str = "") -> str:
     prefix = "../" * node.depth
     parts = [breadcrumb(node, prefix)]
@@ -574,6 +591,8 @@ def render_node(site: dict, sections: list[Node], node: Node, index_url: str = "
         if node.data.get("filter") and not node.children:
             parts.append(shelf_filter(node.data["filter"], photos=True))
         parts.append(photo_grid(node, prefix))
+    if node.data.get("related"):
+        parts.append(related_block(sections, node, prefix))
     if node.locked:
         mode = "section" if node.is_section else ("child" if node.data.get("vault_child") else "gallery")
         parts.append(vault_form(node, prefix, mode))
