@@ -802,6 +802,31 @@
             "Superia 200",
             "Włochy"
           ]
+        },
+        {
+          "slug": "yashica-mat-ilford-delta-100-toskania",
+          "title": "Yashica Mat, Ilford Delta 100 Pro, Toskania",
+          "plate": [
+            [
+              "Aparat",
+              "Yashica Mat"
+            ],
+            [
+              "Film",
+              "Ilford Delta 100 Pro, typ 120"
+            ],
+            [
+              "Miejsce",
+              "Toskania"
+            ]
+          ],
+          "keywords": [
+            "Yashica-Mat",
+            "średni format",
+            "6x6",
+            "dwuobiektywowa",
+            "Włochy"
+          ]
         }
       ]
     },
