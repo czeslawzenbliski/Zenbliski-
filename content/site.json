@@ -910,7 +910,16 @@
             },
             {
               "slug": "nikon-fm2",
-              "title": "Nikon FM2"
+              "title": "Nikon FM2",
+              "related": [
+                {
+                  "title": "Prospekty",
+                  "items": [
+                    "materialy-reklamowe/foldery-i-prospekty/nikon-fm2-1993",
+                    "materialy-reklamowe/foldery-i-prospekty/nikon-32-fotocamere-1993"
+                  ]
+                }
+              ]
             },
             {
               "slug": "nikon-fe2",
@@ -2317,6 +2326,28 @@
                 "MD-12",
                 "SB-16B",
                 "MF-16"
+              ]
+            },
+            {
+              "slug": "nikon-fm2-1993",
+              "title": "Nikon FM2, 1993 r., włoski",
+              "unit": "strona",
+              "keywords": [
+                "FM2",
+                "FM-2",
+                "La Nikon dei Perfezionisti",
+                "Il Dominio della Fotografia",
+                "1/4000",
+                "MD-12",
+                "MF-16",
+                "SB-16B",
+                "SB-20",
+                "SB-22",
+                "SB-25",
+                "Nital",
+                "Nikkor",
+                "obiektywy Nikkor",
+                "Nikon Photo Contest International"
               ]
             },
             {
