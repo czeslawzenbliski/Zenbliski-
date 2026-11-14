@@ -1185,7 +1185,8 @@
                 {
                   "title": "Prospekty",
                   "items": [
-                    "materialy-reklamowe/foldery-i-prospekty/nikon-em-fe-fm-f3"
+                    "materialy-reklamowe/foldery-i-prospekty/nikon-em-fe-fm-f3",
+                    "materialy-reklamowe/foldery-i-prospekty/nikon-f3-1986"
                   ]
                 }
               ]
@@ -2278,6 +2279,45 @@
               "slug": "nikon-em-fe-fm-f3",
               "title": "Nikon EM, Nikon FE, Nikon FM, Nikon F3, ok. 1980 r., szwedzki",
               "unit": "strona"
+            },
+            {
+              "slug": "nikon-f3-1986",
+              "title": "Nikon F3 / F3 high-eyepoint, 1986 r., włoski",
+              "unit": "strona",
+              "keywords": [
+                "F3",
+                "F3HP",
+                "F3 HP",
+                "high-eyepoint",
+                "Nippon Kogaku",
+                "Giugiaro",
+                "Space Shuttle",
+                "NASA",
+                "DE-2",
+                "DE-3",
+                "DA-2",
+                "DW-3",
+                "DW-4",
+                "MD-4",
+                "MK-1",
+                "MF-4",
+                "MF-6",
+                "MF-14",
+                "MF-17",
+                "SB-11",
+                "SB-14",
+                "SB-16A",
+                "SB-17",
+                "SB-6",
+                "SR-2",
+                "SM-2",
+                "PB-6",
+                "PS-6",
+                "PF-4",
+                "Nikkor",
+                "Nikon Serie E",
+                "vetrini di messa a fuoco"
+              ]
             },
             {
               "slug": "nikon-f4",
