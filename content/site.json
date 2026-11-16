@@ -3540,7 +3540,13 @@
             "F401",
             "F-501",
             "F-70",
-            "TW Zoom"
+            "TW Zoom",
+            "Praktica",
+            "Praktica Nova I",
+            "Nova I",
+            "PL nova I",
+            "Pentacon",
+            "Werbung"
           ],
           "cover_only": true
         },
