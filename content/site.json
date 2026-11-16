@@ -3546,10 +3546,15 @@
             "Nova I",
             "PL nova I",
             "Pentacon",
-            "Werbung"
+            "Werbung",
+            "Minolta",
+            "Maxxum 7000",
+            "Minolta 7000",
+            "Dynax 7000",
+            "7000 AF"
           ],
           "cover_only": true,
-          "filter": "Szukaj, np. Nikon, FG, Praktica albo 1982"
+          "filter": "Szukaj, np. Nikon, Minolta, Praktica albo 1982"
         },
         {
           "slug": "gadzety-reklamowe",
