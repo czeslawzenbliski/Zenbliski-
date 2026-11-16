@@ -519,7 +519,7 @@ a:hover { color: var(--papier); }
 .prose li { margin-bottom: 0.4rem; }
 .prose img { margin: 1.75rem 0; }
 /* Odnośniki do cudzych artykułów (dział Artykuły – blog). */
-.prose .ref { padding: 1.5rem 0; border-bottom: 1px solid var(--linia); }
+.prose .ref { padding: 1.5rem 0; border-bottom: 1px solid var(--linia); scroll-margin-top: 1rem; }
 .prose .ref:first-child { padding-top: 0; }
 .prose .ref h2 { margin: 0 0 0.4rem; font-size: 1.5rem; line-height: 1.25; }
 .prose .ref h2 a { color: var(--papier); text-decoration: none; }
