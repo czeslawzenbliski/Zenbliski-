@@ -3503,6 +3503,22 @@
           ]
         },
         {
+          "slug": "reklamy-filmowe",
+          "title": "Reklamy filmowe",
+          "kind": "text",
+          "lead": "Odnośniki do dawnych reklam telewizyjnych i filmowych aparatów fotograficznych zamieszczonych na YouTube.",
+          "empty": "Ten dział jest w przygotowaniu.",
+          "keywords": [
+            "reklama telewizyjna",
+            "reklamy telewizyjne",
+            "spot reklamowy",
+            "YouTube",
+            "film reklamowy",
+            "CM",
+            "Nikon"
+          ]
+        },
+        {
           "slug": "gadzety-reklamowe",
           "title": "Gadżety reklamowe",
           "lead": "Długopisy, breloki, podstawki, pudełka z logo firm i inne przedmioty reklamowe.",
