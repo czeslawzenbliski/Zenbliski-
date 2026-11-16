@@ -869,7 +869,8 @@
     var input = form.querySelector("input");
     var status = form.querySelector(".search__status");
     var photos = form.hasAttribute("data-photo-filter");
-    var box = document.querySelector(photos ? ".photos[data-lightbox]" : ".shelf");
+    var refs = form.hasAttribute("data-ref-filter");
+    var box = document.querySelector(photos ? ".photos[data-lightbox]" : refs ? ".prose" : ".shelf");
     if (!box) return;
     function norm(s) {
       s = (s || "").toLowerCase().replace(/\u0142/g, "l");
@@ -877,12 +878,13 @@
       return s.replace(/[^a-z0-9]+/g, " ").trim();
     }
     // "ae-1" i "ae1" mają znaczyć to samo, więc porównujemy też tekst bez odstępów.
-    var items = Array.prototype.map.call(box.children, function (el) {
-      var t = photos ? null : el.querySelector(".frame__title");
+    var els = refs ? box.querySelectorAll("article.ref") : box.children;
+    var items = Array.prototype.map.call(els, function (el) {
+      var t = (photos || refs) ? null : el.querySelector(".frame__title");
       var n = norm(photos ? el.getAttribute("data-caption") : (t ? t.textContent : el.textContent));
       return { el: el, n: " " + n + " ", c: n.replace(/ /g, "") };
     });
-    var what = photos ? "zdjęć" : "";
+    var what = photos ? "zdjęć" : refs ? "reklam" : "";
     function render() {
       var tokens = norm(input.value).split(" ").filter(Boolean), shown = 0;
       items.forEach(function (it) {

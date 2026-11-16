@@ -378,12 +378,13 @@ def search_form(index_url: str, scope: str = "", base: str = "", hint: str = "Sz
     </form>"""
 
 
-def shelf_filter(cfg, photos: bool = False) -> str:
-    """Pole zawężające listę galerii (albo zdjęcia galerii, po podpisach) na tej samej stronie.
-    Bez skryptu zostaje ukryte."""
-    default = "Szukaj na zdjęciach, np. Leica albo Kodak" if photos else "Szukaj, np. Canon, AE-1 albo 1977"
+def shelf_filter(cfg, photos: bool = False, refs: bool = False) -> str:
+    """Pole zawężające listę galerii (albo zdjęcia galerii, po podpisach, albo wpisy
+    <article class="ref"> strony tekstowej) na tej samej stronie. Bez skryptu zostaje ukryte."""
+    default = ("Szukaj na zdjęciach, np. Leica albo Kodak" if photos else
+               "Szukaj, np. Nikon, FG albo 1982" if refs else "Szukaj, np. Canon, AE-1 albo 1977")
     hint = cfg if isinstance(cfg, str) else default
-    attr = " data-photo-filter" if photos else ""
+    attr = " data-photo-filter" if photos else (" data-ref-filter" if refs else "")
     return f"""<form class="search search--shelf" role="search" data-shelf-filter{attr} hidden>
       <label class="search__field">
         {SEARCH_ICON}
@@ -574,6 +575,10 @@ def render_node(site: dict, sections: list[Node], node: Node, index_url: str = "
 
     body, photos = node.body, node.photos
     if body:
+        # "filter" na stronie tekstowej z wpisami <article class="ref"> (np. Reklamy filmowe):
+        # pole zawężające wpisy po ich treści.
+        if node.data.get("filter") and not node.children and 'class="ref"' in body:
+            parts.append(shelf_filter(node.data["filter"], refs=True))
         parts.append(f'<div class="prose">\n{body}\n</div>')
     if node.children:
         frames = "\n".join(frame(c, prefix) for c in node.children)

@@ -3548,7 +3548,8 @@
             "Pentacon",
             "Werbung"
           ],
-          "cover_only": true
+          "cover_only": true,
+          "filter": "Szukaj, np. Nikon, FG, Praktica albo 1982"
         },
         {
           "slug": "gadzety-reklamowe",
