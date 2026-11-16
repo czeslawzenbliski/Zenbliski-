@@ -3541,7 +3541,8 @@
             "F-501",
             "F-70",
             "TW Zoom"
-          ]
+          ],
+          "cover_only": true
         },
         {
           "slug": "gadzety-reklamowe",
