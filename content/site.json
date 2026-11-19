@@ -1014,7 +1014,7 @@
         },
         {
           "slug": "nikon-f3-nikkor-50-kodak-ultramax-400-gdansk",
-          "title": "Nikon F3, Nikkor 50 mm 1:1,4, Kodak Ultra Max 400, Gdańsk",
+          "title": "Nikon F3, Nikkor 50 mm 1:1,4, Kodak Ultra Max 400, Gdańsk, Sopot, Warszawa",
           "plate": [
             [
               "Aparat",
@@ -1030,7 +1030,11 @@
             ],
             [
               "Miejsce",
-              "Gdańsk"
+              "Gdańsk, Sopot, Warszawa"
+            ],
+            [
+              "Skan",
+              "Fotoforma Valoi easy35"
             ]
           ],
           "keywords": [
@@ -1052,7 +1056,10 @@
             "plaża",
             "Bałtyk",
             "Warszawa",
-            "InterContinental"
+            "InterContinental",
+            "Valoi",
+            "easy35",
+            "Fotoforma"
           ]
         }
       ]
