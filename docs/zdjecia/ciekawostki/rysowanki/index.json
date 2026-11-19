@@ -178,5 +178,41 @@
     "mw": 735,
     "mh": 900,
     "caption": ""
+  },
+  {
+    "file": "rysowanki-21.avif",
+    "mini": "rysowanki-21.webp",
+    "w": 1735,
+    "h": 1714,
+    "mw": 900,
+    "mh": 889,
+    "caption": ""
+  },
+  {
+    "file": "rysowanki-22.avif",
+    "mini": "rysowanki-22.webp",
+    "w": 1751,
+    "h": 1670,
+    "mw": 900,
+    "mh": 858,
+    "caption": ""
+  },
+  {
+    "file": "rysowanki-23.avif",
+    "mini": "rysowanki-23.webp",
+    "w": 1429,
+    "h": 2000,
+    "mw": 643,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "rysowanki-24.avif",
+    "mini": "rysowanki-24.webp",
+    "w": 1586,
+    "h": 2000,
+    "mw": 714,
+    "mh": 900,
+    "caption": ""
   }
 ]
