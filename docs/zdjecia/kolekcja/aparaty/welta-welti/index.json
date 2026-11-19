@@ -1,0 +1,29 @@
+[
+  {
+    "file": "welta-welti-1.avif",
+    "mini": "welta-welti-1.webp",
+    "w": 2000,
+    "h": 2000,
+    "mw": 900,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "welta-welti-2.avif",
+    "mini": "welta-welti-2.webp",
+    "w": 1125,
+    "h": 2000,
+    "mw": 506,
+    "mh": 900,
+    "caption": ""
+  },
+  {
+    "file": "welta-welti-3.avif",
+    "mini": "welta-welti-3.webp",
+    "w": 2000,
+    "h": 1335,
+    "mw": 900,
+    "mh": 601,
+    "caption": ""
+  }
+]
