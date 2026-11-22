@@ -1311,7 +1311,13 @@
             },
             {
               "slug": "minolta-x-700",
-              "title": "Minolta X-700"
+              "title": "Minolta X-700",
+              "keywords": [
+                "X700",
+                "MD 50 mm 1:1,7",
+                "Minolta MD 50mm f/1.7",
+                "MPS"
+              ]
             },
             {
               "slug": "yashica-electro-35-gsn",
