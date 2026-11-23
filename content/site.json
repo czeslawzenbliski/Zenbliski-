@@ -1107,7 +1107,9 @@
                 "WZFO",
                 "Varimex",
                 "6x6"
-              ]
+              ],
+              "cover": "ami-66-06.avif",
+              "cover_pos": "50% 28%"
             },
             {
               "slug": "canon-canonet-ql17",
