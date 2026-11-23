@@ -251,6 +251,11 @@ def frame(node: Node, prefix: str, heading: str = "h2") -> str:
     cover = node.cover()
     if cover:
         owner, p = cover
+        # "cover_crop": osobny, przycięty plik okładki w mini/ (spoza galerii), np. gdy aparat
+        # zajmuje mały fragment zdjęcia i samo przesunięcie kadru (cover_pos) nie wystarcza.
+        crop = owner.data.get("cover_crop")
+        if crop:
+            p = {"mini": crop["file"], "file": crop["file"], "mw": crop["w"], "mh": crop["h"]}
         src = f"{photo_base(owner.path, prefix)}mini/{p.get('mini', p['file'])}"
         # "cover_pos" przesuwa kadr okładki (CSS object-position), np. "50% 20%".
         pos = owner.data.get("cover_pos")

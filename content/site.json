@@ -1263,7 +1263,12 @@
                 "Tamron 179DM",
                 "Minolta AF",
                 "pudełko"
-              ]
+              ],
+              "cover_crop": {
+                "file": "minolta-dynax-4-okladka.webp",
+                "w": 900,
+                "h": 600
+              }
             },
             {
               "slug": "minolta-x-700",
