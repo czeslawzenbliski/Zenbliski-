@@ -1590,7 +1590,12 @@
                     "materialy-reklamowe/foldery-i-prospekty/yashica-electro-35-gsn-mg-1-me-1-35-mf-diary"
                   ]
                 }
-              ]
+              ],
+              "cover_crop": {
+                "file": "yashica-electro-35-gsn-okladka.webp",
+                "w": 900,
+                "h": 600
+              }
             }
           ],
           "filter": "Szukaj, np. Nikon, Praktica albo FE2"
