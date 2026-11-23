@@ -1075,278 +1075,6 @@
           "lead": "Każdy aparat osobno: zdjęcia i opis.",
           "children": [
             {
-              "slug": "nikon-f2a",
-              "title": "Nikon F2A"
-            },
-            {
-              "slug": "rolleiflex-3-5-f-planar",
-              "title": "Rolleiflex 3,5 F Planar",
-              "related": [
-                {
-                  "title": "Zdjęcia wykonane tym aparatem",
-                  "items": [
-                    "analogowe/rolleiflex-3-5f-fomapan-100-szwecja-2022",
-                    "analogowe/rolleiflex-3-5f-rollei-rpx-100-warszawa-2022",
-                    "analogowe/rolleiflex-3-5f-kodak-ektar-100-krakow-2022",
-                    "analogowe/rolleiflex-3-5f-ilford-delta-100-sopot-2025"
-                  ]
-                }
-              ]
-            },
-            {
-              "slug": "mamiya-c330s",
-              "title": "Mamiya C330S",
-              "cover": "mamiya-c330s-02"
-            },
-            {
-              "slug": "rollei-35",
-              "title": "Rollei 35"
-            },
-            {
-              "slug": "fed-atlas",
-              "title": "FED-Atlas"
-            },
-            {
-              "slug": "reflekta-ii",
-              "title": "Reflekta II",
-              "cover": "reflekta-ii-06"
-            },
-            {
-              "slug": "praktica-electronic",
-              "title": "Praktica Electronic",
-              "cover_pos": "50% 35%"
-            },
-            {
-              "slug": "nikon-fm2",
-              "title": "Nikon FM2",
-              "related": [
-                {
-                  "title": "Prospekty",
-                  "items": [
-                    "materialy-reklamowe/foldery-i-prospekty/nikon-fm2-1993",
-                    "materialy-reklamowe/foldery-i-prospekty/nikon-32-fotocamere-1993"
-                  ]
-                }
-              ]
-            },
-            {
-              "slug": "nikon-fe2",
-              "title": "Nikon FE2",
-              "related": [
-                {
-                  "title": "Zdjęcia wykonane tym aparatem",
-                  "items": [
-                    "analogowe/nikon-fe2-kodak-ektar-100-gdansk-2025",
-                    "analogowe/nikon-fe2-kentmere-pan-200-wolomin-warszawa-2026"
-                  ]
-                },
-                {
-                  "title": "Prospekty",
-                  "items": [
-                    "materialy-reklamowe/foldery-i-prospekty/nikon-fe2-1983"
-                  ]
-                }
-              ]
-            },
-            {
-              "slug": "nikon-fg-20",
-              "title": "Nikon FG-20"
-            },
-            {
-              "slug": "voigtlander-bessa-rf",
-              "title": "Voigtländer Bessa RF",
-              "keywords": [
-                "Voigtlander",
-                "Bessa",
-                "Skopar",
-                "Compur-Rapid",
-                "mieszkowy",
-                "składany",
-                "dalmierz",
-                "suwak-światłomierz"
-              ]
-            },
-            {
-              "slug": "nikon-f4",
-              "title": "Nikon F4",
-              "related": [
-                {
-                  "title": "Zdjęcia wykonane tym aparatem",
-                  "items": [
-                    "analogowe/nikon-f4-kodak-color-200-warszawa-2026",
-                    "analogowe/nikon-f4-kodak-ektar-100-gdansk-2026"
-                  ]
-                },
-                {
-                  "title": "Prospekty",
-                  "items": [
-                    "materialy-reklamowe/foldery-i-prospekty/nikon-f4"
-                  ]
-                }
-              ]
-            },
-            {
-              "slug": "certo-super-dollina-ii",
-              "title": "Certo Super Dollina II",
-              "keywords": [
-                "Dolina",
-                "Certo-Camera-Werk",
-                "Carl Zeiss Jena",
-                "Tessar",
-                "Vebur",
-                "dalmierz",
-                "składany"
-              ]
-            },
-            {
-              "slug": "nikon-f-301",
-              "title": "Nikon F-301",
-              "keywords": [
-                "F301",
-                "N2000",
-                "Nikkor 50 mm 1:1,8",
-                "Bedienungsanleitung",
-                "pudełko",
-                "nowy"
-              ]
-            },
-            {
-              "slug": "minolta-dynax-4",
-              "title": "Minolta Dynax 4",
-              "keywords": [
-                "Dynax4",
-                "Maxxum 4",
-                "Tamron AF 28-105 mm F/4-5.6",
-                "Tamron 179DM",
-                "Minolta AF",
-                "pudełko"
-              ]
-            },
-            {
-              "slug": "ensign",
-              "title": "Ensign",
-              "keywords": [
-                "Ensign Ful-Vue",
-                "Ful-Vue",
-                "Houghton-Butcher",
-                "Barnet Ensign",
-                "Made in England",
-                "box",
-                "skrzynkowy"
-              ]
-            },
-            {
-              "slug": "lubitel-166b",
-              "title": "Lubitel 166B",
-              "keywords": [
-                "Lubitel 166 B",
-                "Любитель",
-                "LOMO",
-                "ЛОМО",
-                "T-22",
-                "4,5/75",
-                "dwuobiektywowy",
-                "średni format",
-                "ZSRR"
-              ]
-            },
-            {
-              "slug": "fed-3",
-              "title": "FED 3",
-              "keywords": [
-                "FED3",
-                "FED-3",
-                "ФЭД 3",
-                "ФЭД",
-                "Industar-61",
-                "Индустар-61",
-                "И-61",
-                "2,8/53",
-                "dalmierz",
-                "ZSRR"
-              ]
-            },
-            {
-              "slug": "canon-canonet-ql25",
-              "title": "Canon Canonet QL25",
-              "keywords": [
-                "Canonet",
-                "QL 25",
-                "Quick Loading",
-                "Canon Lens SE 45 mm 1:2,5",
-                "dalmierz"
-              ]
-            },
-            {
-              "slug": "canon-canonet-ql17",
-              "title": "Canon Canonet QL17",
-              "keywords": [
-                "Canonet",
-                "QL 17",
-                "Quick Loading",
-                "Canon Lens SE 45 mm 1:1,7",
-                "dalmierz"
-              ]
-            },
-            {
-              "slug": "praktica-35-m",
-              "title": "Praktica 35 M",
-              "keywords": [
-                "Praktica 35M",
-                "kompakt"
-              ]
-            },
-            {
-              "slug": "ricoh-a-2",
-              "title": "Ricoh A-2",
-              "keywords": [
-                "Ricoh A2",
-                "AD-1",
-                "Color Rikenon",
-                "napęd sprężynowy",
-                "kompakt",
-                "pudełko",
-                "instrukcja"
-              ]
-            },
-            {
-              "slug": "minolta-x-700",
-              "title": "Minolta X-700",
-              "keywords": [
-                "X700",
-                "MD 50 mm 1:1,7",
-                "Minolta MD 50mm f/1.7",
-                "MPS"
-              ]
-            },
-            {
-              "slug": "yashica-electro-35-gsn",
-              "title": "Yashica Electro 35 GSN",
-              "related": [
-                {
-                  "title": "Zdjęcia wykonane tym aparatem",
-                  "items": [
-                    "analogowe/yashica-electro-35-gsn-kentmere-pan-100-brodno-2025"
-                  ]
-                },
-                {
-                  "title": "Prospekty",
-                  "items": [
-                    "materialy-reklamowe/foldery-i-prospekty/yashica-electro-35-gsn-mg-1-me-1-35-mf-diary"
-                  ]
-                }
-              ]
-            },
-            {
-              "slug": "voigtlander-vito-c",
-              "title": "Voigtländer Vito C",
-              "keywords": [
-                "Voigtlander",
-                "Vitolux 18",
-                "Skopar"
-              ]
-            },
-            {
               "slug": "adox-300",
               "title": "Adox 300",
               "keywords": [
@@ -1372,6 +1100,126 @@
               ]
             },
             {
+              "slug": "ami-66",
+              "title": "Ami 66",
+              "keywords": [
+                "PZO",
+                "WZFO",
+                "Varimex",
+                "6x6"
+              ]
+            },
+            {
+              "slug": "canon-canonet-ql17",
+              "title": "Canon Canonet QL17",
+              "keywords": [
+                "Canonet",
+                "QL 17",
+                "Quick Loading",
+                "Canon Lens SE 45 mm 1:1,7",
+                "dalmierz"
+              ]
+            },
+            {
+              "slug": "canon-canonet-ql25",
+              "title": "Canon Canonet QL25",
+              "keywords": [
+                "Canonet",
+                "QL 25",
+                "Quick Loading",
+                "Canon Lens SE 45 mm 1:2,5",
+                "dalmierz"
+              ]
+            },
+            {
+              "slug": "certo-super-dollina-ii",
+              "title": "Certo Super Dollina II",
+              "keywords": [
+                "Dolina",
+                "Certo-Camera-Werk",
+                "Carl Zeiss Jena",
+                "Tessar",
+                "Vebur",
+                "dalmierz",
+                "składany"
+              ]
+            },
+            {
+              "slug": "ensign",
+              "title": "Ensign",
+              "keywords": [
+                "Ensign Ful-Vue",
+                "Ful-Vue",
+                "Houghton-Butcher",
+                "Barnet Ensign",
+                "Made in England",
+                "box",
+                "skrzynkowy"
+              ]
+            },
+            {
+              "slug": "fed-3",
+              "title": "FED 3",
+              "keywords": [
+                "FED3",
+                "FED-3",
+                "ФЭД 3",
+                "ФЭД",
+                "Industar-61",
+                "Индустар-61",
+                "И-61",
+                "2,8/53",
+                "dalmierz",
+                "ZSRR"
+              ]
+            },
+            {
+              "slug": "fed-atlas",
+              "title": "FED-Atlas"
+            },
+            {
+              "slug": "goerz-taro-tenax",
+              "title": "Goerz Taro-Tenax",
+              "keywords": [
+                "Taro-Tenax",
+                "Taro Tenax",
+                "C. P. Goerz",
+                "Goerz Berlin",
+                "Compur",
+                "aparat mieszkowy",
+                "składany",
+                "płyty",
+                "Gebrauchsanweisung",
+                "instrukcja obsługi",
+                "Agfa Belichtungs-Tabelle",
+                "futerał"
+              ]
+            },
+            {
+              "slug": "horizon-202",
+              "title": "Horizon 202",
+              "keywords": [
+                "Horizon",
+                "Горизонт",
+                "Gorizont",
+                "Horyzont",
+                "panoramiczny",
+                "aparat panoramiczny",
+                "obrotowy obiektyw",
+                "KMZ",
+                "Krasnogorsk",
+                "Made in Russia"
+              ]
+            },
+            {
+              "slug": "kodak-kb10",
+              "title": "Kodak KB10",
+              "keywords": [
+                "KB-10",
+                "KB 10"
+              ]
+            },
+            {
               "slug": "leica-iiif",
               "title": "Leica IIIf",
               "keywords": [
@@ -1380,6 +1228,67 @@
                 "Ernst Leitz Wetzlar",
                 "Summitar"
               ]
+            },
+            {
+              "slug": "lubitel-166b",
+              "title": "Lubitel 166B",
+              "keywords": [
+                "Lubitel 166 B",
+                "Любитель",
+                "LOMO",
+                "ЛОМО",
+                "T-22",
+                "4,5/75",
+                "dwuobiektywowy",
+                "średni format",
+                "ZSRR"
+              ]
+            },
+            {
+              "slug": "mamiya-c330s",
+              "title": "Mamiya C330S",
+              "cover": "mamiya-c330s-02"
+            },
+            {
+              "slug": "minolta-dynax-4",
+              "title": "Minolta Dynax 4",
+              "keywords": [
+                "Dynax4",
+                "Maxxum 4",
+                "Tamron AF 28-105 mm F/4-5.6",
+                "Tamron 179DM",
+                "Minolta AF",
+                "pudełko"
+              ]
+            },
+            {
+              "slug": "minolta-x-700",
+              "title": "Minolta X-700",
+              "keywords": [
+                "X700",
+                "MD 50 mm 1:1,7",
+                "Minolta MD 50mm f/1.7",
+                "MPS"
+              ]
+            },
+            {
+              "slug": "nikon-f-ftn",
+              "title": "Nikon F Photomic FTn",
+              "keywords": [
+                "Photomic",
+                "FTn",
+                "Nikkor-S Auto 50 mm 1:1,4",
+                "Nikon F FTn",
+                "Ftn",
+                "Photomic FTn",
+                "Nikkor-S Auto 50mm f/1.4",
+                "Nippon Kogaku",
+                "HS-9"
+              ]
+            },
+            {
+              "slug": "nikon-f2a",
+              "title": "Nikon F2A"
             },
             {
               "slug": "nikon-f3",
@@ -1404,6 +1313,44 @@
                     "materialy-reklamowe/foldery-i-prospekty/nikon-f3-1986"
                   ]
                 }
+              ]
+            },
+            {
+              "slug": "nikon-f4",
+              "title": "Nikon F4",
+              "related": [
+                {
+                  "title": "Zdjęcia wykonane tym aparatem",
+                  "items": [
+                    "analogowe/nikon-f4-kodak-color-200-warszawa-2026",
+                    "analogowe/nikon-f4-kodak-ektar-100-gdansk-2026"
+                  ]
+                },
+                {
+                  "title": "Prospekty",
+                  "items": [
+                    "materialy-reklamowe/foldery-i-prospekty/nikon-f4"
+                  ]
+                }
+              ]
+            },
+            {
+              "slug": "nikon-f-301",
+              "title": "Nikon F-301",
+              "keywords": [
+                "F301",
+                "N2000",
+                "Nikkor 50 mm 1:1,8",
+                "Bedienungsanleitung",
+                "pudełko",
+                "nowy"
+              ]
+            },
+            {
+              "slug": "nikon-fa",
+              "title": "Nikon FA",
+              "keywords": [
+                "Nikkor 50 mm 1:1,4"
               ]
             },
             {
@@ -1434,17 +1381,29 @@
               ]
             },
             {
+              "slug": "nikon-fe2",
+              "title": "Nikon FE2",
+              "related": [
+                {
+                  "title": "Zdjęcia wykonane tym aparatem",
+                  "items": [
+                    "analogowe/nikon-fe2-kodak-ektar-100-gdansk-2025",
+                    "analogowe/nikon-fe2-kentmere-pan-200-wolomin-warszawa-2026"
+                  ]
+                },
+                {
+                  "title": "Prospekty",
+                  "items": [
+                    "materialy-reklamowe/foldery-i-prospekty/nikon-fe2-1983"
+                  ]
+                }
+              ]
+            },
+            {
               "slug": "nikon-fe10",
               "title": "Nikon FE10",
               "keywords": [
                 "FE-10",
-                "Nikkor 50 mm 1:1,4"
-              ]
-            },
-            {
-              "slug": "nikon-fa",
-              "title": "Nikon FA",
-              "keywords": [
                 "Nikkor 50 mm 1:1,4"
               ]
             },
@@ -1456,54 +1415,20 @@
               ]
             },
             {
-              "slug": "ami-66",
-              "title": "Ami 66",
-              "keywords": [
-                "PZO",
-                "WZFO",
-                "Varimex",
-                "6x6"
-              ]
+              "slug": "nikon-fg-20",
+              "title": "Nikon FG-20"
             },
             {
-              "slug": "kodak-kb10",
-              "title": "Kodak KB10",
-              "keywords": [
-                "KB-10",
-                "KB 10"
-              ]
-            },
-            {
-              "slug": "nikon-f-ftn",
-              "title": "Nikon F Photomic FTn",
-              "keywords": [
-                "Photomic",
-                "FTn",
-                "Nikkor-S Auto 50 mm 1:1,4",
-                "Nikon F FTn",
-                "Ftn",
-                "Photomic FTn",
-                "Nikkor-S Auto 50mm f/1.4",
-                "Nippon Kogaku",
-                "HS-9"
-              ]
-            },
-            {
-              "slug": "goerz-taro-tenax",
-              "title": "Goerz Taro-Tenax",
-              "keywords": [
-                "Taro-Tenax",
-                "Taro Tenax",
-                "C. P. Goerz",
-                "Goerz Berlin",
-                "Compur",
-                "aparat mieszkowy",
-                "składany",
-                "płyty",
-                "Gebrauchsanweisung",
-                "instrukcja obsługi",
-                "Agfa Belichtungs-Tabelle",
-                "futerał"
+              "slug": "nikon-fm2",
+              "title": "Nikon FM2",
+              "related": [
+                {
+                  "title": "Prospekty",
+                  "items": [
+                    "materialy-reklamowe/foldery-i-prospekty/nikon-fm2-1993",
+                    "materialy-reklamowe/foldery-i-prospekty/nikon-32-fotocamere-1993"
+                  ]
+                }
               ]
             },
             {
@@ -1517,6 +1442,19 @@
                 "kompakt",
                 "małoobrazkowy"
               ]
+            },
+            {
+              "slug": "praktica-35-m",
+              "title": "Praktica 35 M",
+              "keywords": [
+                "Praktica 35M",
+                "kompakt"
+              ]
+            },
+            {
+              "slug": "praktica-electronic",
+              "title": "Praktica Electronic",
+              "cover_pos": "50% 35%"
             },
             {
               "slug": "praktica-fx3",
@@ -1534,19 +1472,63 @@
               ]
             },
             {
-              "slug": "welti-i",
-              "title": "Welti I",
+              "slug": "reflekta-ii",
+              "title": "Reflekta II",
+              "cover": "reflekta-ii-06"
+            },
+            {
+              "slug": "ricoh-a-2",
+              "title": "Ricoh A-2",
               "keywords": [
-                "Welti",
-                "Welti 1",
-                "Welta",
-                "Carl Zeiss Jena Tessar 2,8/50",
-                "Tessar 2,8/50",
-                "Tessar",
-                "Vebur",
-                "aparat składany",
+                "Ricoh A2",
+                "AD-1",
+                "Color Rikenon",
+                "napęd sprężynowy",
+                "kompakt",
+                "pudełko",
+                "instrukcja"
+              ]
+            },
+            {
+              "slug": "rollei-35",
+              "title": "Rollei 35"
+            },
+            {
+              "slug": "rolleiflex-3-5-f-planar",
+              "title": "Rolleiflex 3,5 F Planar",
+              "related": [
+                {
+                  "title": "Zdjęcia wykonane tym aparatem",
+                  "items": [
+                    "analogowe/rolleiflex-3-5f-fomapan-100-szwecja-2022",
+                    "analogowe/rolleiflex-3-5f-rollei-rpx-100-warszawa-2022",
+                    "analogowe/rolleiflex-3-5f-kodak-ektar-100-krakow-2022",
+                    "analogowe/rolleiflex-3-5f-ilford-delta-100-sopot-2025"
+                  ]
+                }
+              ]
+            },
+            {
+              "slug": "voigtlander-bessa-rf",
+              "title": "Voigtländer Bessa RF",
+              "keywords": [
+                "Voigtlander",
+                "Bessa",
+                "Skopar",
+                "Compur-Rapid",
                 "mieszkowy",
-                "małoobrazkowy"
+                "składany",
+                "dalmierz",
+                "suwak-światłomierz"
+              ]
+            },
+            {
+              "slug": "voigtlander-vito-c",
+              "title": "Voigtländer Vito C",
+              "keywords": [
+                "Voigtlander",
+                "Vitolux 18",
+                "Skopar"
               ]
             },
             {
@@ -1566,22 +1548,41 @@
               ]
             },
             {
-              "slug": "horizon-202",
-              "title": "Horizon 202",
+              "slug": "welti-i",
+              "title": "Welta – Welti I",
               "keywords": [
-                "Horizon",
-                "Горизонт",
-                "Gorizont",
-                "Horyzont",
-                "panoramiczny",
-                "aparat panoramiczny",
-                "obrotowy obiektyw",
-                "KMZ",
-                "Krasnogorsk",
-                "Made in Russia"
+                "Welti",
+                "Welti 1",
+                "Welta",
+                "Carl Zeiss Jena Tessar 2,8/50",
+                "Tessar 2,8/50",
+                "Tessar",
+                "Vebur",
+                "aparat składany",
+                "mieszkowy",
+                "małoobrazkowy"
+              ]
+            },
+            {
+              "slug": "yashica-electro-35-gsn",
+              "title": "Yashica Electro 35 GSN",
+              "related": [
+                {
+                  "title": "Zdjęcia wykonane tym aparatem",
+                  "items": [
+                    "analogowe/yashica-electro-35-gsn-kentmere-pan-100-brodno-2025"
+                  ]
+                },
+                {
+                  "title": "Prospekty",
+                  "items": [
+                    "materialy-reklamowe/foldery-i-prospekty/yashica-electro-35-gsn-mg-1-me-1-35-mf-diary"
+                  ]
+                }
               ]
             }
-          ]
+          ],
+          "filter": "Szukaj, np. Nikon, Praktica albo FE2"
         },
         {
           "slug": "na-przestrzeni-lat",
