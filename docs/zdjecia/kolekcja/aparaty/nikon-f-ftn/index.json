@@ -1,7 +1,7 @@
 [
   {
-    "file": "nikon-f-ftn-01.avif",
-    "mini": "nikon-f-ftn-01.webp",
+    "file": "nikon-f-photomic-ftn-01.avif",
+    "mini": "nikon-f-photomic-ftn-01.webp",
     "w": 2000,
     "h": 1333,
     "mw": 900,
@@ -9,8 +9,8 @@
     "caption": ""
   },
   {
-    "file": "nikon-f-ftn-02.avif",
-    "mini": "nikon-f-ftn-02.webp",
+    "file": "nikon-f-photomic-ftn-02.avif",
+    "mini": "nikon-f-photomic-ftn-02.webp",
     "w": 2000,
     "h": 1333,
     "mw": 900,
@@ -18,8 +18,8 @@
     "caption": ""
   },
   {
-    "file": "nikon-f-ftn-03.avif",
-    "mini": "nikon-f-ftn-03.webp",
+    "file": "nikon-f-photomic-ftn-03.avif",
+    "mini": "nikon-f-photomic-ftn-03.webp",
     "w": 2000,
     "h": 1333,
     "mw": 900,
@@ -27,8 +27,8 @@
     "caption": ""
   },
   {
-    "file": "nikon-f-ftn-04.avif",
-    "mini": "nikon-f-ftn-04.webp",
+    "file": "nikon-f-photomic-ftn-04.avif",
+    "mini": "nikon-f-photomic-ftn-04.webp",
     "w": 2000,
     "h": 1333,
     "mw": 900,
@@ -36,8 +36,8 @@
     "caption": ""
   },
   {
-    "file": "nikon-f-ftn-05.avif",
-    "mini": "nikon-f-ftn-05.webp",
+    "file": "nikon-f-photomic-ftn-05.avif",
+    "mini": "nikon-f-photomic-ftn-05.webp",
     "w": 2000,
     "h": 1333,
     "mw": 900,
@@ -45,8 +45,44 @@
     "caption": ""
   },
   {
-    "file": "nikon-f-ftn-06.avif",
-    "mini": "nikon-f-ftn-06.webp",
+    "file": "nikon-f-photomic-ftn-06.avif",
+    "mini": "nikon-f-photomic-ftn-06.webp",
+    "w": 2000,
+    "h": 1333,
+    "mw": 900,
+    "mh": 600,
+    "caption": ""
+  },
+  {
+    "file": "nikon-f-photomic-ftn-07.avif",
+    "mini": "nikon-f-photomic-ftn-07.webp",
+    "w": 2000,
+    "h": 1333,
+    "mw": 900,
+    "mh": 600,
+    "caption": ""
+  },
+  {
+    "file": "nikon-f-photomic-ftn-08.avif",
+    "mini": "nikon-f-photomic-ftn-08.webp",
+    "w": 2000,
+    "h": 1333,
+    "mw": 900,
+    "mh": 600,
+    "caption": ""
+  },
+  {
+    "file": "nikon-f-photomic-ftn-09.avif",
+    "mini": "nikon-f-photomic-ftn-09.webp",
+    "w": 2000,
+    "h": 1333,
+    "mw": 900,
+    "mh": 600,
+    "caption": ""
+  },
+  {
+    "file": "nikon-f-photomic-ftn-10.avif",
+    "mini": "nikon-f-photomic-ftn-10.webp",
     "w": 2000,
     "h": 1333,
     "mw": 900,
