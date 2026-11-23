@@ -1196,7 +1196,12 @@
                 "instrukcja obsługi",
                 "Agfa Belichtungs-Tabelle",
                 "futerał"
-              ]
+              ],
+              "cover_crop": {
+                "file": "goerz-taro-tenax-okladka.webp",
+                "w": 900,
+                "h": 600
+              }
             },
             {
               "slug": "horizon-202",
@@ -1465,7 +1470,11 @@
             {
               "slug": "praktica-electronic",
               "title": "Praktica Electronic",
-              "cover_pos": "50% 35%"
+              "cover_crop": {
+                "file": "praktica-electronic-okladka.webp",
+                "w": 900,
+                "h": 600
+              }
             },
             {
               "slug": "praktica-fx3",
@@ -1480,7 +1489,12 @@
                 "KW",
                 "Kamera-Werkstätten",
                 "M42"
-              ]
+              ],
+              "cover_crop": {
+                "file": "praktica-fx3-okladka.webp",
+                "w": 900,
+                "h": 600
+              }
             },
             {
               "slug": "reflekta-ii",
@@ -1498,7 +1512,12 @@
                 "kompakt",
                 "pudełko",
                 "instrukcja"
-              ]
+              ],
+              "cover_crop": {
+                "file": "ricoh-a-2-okladka.webp",
+                "w": 900,
+                "h": 600
+              }
             },
             {
               "slug": "rollei-35",
@@ -1556,7 +1575,12 @@
                 "aparat składany",
                 "mieszkowy",
                 "małoobrazkowy"
-              ]
+              ],
+              "cover_crop": {
+                "file": "welta-welti-okladka.webp",
+                "w": 900,
+                "h": 600
+              }
             },
             {
               "slug": "welti-i",
