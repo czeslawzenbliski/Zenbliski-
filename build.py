@@ -171,8 +171,52 @@ class Node:
 
 # ------------------------------------------------------------------ szablony
 
-def head(site: dict, title: str, description: str, prefix: str) -> str:
+def cover_image(node: "Node | None", sections: list["Node"] | None = None) -> tuple[str, int, int] | None:
+    """Okładka strony jako pełny adres (do podglądu linku na Facebooku, w Messengerze itp.)."""
+    found = node.cover() if node is not None else None
+    if found is None and node is None and sections:
+        for s in sections:
+            found = s.cover()
+            if found:
+                break
+    if not found:
+        return None
+    owner, p = found
+    if owner.locked:
+        return None
+    crop = owner.data.get("cover_crop")
+    if crop:
+        p = {"mini": crop["file"], "file": crop["file"], "mw": crop["w"], "mh": crop["h"]}
+    base = photo_base(owner.path, "")
+    if not base.startswith("http"):
+        base = site_url(base)
+    return f"{base}mini/{p.get('mini', p['file'])}", p["mw"], p["mh"]
+
+
+def site_url(path: str = "") -> str:
+    """Pełny adres strony, np. https://zenbliski.pl/kolekcja/ (do mapy strony, RSS i podglądów linków)."""
+    return SITE.get("site_url", "").rstrip("/") + "/" + path.lstrip("/")
+
+
+def head(site: dict, title: str, description: str, prefix: str,
+         path: str | None = None, image: tuple[str, int, int] | None = None) -> str:
     robots = '<meta name="robots" content="noindex">\n' if site.get("noindex") else ""
+    social = ""
+    if site.get("site_url"):
+        if path is not None:
+            url = escape(site_url(path), quote=True)
+            social += f'<link rel="canonical" href="{url}">\n<meta property="og:url" content="{url}">\n'
+        social += f'<meta property="og:description" content="{escape(description, quote=True)}">\n'
+        if image:
+            social += (f'<meta property="og:image" content="{escape(image[0], quote=True)}">\n'
+                       f'<meta property="og:image:width" content="{image[1]}">\n'
+                       f'<meta property="og:image:height" content="{image[2]}">\n'
+                       '<meta name="twitter:card" content="summary_large_image">\n')
+        social += (f'<link rel="alternate" type="application/rss+xml" title="{escape(site["title"], quote=True)} – nowe galerie" '
+                   f'href="{prefix}nowosci.xml">\n')
+        if site.get("google_verification"):
+            social += f'<meta name="google-site-verification" content="{escape(site["google_verification"], quote=True)}">\n'
+
     return f"""<!doctype html>
 <html lang="{site['lang']}">
 <head>
@@ -184,7 +228,7 @@ def head(site: dict, title: str, description: str, prefix: str) -> str:
 <meta property="og:site_name" content="{escape(site['title'], quote=True)}">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pl_PL">
-<meta name="theme-color" content="#151412">
+{social}<meta name="theme-color" content="#151412">
 <link rel="preload" href="{prefix}assets/fonts/playfair-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{prefix}{asset('style.css')}">
 <script>document.documentElement.classList.add("js")</script>
@@ -459,24 +503,31 @@ def home_photo(site: dict, sections: list[Node]) -> str:
 
 def recent_nodes(sections: list[Node], limit: int) -> list[Node]:
     """Galerie w kolejności dodania (data pierwszego commita z ich manifestem zdjęć)."""
+    return [n for n, _ in recent_dated(sections, limit)]
+
+
+def recent_dated(sections: list[Node], limit: int) -> list[tuple[Node, int]]:
+    """Jak recent_nodes, ale z datą dodania (sekundy od 1970) – do kanału RSS."""
     try:
         out = subprocess.run(
             ["git", "log", "--diff-filter=A", "--name-only", "--format=@%ct", "--", "docs/zdjecia"],
             cwd=ROOT, capture_output=True, text=True, check=True).stdout
     except (OSError, subprocess.CalledProcessError):
         return []
-    seen, order = set(), []
+    seen, order, ts = set(), [], 0
     for line in out.splitlines():
-        if line.startswith("docs/zdjecia/") and line.endswith("/index.json"):
+        if line.startswith("@"):
+            ts = int(line[1:])
+        elif line.startswith("docs/zdjecia/") and line.endswith("/index.json"):
             path = line[len("docs/zdjecia/"):-len("/index.json")]
             if path not in seen:
                 seen.add(path)
-                order.append(path)
+                order.append((path, ts))
     result = []
-    for path in order:
+    for path, when in order:
         n = find_node(sections, path)
         if n and n.photos and not n.children and not n.data.get("cover_only"):
-            result.append(n)
+            result.append((n, when))
         if len(result) >= limit:
             break
     return result
@@ -529,7 +580,7 @@ def render_home(site: dict, sections: list[Node], index_url: str) -> str:
     extra = home_recent(site, sections) + home_blog(site, sections)
     sections_title = '  <h2 class="home-block__title home-block__title--index" id="dzialy">Działy</h2>\n' if (extra or photo) else ""
     return (
-        head(site, f"{site['title']} – fotografia", site["description"], "")
+        head(site, f"{site['title']} – fotografia", site["description"], "", "", cover_image(None, sections))
         + header(site, sections, "", None, home=True)
         + f"""<main id="tresc">
   <section class="hero{' hero--with-photo' if photo else ''}">
@@ -614,9 +665,11 @@ def render_node(site: dict, sections: list[Node], node: Node, index_url: str = "
         parts.append(siblings_nav(node, prefix))
 
     title = f"{node.title} – {site['title']}"
-    description = node.lead or f"{node.title}. {site['description']}"
+    description = node.lead or f"{node.title}{'' if node.title.endswith('.') else '.'} {site['description']}"
     return (
-        head(site, title, description, prefix)
+        head(site, title, description, prefix,
+             None if node.data.get("vault_child") else f"{node.path}/",
+             None if node.data.get("vault_child") else cover_image(node))
         + header(site, sections, prefix, node, home=False)
         + '<main id="tresc" class="page">\n'
         + "\n".join(p for p in parts if p)
@@ -658,7 +711,7 @@ def render_contact(site: dict, sections: list[Node]) -> str:
     if c.get("note"):
         rows.append(f'<h2>Prawa autorskie</h2>\n<p>{escape(c["note"])}</p>')
     return (
-        head(site, f"Kontakt – {site['title']}", f"Kontakt. {site['description']}", prefix)
+        head(site, f"Kontakt – {site['title']}", f"Kontakt. {site['description']}", prefix, "kontakt/")
         + header(site, sections, prefix, None, home=False)
         + '<main id="tresc" class="page">\n<h1 class="page__title">Kontakt</h1>\n'
         + '<div class="prose contact">\n' + "\n".join(rows) + "\n</div>\n</main>\n"
@@ -712,6 +765,54 @@ def search_index(sections: list[Node]) -> list[dict]:
     return entries
 
 
+def write_discovery(site: dict, sections: list[Node]) -> None:
+    """Mapa strony dla wyszukiwarek (sitemap.xml), robots.txt i kanał RSS z nowymi galeriami (nowosci.xml)."""
+    if not site.get("site_url") or site.get("noindex"):
+        return
+    urls = [""] + (["kontakt/"] if site.get("contact") else [])
+    urls += [f"{n.path}/" for n in walk(sections) if n.has_content() and not n.locked]
+    sm = "\n".join(f"  <url><loc>{escape(site_url(u))}</loc></url>" for u in urls)
+    (OUT / "sitemap.xml").write_text(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + sm + "\n</urlset>\n", encoding="utf-8")
+    (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {site_url('sitemap.xml')}\n", encoding="utf-8")
+
+    from email.utils import formatdate
+    items = []
+    for n, when in recent_dated(sections, site.get("rss", 30)):
+        link = escape(site_url(f"{n.path}/"))
+        crumbs = " / ".join(a.title for a in reversed(list(ancestors(n))))
+        desc = n.lead or (f"Nowa galeria w dziale {crumbs}" if crumbs else "Nowa galeria")
+        img = cover_image(n)
+        pic = f'<p><img src="{img[0]}" width="{img[1]}" height="{img[2]}" alt=""></p>' if img else ""
+        items.append(f"""  <item>
+    <title>{escape(n.title)}</title>
+    <link>{link}</link>
+    <guid isPermaLink="true">{link}</guid>
+    <pubDate>{formatdate(when, usegmt=True)}</pubDate>
+    <description>{escape(pic + "<p>" + escape(desc) + " – " + escape(n.count_label()) + "</p>")}</description>
+  </item>""")
+    (OUT / "nowosci.xml").write_text(f"""<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>{escape(site['title'])} – nowe galerie</title>
+  <link>{escape(site_url())}</link>
+  <atom:link href="{escape(site_url('nowosci.xml'))}" rel="self" type="application/rss+xml"/>
+  <description>{escape(site['description'])}</description>
+  <language>pl</language>
+{chr(10).join(items)}
+</channel>
+</rss>
+""", encoding="utf-8")
+
+
+def ancestors(node: Node):
+    p = node.parent
+    while p:
+        yield p
+        p = p.parent
+
+
 def main() -> None:
     site = json.loads((CONTENT / "site.json").read_text(encoding="utf-8"))
     SITE.update(site)
@@ -750,6 +851,7 @@ def main() -> None:
             (target / slug / "index.html").write_text(render_node(site, sections, child, index_url), encoding="utf-8")
             pages += 1
 
+    write_discovery(site, sections)
     photos = sum(len(n.photos) for n in walk(sections))
     print(f"Gotowe: stron: {pages}, zdjęć w galeriach: {photos}.")
 

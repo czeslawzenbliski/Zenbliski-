@@ -67,6 +67,10 @@ Po każdej zmianie: uruchom `build.py`, obejrzyj wynik w przeglądarce (komputer
 Po zmianach w `docs/assets/site.js` albo w stylach podglądu zdjęć (`.lb…`) uruchom też `python3 tools/check_viewer.py`.
 Skrypt stuka w strzałki i przesuwa palcem tak jak człowiek na telefonie. Sam zrzut ekranu tego nie wykaże: pierwsza wersja podglądu wyglądała dobrze, a na telefonie nie działała.
 
+## Widoczność w wyszukiwarkach i podglądy linków (od 26.11.2026)
+
+`build.py` (`write_discovery`, `head`, `cover_image`) przy każdym budowaniu zapisuje `docs/sitemap.xml` (mapa strony; bez galerii na hasło i sejfu, bez pustych stron), `docs/robots.txt` i `docs/nowosci.xml` (kanał RSS: 30 ostatnio dodanych galerii, kolejność jak „Ostatnio dodane”). Każda strona ma `og:url`, `canonical`, `og:description` i `og:image` (miniatura okładki WebP, pełny adres; przy galeriach na hasło bez obrazka). Adres bazowy: `site.json` → `site_url`. Weryfikacja Google Search Console: `site.json` → `google_verification` (kod z metatagu, wstawiany do `<head>`).
+
 ## Wyszukiwarka
 
 Pole z lupką na stronie głównej. Działa w całości w przeglądarce: `build.py` zapisuje spis `docs/szukaj.json`, a `site.js` (funkcja `initSearch`) go przeszukuje. Żadnej zewnętrznej usługi.
